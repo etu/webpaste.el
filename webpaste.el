@@ -40,6 +40,15 @@
   (let ((text (buffer-substring (mark) (point))))
     (message text)))
 
+;; The function to paste a buffer
+(defun webpaste-paste-buffer ()
+  "Paste current buffer to some paste service."
+  (interactive)
+
+  (save-mark-and-excursion
+   (set-mark (point-min))               ; Set mark on point-min
+   (goto-char (point-max))              ; Go to point-max
+   (webpaste-paste-region)))            ; Paste region
 
 (provide 'webpaste)
 
