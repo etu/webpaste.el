@@ -32,6 +32,15 @@
 
 ;;; Code:
 
+;; The function to paste a region
+(defun webpaste-paste-region ()
+  "Paste selected region to some paste service."
+  (interactive)
+
+  (let ((text (buffer-substring (mark) (point))))
+    (message text)))
+
+
 (provide 'webpaste)
 
 ;;; webpaste.el ends here
