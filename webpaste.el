@@ -55,6 +55,21 @@
    (goto-char (point-max))              ; Go to point-max
    (webpaste-paste-region)))            ; Paste region
 
+
+;; Define providers
+(defun webpaste-providers-ix.io (text)
+  "Paste TEXT to http://ix.io/."
+
+  ;; Use request.el to do request to ix.io to submit data
+  (request "http://ix.io/"
+           :type "POST"
+           :data '(("f:1" . text))
+           :parser 'buffer-string
+           :success (function* (lambda (&key data &allow-other-keys)
+                                 (when data
+                                   (webpaste-return-url data))))))
+
+
 (provide 'webpaste)
 
 ;;; webpaste.el ends here
