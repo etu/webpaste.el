@@ -68,7 +68,6 @@
            :success (function* (lambda (&key data &allow-other-keys)
                                  (when data
                                    (webpaste-return-url data)))))
-
   nil)
 
 
