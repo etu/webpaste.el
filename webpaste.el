@@ -42,7 +42,7 @@
   (interactive)
 
   (let ((text (buffer-substring (mark) (point))))
-    (message text)))
+    (webpaste-providers-ix.io text)))
 
 
 ;; The function to paste a buffer
