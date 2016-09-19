@@ -67,7 +67,9 @@
            :parser 'buffer-string
            :success (function* (lambda (&key data &allow-other-keys)
                                  (when data
-                                   (webpaste-return-url data))))))
+                                   (webpaste-return-url data)))))
+
+  nil)
 
 
 (provide 'webpaste)
