@@ -66,14 +66,18 @@
 (defun webpaste-providers-ix.io (text)
   "Paste TEXT to http://ix.io/."
 
-  ;; Use request.el to do request to ix.io to submit data
-  (request "http://ix.io/"
-           :type "POST"
-           :data '(("f:1" . text))
-           :parser 'buffer-string
-           :success (function* (lambda (&key data &allow-other-keys)
-                                 (when data
-                                   (webpaste-return-url data)))))
+  (let ((post-data '()))
+    ;; Construct post data
+    (add-to-list 'post-data (cons "f:1" text))
+
+    ;; Use request.el to do request to ix.io to submit data
+    (request "http://ix.io/"
+             :type "POST"
+             :data post-data
+             :parser 'buffer-string
+             :success (function* (lambda (&key data &allow-other-keys)
+                                   (when data
+                                     (webpaste-return-url data))))))
   nil)
 
 
