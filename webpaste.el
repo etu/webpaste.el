@@ -62,7 +62,9 @@
    (webpaste-paste-region)))            ; Paste region
 
 
-;; Define providers
+;;; Define providers
+
+;; Providor for http://ix.io/
 (defun webpaste-providers-ix.io (text)
   "Paste TEXT to http://ix.io/."
 
