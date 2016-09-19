@@ -42,7 +42,7 @@
   (message (concat "We got this URL back: " returned-url)))
 
 
-;; The function to paste a region
+;;;###autoload
 (defun webpaste-paste-region ()
   "Paste selected region to some paste service."
   (interactive)
@@ -51,7 +51,7 @@
     (webpaste-providers-ix.io text)))
 
 
-;; The function to paste a buffer
+;;;###autoload
 (defun webpaste-paste-buffer ()
   "Paste current buffer to some paste service."
   (interactive)
