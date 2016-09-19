@@ -35,6 +35,12 @@
 (require 'request)
 
 
+;; Function we use to return the RETURNED-URL from the service
+(defun webpaste-return-url (returned-url)
+  "Return RETURNED-URL to user from the result of the paste service."
+
+  (message (concat "We got this URL back: " returned-url)))
+
 
 ;; The function to paste a region
 (defun webpaste-paste-region ()
