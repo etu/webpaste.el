@@ -7,6 +7,7 @@
 ;; Package-Version: 0
 ;; Version: 0.0.1
 ;; Keywords: convenience, webpaste
+;; Package-Requires: ((emacs "25.1") (request "0.2.0"))
 
 ;;; Commentary:
 
@@ -31,6 +32,9 @@
 ;; 02110-1301, USA.
 
 ;;; Code:
+(require 'request)
+
+
 
 ;; The function to paste a region
 (defun webpaste-paste-region ()
@@ -39,6 +43,7 @@
 
   (let ((text (buffer-substring (mark) (point))))
     (message text)))
+
 
 ;; The function to paste a buffer
 (defun webpaste-paste-buffer ()
