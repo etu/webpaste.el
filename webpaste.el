@@ -64,7 +64,7 @@
 
 ;;; Define providers
 
-;; Providor for http://ix.io/
+;; Provider for http://ix.io/
 (defun webpaste-providers-ix.io (text)
   "Paste TEXT to http://ix.io/."
 
@@ -93,7 +93,7 @@
                      ("poster" . "")
                      ("expiry_days" . "1"))))
 
-    ;; Add text as content
+    ;; Add TEXT as content
     (add-to-list 'post-data (cons "content" text))
 
     ;; Use request.el to do request to dpaste.com to submit data
