@@ -83,6 +83,30 @@
   nil)
 
 
+;; Provider for http://dpaste.com/
+(defun webpaste-providers-dpaste.com (text)
+  "Paste TEXT to http://dpaste.com/."
+
+  ;; Prepare post fields
+  (let ((post-data '(("syntax" . "text")
+                     ("title" . "")
+                     ("poster" . "")
+                     ("expiry_days" . "1"))))
+
+    ;; Add text as content
+    (add-to-list 'post-data (cons "content" text))
+
+    ;; Use request.el to do request to dpaste.com to submit data
+    (request "http://dpaste.com/api/v2/"
+             :type "POST"
+             :data post-data
+             :parser 'buffer-string
+             :success
+             (function* (lambda (&key response &allow-other-keys)
+                          (webpaste-return-url
+                           (request-response-header response "Location"))))))
+  nil)
+
 (provide 'webpaste)
 
 ;;; webpaste.el ends here
