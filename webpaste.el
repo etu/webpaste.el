@@ -117,9 +117,22 @@ return it to the user."
   (message (concat "Added " returned-url " to kill ring.")))
 
 
-;; Function to do pasting
+;;;###autoload
 (defun webpaste-paste-text (text)
-  "Paste TEXT to some paste service."
+  "Paste TEXT to some paste service.
+If ‘webpaste-provider-priority’ isn't populated, it will populate it with the
+default providers.
+
+Then if ‘webpaste-tested-providers’ isn't populated it will be populated by
+‘webpaste-provider-priority’.
+
+Then it extracts the first element of ‘webpaste-tested-providers’ and drops
+the first element from that list and gets the lambda for the provider and
+runs the lambda to paste TEXT to the paste service.  The paste-service in turn
+might call this function again with TEXT as param to retry if it failed.
+
+When we run out of providers to try, it will restart since
+‘webpaste-tested-providers’ will be empty and then populated again."
 
   ;; Populate webpaste-provider-priority if needed
   (if (eq webpaste-provider-priority nil)
