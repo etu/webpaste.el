@@ -4,15 +4,17 @@
 
 ;; Author: Elis "etu" Axelsson
 ;; URL: https://github.com/etu/webpaste.el
-;; Package-Version: 0
+;; Package-Version: 0.0.1
 ;; Version: 0.0.1
-;; Keywords: convenience, webpaste
+;; Keywords: convenience, webpaste, dpaste, dpaste.com, ix, ix.io
 ;; Package-Requires: ((emacs "25.1") (request "0.2.0"))
 
 ;;; Commentary:
 
-;; This mode will allow the user to paste parts or whole buffers
-;; to pastebin-like services.
+;; This mode allows to paste whole buffers or parts of buffers to
+;; pastebin-like services. It supports more than one service and will
+;; failover if one service fails. More services can easily be added
+;; over time and prefered services can easily be configured.
 
 ;;; License:
 

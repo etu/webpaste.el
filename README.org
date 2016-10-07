@@ -1,8 +1,12 @@
 * Webpaste.el
-** TODO Providers to implement [0/3]
- - [ ] dpaste.de
- - [ ] Spacepaste :: paste.pound-python.org
- - [ ] Debian Paste :: paste.debian.net
+This mode allows to paste whole buffers or parts of buffers to
+pastebin-like services. It supports more than one service and will
+failover if one service fails. More services can easily be added
+over time and prefered services can easily be configured.
 
-** DONE Fallback on failure [1/1]
- - [X] Support trying the next provider on failure
+** TODO Providers to implement [2/5]
+ - [X] ix.io
+ - [X] dpaste.com
+ - [ ] dpaste.de
+ - [ ] paste.pound-python.org
+ - [ ] paste.debian.net
