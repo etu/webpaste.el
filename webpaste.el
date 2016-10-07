@@ -132,7 +132,13 @@ return it to the user."
   (if (eq webpaste-tested-providers nil)
       (setq webpaste-tested-providers webpaste-provider-priority))
 
-  (funcall (cdr (car webpaste-providers-alist)) text))
+  ;; Get name of provider at the top of the list
+  (let ((provider-name (car webpaste-tested-providers)))
+    ;; Drop the name at the top of the list
+    (setq webpaste-tested-providers (cdr webpaste-tested-providers))
+
+    ;; Run pasting function
+    (funcall (cdr (assoc provider-name webpaste-providers-alist)) text)))
 
 
 ;;;###autoload
