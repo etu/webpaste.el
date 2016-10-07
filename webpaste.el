@@ -52,7 +52,7 @@
   (interactive)
 
   (let ((text (buffer-substring (mark) (point))))
-    (funcall (cdr (car webpaste-providers)) text)))
+    (webpaste-paste-text text)))
 
 
 ;;;###autoload
@@ -64,6 +64,13 @@
    (set-mark (point-min))               ; Set mark on point-min
    (goto-char (point-max))              ; Go to point-max
    (webpaste-paste-region)))            ; Paste region
+
+
+;; Function to do pasting
+(defun webpaste-paste-text (text)
+  "Paste TEXT to some paste service."
+
+  (funcall (cdr (car webpaste-providers)) text))
 
 
 ;;; Define providers
