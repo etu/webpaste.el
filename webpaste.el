@@ -128,6 +128,10 @@ return it to the user."
         ;; Set names list
         (setq-default webpaste-provider-priority (reverse provider-names))))
 
+  ;; Populate tested providers for this request if needed
+  (if (eq webpaste-tested-providers nil)
+      (setq webpaste-tested-providers webpaste-provider-priority))
+
   (funcall (cdr (car webpaste-providers-alist)) text))
 
 
