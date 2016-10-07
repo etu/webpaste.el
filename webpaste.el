@@ -48,7 +48,7 @@
   (interactive)
 
   (let ((text (buffer-substring (mark) (point))))
-    (webpaste-providers-ix.io text)))
+    (funcall (cdr (car webpaste-providers)) text)))
 
 
 ;;;###autoload
@@ -63,49 +63,49 @@
 
 
 ;;; Define providers
+(defcustom webpaste-providers
+  '(("ix.io" .
+     (lambda (text)
+       "Paste TEXT to http://ix.io/."
 
-;; Provider for http://ix.io/
-(defun webpaste-providers-ix.io (text)
-  "Paste TEXT to http://ix.io/."
+       (let ((post-data '()))
+         ;; Construct post data
+         (add-to-list 'post-data (cons "f:1" text))
 
-  (let ((post-data '()))
-    ;; Construct post data
-    (add-to-list 'post-data (cons "f:1" text))
+         ;; Use request.el to do request to ix.io to submit data
+         (request "http://ix.io/"
+                  :type "POST"
+                  :data post-data
+                  :parser 'buffer-string
+                  :success (function* (lambda (&key data &allow-other-keys)
+                                        (when data
+                                          (webpaste-return-url data))))))
+       nil))
+    ("dpaste.com" .
+     (lambda (text)
+       "Paste TEXT to http://dpaste.com/."
 
-    ;; Use request.el to do request to ix.io to submit data
-    (request "http://ix.io/"
-             :type "POST"
-             :data post-data
-             :parser 'buffer-string
-             :success (function* (lambda (&key data &allow-other-keys)
-                                   (when data
-                                     (webpaste-return-url data))))))
-  nil)
+       ;; Prepare post fields
+       (let ((post-data '(("syntax" . "text")
+                          ("title" . "")
+                          ("poster" . "")
+                          ("expiry_days" . "1"))))
 
+         ;; Add TEXT as content
+         (add-to-list 'post-data (cons "content" text))
 
-;; Provider for http://dpaste.com/
-(defun webpaste-providers-dpaste.com (text)
-  "Paste TEXT to http://dpaste.com/."
+         ;; Use request.el to do request to dpaste.com to submit data
+         (request "http://dpaste.com/api/v2/"
+                  :type "POST"
+                  :data post-data
+                  :parser 'buffer-string
+                  :success
+                  (function* (lambda (&key response &allow-other-keys)
+                               (webpaste-return-url
+                                (request-response-header response "Location"))))))
+       nil)))
+  "Define all webpaste.el providers.")
 
-  ;; Prepare post fields
-  (let ((post-data '(("syntax" . "text")
-                     ("title" . "")
-                     ("poster" . "")
-                     ("expiry_days" . "1"))))
-
-    ;; Add TEXT as content
-    (add-to-list 'post-data (cons "content" text))
-
-    ;; Use request.el to do request to dpaste.com to submit data
-    (request "http://dpaste.com/api/v2/"
-             :type "POST"
-             :data post-data
-             :parser 'buffer-string
-             :success
-             (function* (lambda (&key response &allow-other-keys)
-                          (webpaste-return-url
-                           (request-response-header response "Location"))))))
-  nil)
 
 (provide 'webpaste)
 
