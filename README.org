@@ -1,1 +1,8 @@
 * Webpaste.el
+** TODO Providers to implement [0/3]
+ - [ ] Spacepaste :: paste.pound-python.org
+ - [ ] dpaste.de
+ - [ ] Debian Paste :: paste.debian.net
+
+** TODO Fallback on failure [0/1]
+ - [ ] Support trying the next provider on failure
