@@ -113,6 +113,21 @@ return it to the user."
 (defun webpaste-paste-text (text)
   "Paste TEXT to some paste service."
 
+  ;; Populate webpaste-provider-priority if needed
+  (if (eq webpaste-provider-priority nil)
+      (let ((providers-alist webpaste-providers-alist)
+            (provider-names))
+        ;; Loop local provider list
+        (while providers-alist
+          ;; Add name to list of names
+          (add-to-list 'provider-names (caar providers-alist))
+
+          ;; Depopulate list
+          (setq providers-alist (cdr providers-alist)))
+
+        ;; Set names list
+        (setq-default webpaste-provider-priority (reverse provider-names))))
+
   (funcall (cdr (car webpaste-providers-alist)) text))
 
 
