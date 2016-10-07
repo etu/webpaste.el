@@ -108,15 +108,16 @@
                                (webpaste-return-url
                                 (request-response-header response "Location"))))))
        nil)))
-  "Define all webpaste.el providers. Consists of provider name and lambda
-function to do the actuall call to the provider. The lamda should call
-webpaste-return-url with resulting url to return it to the user."
+  "Define all webpaste.el providers.
+Consists of provider name and lambda function to do the actuall call to the
+provider.  The lamda should call ‘webpaste-return-url’ with resulting url to
+return it to the user."
   :group 'webpaste)
 
 (defcustom webpaste-provider-priority ()
-  "Define provider priority of which providers to try in which order. This
-variable should be a list of strings and if it isn't defined it will default
-to all providers in order defined in webpaste-providers list."
+  "Define provider priority of which providers to try in which order.
+This variable should be a list of strings and if it isn't defined it will
+default to all providers in order defined in ‘webpaste-providers’ list."
   :group 'webpaste)
 
 (provide 'webpaste)
