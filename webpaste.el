@@ -39,7 +39,11 @@
 (defun webpaste-return-url (returned-url)
   "Return RETURNED-URL to user from the result of the paste service."
 
-  (message (concat "We got this URL back: " returned-url)))
+  ;; Add RETURNED-URL to killring for easy pasting
+  (kill-new returned-url)
+
+  ;; Notify user
+  (message (concat "Added " returned-url " to kill ring.")))
 
 
 ;;;###autoload
