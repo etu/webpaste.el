@@ -136,7 +136,6 @@ return it to the user."
    (webpaste-paste-region)))            ; Paste region
 
 
-
 (provide 'webpaste)
 
 ;;; webpaste.el ends here
