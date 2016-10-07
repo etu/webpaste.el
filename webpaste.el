@@ -50,7 +50,7 @@ each run.")
 
 
 ;;; Define providers
-(defcustom webpaste-providers
+(defcustom webpaste-providers-alist
   '(("ix.io" .
      (lambda (text)
        "Paste TEXT to http://ix.io/."
@@ -113,7 +113,7 @@ return it to the user."
 (defun webpaste-paste-text (text)
   "Paste TEXT to some paste service."
 
-  (funcall (cdr (car webpaste-providers)) text))
+  (funcall (cdr (car webpaste-providers-alist)) text))
 
 
 ;;;###autoload
