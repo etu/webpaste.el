@@ -120,6 +120,12 @@ This variable should be a list of strings and if it isn't defined it will
 default to all providers in order defined in ‘webpaste-providers’ list."
   :group 'webpaste)
 
+(defvar webpaste-tested-providers ()
+  "Variable for storing which providers to try in which order while running.
+This list will be re-populated each run based on ‘webpaste-provider-priority’ or
+if that variable is nil, it will use the list of names from ‘webpaste-providers’
+each run.")
+
 (provide 'webpaste)
 
 ;;; webpaste.el ends here
