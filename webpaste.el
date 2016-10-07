@@ -35,42 +35,18 @@
 (require 'request)
 
 
-;; Function we use to return the RETURNED-URL from the service
-(defun webpaste-return-url (returned-url)
-  "Return RETURNED-URL to user from the result of the paste service."
-
-  ;; Add RETURNED-URL to killring for easy pasting
-  (kill-new returned-url)
-
-  ;; Notify user
-  (message (concat "Added " returned-url " to kill ring.")))
+(defcustom webpaste-provider-priority ()
+  "Define provider priority of which providers to try in which order.
+This variable should be a list of strings and if it isn't defined it will
+default to all providers in order defined in ‘webpaste-providers’ list."
+  :group 'webpaste)
 
 
-;;;###autoload
-(defun webpaste-paste-region ()
-  "Paste selected region to some paste service."
-  (interactive)
-
-  (let ((text (buffer-substring (mark) (point))))
-    (webpaste-paste-text text)))
-
-
-;;;###autoload
-(defun webpaste-paste-buffer ()
-  "Paste current buffer to some paste service."
-  (interactive)
-
-  (save-mark-and-excursion
-   (set-mark (point-min))               ; Set mark on point-min
-   (goto-char (point-max))              ; Go to point-max
-   (webpaste-paste-region)))            ; Paste region
-
-
-;; Function to do pasting
-(defun webpaste-paste-text (text)
-  "Paste TEXT to some paste service."
-
-  (funcall (cdr (car webpaste-providers)) text))
+(defvar webpaste-tested-providers ()
+  "Variable for storing which providers to try in which order while running.
+This list will be re-populated each run based on ‘webpaste-provider-priority’ or
+if that variable is nil, it will use the list of names from ‘webpaste-providers’
+each run.")
 
 
 ;;; Define providers
@@ -122,18 +98,43 @@ return it to the user."
   :group 'webpaste)
 
 
-(defcustom webpaste-provider-priority ()
-  "Define provider priority of which providers to try in which order.
-This variable should be a list of strings and if it isn't defined it will
-default to all providers in order defined in ‘webpaste-providers’ list."
-  :group 'webpaste)
+;; Function we use to return the RETURNED-URL from the service
+(defun webpaste-return-url (returned-url)
+  "Return RETURNED-URL to user from the result of the paste service."
+
+  ;; Add RETURNED-URL to killring for easy pasting
+  (kill-new returned-url)
+
+  ;; Notify user
+  (message (concat "Added " returned-url " to kill ring.")))
 
 
-(defvar webpaste-tested-providers ()
-  "Variable for storing which providers to try in which order while running.
-This list will be re-populated each run based on ‘webpaste-provider-priority’ or
-if that variable is nil, it will use the list of names from ‘webpaste-providers’
-each run.")
+;; Function to do pasting
+(defun webpaste-paste-text (text)
+  "Paste TEXT to some paste service."
+
+  (funcall (cdr (car webpaste-providers)) text))
+
+
+;;;###autoload
+(defun webpaste-paste-region ()
+  "Paste selected region to some paste service."
+  (interactive)
+
+  (let ((text (buffer-substring (mark) (point))))
+    (webpaste-paste-text text)))
+
+
+;;;###autoload
+(defun webpaste-paste-buffer ()
+  "Paste current buffer to some paste service."
+  (interactive)
+
+  (save-mark-and-excursion
+   (set-mark (point-min))               ; Set mark on point-min
+   (goto-char (point-max))              ; Go to point-max
+   (webpaste-paste-region)))            ; Paste region
+
 
 
 (provide 'webpaste)
