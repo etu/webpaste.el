@@ -66,7 +66,11 @@ each run.")
                   :parser 'buffer-string
                   :success (function* (lambda (&key data &allow-other-keys)
                                         (when data
-                                          (webpaste-return-url data))))))
+                                          (webpaste-return-url data))))
+                  :error
+                  (function* (lambda (&key error-thrown &allow-other-keys&rest _)
+                               (message "Got error: %S" error-thrown)
+                               (webpaste-paste-text text)))))
        nil))
     ("dpaste.com" .
      (lambda (text)
@@ -89,7 +93,11 @@ each run.")
                   :success
                   (function* (lambda (&key response &allow-other-keys)
                                (webpaste-return-url
-                                (request-response-header response "Location"))))))
+                                (request-response-header response "Location"))))
+                  :error
+                  (function* (lambda (&key error-thrown &allow-other-keys&rest _)
+                               (message "Got error: %S" error-thrown)
+                               (webpaste-paste-text text)))))
        nil)))
   "Define all webpaste.el providers.
 Consists of provider name and lambda function to do the actuall call to the
