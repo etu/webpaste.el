@@ -186,6 +186,7 @@ When we run out of providers to try, it will restart since
 
 ;; Define wrapper for save-excursion / save-mark-and-excursion
 (defmacro webpaste-save-mark-and-excursion (&rest body)
+  "Wraps usage of sending BODY to ‘save-mark-and-excursion’ / ‘save-excursion’."
   (if (< emacs-major-version 25)
       `(save-excursion ,@body)
     `(save-mark-and-excursion ,@body)))
