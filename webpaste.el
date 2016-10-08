@@ -117,6 +117,9 @@ return it to the user."
 (defun webpaste-return-url (returned-url)
   "Return RETURNED-URL to user from the result of the paste service."
 
+  ;; Reset tested providers after successful paste
+  (setq webpaste-tested-providers nil)
+
   ;; Add RETURNED-URL to killring for easy pasting
   (kill-new returned-url)
 
