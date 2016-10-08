@@ -151,15 +151,10 @@ When we run out of providers to try, it will restart since
 
   ;; Populate webpaste-provider-priority if needed
   (if (eq webpaste-provider-priority nil)
-      (let ((providers-alist webpaste-providers-alist)
-            (provider-names))
-        ;; Loop local provider list
-        (while providers-alist
-          ;; Add name to list of names
-          (add-to-list 'provider-names (caar providers-alist))
-
-          ;; Depopulate list
-          (setq providers-alist (cdr providers-alist)))
+      (let ((provider-names))
+        ;; Loop provider list
+        (dolist (provider webpaste-providers-alist)
+          (add-to-list 'provider-names (car provider)))
 
         ;; Set names list
         (setq-default webpaste-provider-priority (reverse provider-names))))
