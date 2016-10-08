@@ -178,17 +178,17 @@ When we run out of providers to try, it will restart since
   "Paste current buffer to some paste service."
   (interactive)
 
-  (save-mark-and-excursion
+  (webpaste-save-mark-and-excursion
    (set-mark (point-min))               ; Set mark on point-min
    (goto-char (point-max))              ; Go to point-max
    (webpaste-paste-region)))            ; Paste region
 
 
-;; Define macro for emacs <25 compability
-(eval-when-compile
-  (when (< emacs-major-version 25)
-    (defmacro save-mark-and-excursion (&rest body)
-      `(save-excursion ,@body))))
+;; Define wrapper for save-excursion / save-mark-and-excursion
+(defmacro webpaste-save-mark-and-excursion (&rest body)
+  (if (< emacs-major-version 25)
+      `(save-excursion ,@body)
+    `(save-mark-and-excursion ,@body)))
 
 
 (provide 'webpaste)
