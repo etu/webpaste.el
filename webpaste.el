@@ -6,7 +6,7 @@
 ;; URL: https://github.com/etu/webpaste.el
 ;; Package-Version: 0.0.1
 ;; Version: 0.0.1
-;; Keywords: convenience, webpaste, dpaste, dpaste.com, ix, ix.io
+;; Keywords: convenience, comm, paste
 ;; Package-Requires: ((emacs "25.1") (request "0.2.0"))
 
 ;;; Commentary:
