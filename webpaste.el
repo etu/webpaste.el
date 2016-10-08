@@ -65,9 +65,9 @@ each run.")
      (lambda (text)
        "Paste TEXT to http://ix.io/."
 
-       (let ((post-data '()))
-         ;; Construct post data
-         (add-to-list 'post-data (cons "f:1" text))
+       (let ((post-data))
+         ;; Add TEXT to POST-DATA
+         (cl-pushnew (cons "f:1" text) post-data)
 
          ;; Use request.el to do request to ix.io to submit data
          (request "http://ix.io/"
@@ -93,7 +93,7 @@ each run.")
                           ("expiry_days" . "1"))))
 
          ;; Add TEXT as content
-         (add-to-list 'post-data (cons "content" text))
+         (cl-pushnew (cons "content" text) post-data)
 
          ;; Use request.el to do request to dpaste.com to submit data
          (request "http://dpaste.com/api/v2/"
