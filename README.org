@@ -1,8 +1,23 @@
-* Webpaste.el
+[[https://melpa.org/#/webpaste][file:https://melpa.org/packages/webpaste-badge.svg]]
+[[https://stable.melpa.org/#/webpaste][file:https://stable.melpa.org/packages/webpaste-badge.svg]]
+
+* Webpaste.el -- Paste text to pastebin-like services
 This mode allows to paste whole buffers or parts of buffers to
 pastebin-like services. It supports more than one service and will
 failover if one service fails. More services can easily be added
 over time and prefered services can easily be configured.
+
+** Installation
+*** The lazy way (Using [[https://github.com/jwiegley/use-package][use-package]])
+This requires that you have [[https://github.com/jwiegley/use-package][use-package]] set up. But it's in my opinion the
+easiest way to install and configure packages.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package webpaste
+    :ensure t
+    :bind (("C-c C-p C-b" . webpaste-paste-buffer)
+           ("C-c C-p C-r" . webpaste-paste-region)))
+#+END_SRC
 
 ** TODO Providers to implement [2/5]
  - [X] ix.io
