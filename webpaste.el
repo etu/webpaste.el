@@ -177,16 +177,8 @@ When we run out of providers to try, it will restart since
   "Paste selected region to some paste service."
   (interactive)
 
-  (let ((text (buffer-substring (mark) (point))))
-    (webpaste-paste-text text)))
-
-
-;;;###autoload
-(defmacro webpaste-save-mark-and-excursion (&rest body)
-  "Wraps usage of sending BODY to ‘save-mark-and-excursion’ / ‘save-excursion’."
-  (if (< emacs-major-version 25)
-      `(save-excursion ,@body)
-    `(save-mark-and-excursion ,@body)))
+  ;; Extract the buffer contents with buffer-substring and paste it
+  (webpaste-paste-text (buffer-substring (mark) (point))))
 
 
 ;;;###autoload
@@ -194,10 +186,8 @@ When we run out of providers to try, it will restart since
   "Paste current buffer to some paste service."
   (interactive)
 
-  (webpaste-save-mark-and-excursion
-   (set-mark (point-min))               ; Set mark on point-min
-   (goto-char (point-max))              ; Go to point-max
-   (webpaste-paste-region)))            ; Paste region
+  ;; Extract the buffer contents with buffer-substring and paste it
+  (webpaste-paste-text (buffer-substring (point-min) (point-max))))
 
 
 (provide 'webpaste)
