@@ -154,7 +154,7 @@ When we run out of providers to try, it will restart since
       (let ((provider-names))
         ;; Loop provider list
         (dolist (provider webpaste-providers-alist)
-          (add-to-list 'provider-names (car provider)))
+          (cl-pushnew (car provider) provider-names))
 
         ;; Set names list
         (setq-default webpaste-provider-priority (reverse provider-names))))
