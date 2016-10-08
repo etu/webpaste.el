@@ -115,7 +115,7 @@ provider.  The lamda should call ‘webpaste-return-url’ with resulting url to
 return it to the user."
   :group 'webpaste
   :type  '(alist :key-type (string :tag "provider name")
-                 :value-type (function :tag "lambda function to the provider")))
+                 :value-type (function :tag "lambda function for the provider")))
 
 
 ;;;###autoload
