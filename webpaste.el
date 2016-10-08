@@ -7,7 +7,7 @@
 ;; Package-Version: 0.0.1
 ;; Version: 0.0.1
 ;; Keywords: convenience, comm, paste
-;; Package-Requires: ((emacs "24.1") (request "0.2.0"))
+;; Package-Requires: ((emacs "24.1") (request "0.2.0") (cl-lib "0.5"))
 
 ;;; Commentary:
 
@@ -35,6 +35,7 @@
 
 ;;; Code:
 (require 'request)
+(require 'cl-lib)
 
 
 (defgroup webpaste nil
@@ -73,13 +74,13 @@ each run.")
                   :type "POST"
                   :data post-data
                   :parser 'buffer-string
-                  :success (function* (lambda (&key data &allow-other-keys)
-                                        (when data
-                                          (webpaste-return-url data))))
+                  :success (cl-function (lambda (&key data &allow-other-keys)
+                                          (when data
+                                            (webpaste-return-url data))))
                   :error
-                  (function* (lambda (&key error-thrown &allow-other-keys&rest _)
-                               (message "Got error: %S" error-thrown)
-                               (webpaste-paste-text text)))))
+                  (cl-function (lambda (&key error-thrown &allow-other-keys)
+                                 (message "Got error: %S" error-thrown)
+                                 (webpaste-paste-text text)))))
        nil))
     ("dpaste.com" .
      (lambda (text)
@@ -100,13 +101,13 @@ each run.")
                   :data post-data
                   :parser 'buffer-string
                   :success
-                  (function* (lambda (&key response &allow-other-keys)
-                               (webpaste-return-url
-                                (request-response-header response "Location"))))
+                  (cl-function (lambda (&key response &allow-other-keys)
+                                 (webpaste-return-url
+                                  (request-response-header response "Location"))))
                   :error
-                  (function* (lambda (&key error-thrown &allow-other-keys&rest _)
-                               (message "Got error: %S" error-thrown)
-                               (webpaste-paste-text text)))))
+                  (cl-function (lambda (&key error-thrown &allow-other-keys)
+                                 (message "Got error: %S" error-thrown)
+                                 (webpaste-paste-text text)))))
        nil)))
   "Define all webpaste.el providers.
 Consists of provider name and lambda function to do the actuall call to the
