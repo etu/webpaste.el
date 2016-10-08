@@ -7,7 +7,7 @@
 ;; Package-Version: 0.0.1
 ;; Version: 0.0.1
 ;; Keywords: convenience, comm, paste
-;; Package-Requires: ((emacs "25.1") (request "0.2.0"))
+;; Package-Requires: ((emacs "24.1") (request "0.2.0"))
 
 ;;; Commentary:
 
@@ -182,6 +182,13 @@ When we run out of providers to try, it will restart since
    (set-mark (point-min))               ; Set mark on point-min
    (goto-char (point-max))              ; Go to point-max
    (webpaste-paste-region)))            ; Paste region
+
+
+;; Define macro for emacs <25 compability
+(eval-when-compile
+  (when (< emacs-major-version 25)
+    (defmacro save-mark-and-excursion (&rest body)
+      `(save-excursion ,@body))))
 
 
 (provide 'webpaste)
