@@ -37,6 +37,11 @@
 (require 'request)
 
 
+(defgroup webpaste nil
+  "Configuration options for webpaste.el where you can define paste providers,
+provider priority for which order which provider should be tried when used.")
+
+
 (defcustom webpaste-provider-priority ()
   "Define provider priority of which providers to try in which order.
 This variable should be a list of strings and if it isn't defined it will
