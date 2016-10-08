@@ -39,14 +39,16 @@
 
 (defgroup webpaste nil
   "Configuration options for webpaste.el where you can define paste providers,
-provider priority for which order which provider should be tried when used.")
+provider priority for which order which provider should be tried when used."
+  :group 'web)
 
 
 (defcustom webpaste-provider-priority ()
   "Define provider priority of which providers to try in which order.
 This variable should be a list of strings and if it isn't defined it will
 default to all providers in order defined in ‘webpaste-providers’ list."
-  :group 'webpaste)
+  :group 'webpaste
+  :type '(repeat string))
 
 
 (defvar webpaste-tested-providers ()
@@ -110,7 +112,9 @@ each run.")
 Consists of provider name and lambda function to do the actuall call to the
 provider.  The lamda should call ‘webpaste-return-url’ with resulting url to
 return it to the user."
-  :group 'webpaste)
+  :group 'webpaste
+  :type  '(alist :key-type (string :tag "provider name")
+                 :value-type (function :tag "lambda function to the provider")))
 
 
 ;; Function we use to return the RETURNED-URL from the service
@@ -180,6 +184,12 @@ When we run out of providers to try, it will restart since
   (let ((text (buffer-substring (mark) (point))))
     (webpaste-paste-text text)))
 
+;;;###autoload
+(defmacro webpaste-save-mark-and-excursion (&rest body)
+  "Wraps usage of sending BODY to ‘save-mark-and-excursion’ / ‘save-excursion’."
+  (if (< emacs-major-version 25)
+      `(save-excursion ,@body)
+    `(save-mark-and-excursion ,@body)))
 
 ;;;###autoload
 (defun webpaste-paste-buffer ()
@@ -190,15 +200,6 @@ When we run out of providers to try, it will restart since
    (set-mark (point-min))               ; Set mark on point-min
    (goto-char (point-max))              ; Go to point-max
    (webpaste-paste-region)))            ; Paste region
-
-
-;;;###autoload
-(defmacro webpaste-save-mark-and-excursion (&rest body)
-  "Wraps usage of sending BODY to ‘save-mark-and-excursion’ / ‘save-excursion’."
-  (if (< emacs-major-version 25)
-      `(save-excursion ,@body)
-    `(save-mark-and-excursion ,@body)))
-
 
 (provide 'webpaste)
 
