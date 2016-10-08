@@ -118,7 +118,7 @@ return it to the user."
                  :value-type (function :tag "lambda function to the provider")))
 
 
-;; Function we use to return the RETURNED-URL from the service
+;;;###autoload
 (defun webpaste-return-url (returned-url)
   "Return RETURNED-URL to user from the result of the paste service."
 
