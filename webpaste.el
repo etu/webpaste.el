@@ -189,7 +189,7 @@ When we run out of providers to try, it will restart since
    (webpaste-paste-region)))            ; Paste region
 
 
-;; Define wrapper for save-excursion / save-mark-and-excursion
+;;;###autoload
 (defmacro webpaste-save-mark-and-excursion (&rest body)
   "Wraps usage of sending BODY to ‘save-mark-and-excursion’ / ‘save-excursion’."
   (if (< emacs-major-version 25)
