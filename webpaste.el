@@ -116,6 +116,17 @@ Usage:
                        (webpaste-return-url
                         (replace-regexp-in-string "\n$" "" data)))))))
 
+    ("sprunge.us" .
+     (webpaste-provider
+      :domain "http://sprunge.us/"
+      :parser 'buffer-string
+      :post-field "sprunge"
+      :success
+      (cl-function (lambda (&key data &allow-other-keys)
+                     (when data
+                       (webpaste-return-url
+                        (replace-regexp-in-string "\n$" "" data)))))))
+
     ("dpaste.com" .
      (webpaste-provider
       :domain "http://dpaste.com/api/v2/"
