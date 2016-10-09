@@ -4,8 +4,8 @@
 
 ;; Author: Elis "etu" Axelsson
 ;; URL: https://github.com/etu/webpaste.el
-;; Package-Version: 0.0.1
-;; Version: 0.0.1
+;; Package-Version: 1.0.0
+;; Version: 1.0.0
 ;; Keywords: convenience, comm, paste
 ;; Package-Requires: ((emacs "24.1") (request "0.2.0") (cl-lib "0.5"))
 
