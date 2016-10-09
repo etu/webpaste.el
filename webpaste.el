@@ -59,6 +59,50 @@ if that variable is nil, it will use the list of names from ‘webpaste-provider
 each run.")
 
 
+(cl-defmacro webpaste-provider
+    (&key (domain)
+          (type "POST")
+          (parser)
+          (post-data ())
+          (post-field)
+          (success))
+  "Macro to create the lambda function for a provider.
+
+This macro accepts the parameters :domain, :type, :parser, :post-data,
+:post-field and :success.
+
+Usage:
+  (webpaste-provider
+    [:keyword [option]]...)
+
+:domain      URL that we should do the request to to paste data.
+:type        HTTP Request type, defaults to POST.
+:parser      Defines how request.el parses the result. Look up :parser for
+             `request`.
+:post-data   Default post fields sent to service. Defaults to nil.
+:post-field  Name of the field to insert the code into.
+:success     Callback sent to `requset`, look up how to write these in the
+             documentation for `request`"
+  `(lambda (text)
+     "Paste TEXT to provider"
+
+     ;; Local variable post-data
+     (let ((post-data ,post-data))
+       ;; Push field with text to post-data
+       (cl-pushnew (cons ,post-field text) post-data)
+
+       ;; Do request
+       (request ,domain
+                :type ,type
+                :data post-data
+                :parser ,parser
+                :success ,success
+                :error
+                (cl-function (lambda (&key error-thrown &allow-other-keys)
+                               (message "Got error: %S" error-thrown))))
+       nil)))
+
+
 ;;; Define providers
 (defcustom webpaste-providers-alist
   '(("ix.io" .
