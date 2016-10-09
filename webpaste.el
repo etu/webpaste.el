@@ -147,7 +147,7 @@ provider.  The lamda should call ‘webpaste-return-url’ with resulting url to
 return it to the user."
   :group 'webpaste
   :type  '(alist :key-type (string :tag "provider name")
-                 :value-type (function :tag "webpaste-provider macro definition for the provider")))
+                 :value-type (sexp :tag "webpaste-provider macro definition for the provider")))
 
 
 ;;;###autoload
