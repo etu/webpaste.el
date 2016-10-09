@@ -113,7 +113,8 @@ Usage:
       :success
       (cl-function (lambda (&key data &allow-other-keys)
                      (when data
-                       (webpaste-return-url data))))))
+                       (webpaste-return-url
+                        (replace-regexp-in-string "\n$" "" data)))))))
 
     ("dpaste.com" .
      (webpaste-provider
