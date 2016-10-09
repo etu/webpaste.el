@@ -189,7 +189,7 @@ When we run out of providers to try, it will restart since
     (setq webpaste-tested-providers (cdr webpaste-tested-providers))
 
     ;; Run pasting function
-    (funcall (cdr (assoc provider-name webpaste-providers-alist)) text)))
+    (funcall (eval (cdr (assoc provider-name webpaste-providers-alist))) text)))
 
 
 ;;;###autoload
