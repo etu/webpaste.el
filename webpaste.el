@@ -99,7 +99,8 @@ Usage:
                 :success ,success
                 :error
                 (cl-function (lambda (&key error-thrown &allow-other-keys)
-                               (message "Got error: %S" error-thrown))))
+                               (message "Got error: %S" error-thrown)
+                               (webpaste-paste-text text))))
        nil)))
 
 
