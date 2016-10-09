@@ -194,7 +194,9 @@ When we run out of providers to try, it will restart since
 
 ;;;###autoload
 (defun webpaste-paste-region (point mark)
-  "Paste selected region to some paste service."
+  "Paste selected region to some paste service.
+Argument POINT Current point.
+Argument MARK Current mark."
   (interactive "r")
 
   ;; Extract the buffer contents with buffer-substring and paste it
