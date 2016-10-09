@@ -173,12 +173,12 @@ When we run out of providers to try, it will restart since
 
 
 ;;;###autoload
-(defun webpaste-paste-region ()
+(defun webpaste-paste-region (point mark)
   "Paste selected region to some paste service."
-  (interactive)
+  (interactive "r")
 
   ;; Extract the buffer contents with buffer-substring and paste it
-  (webpaste-paste-text (buffer-substring (mark) (point))))
+  (webpaste-paste-text (buffer-substring point mark)))
 
 
 ;;;###autoload
