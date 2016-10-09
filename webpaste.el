@@ -140,7 +140,21 @@ Usage:
       :success
       (cl-function (lambda (&key response &allow-other-keys)
                      (webpaste-return-url
-                      (request-response-header response "Location")))))))
+                      (request-response-header response "Location"))))))
+
+    ("dpaste.de" .
+     (webpaste-provider
+      :domain "https://dpaste.de/api/"
+      :parser 'buffer-string
+      :post-data '(("lexer" . "text")
+                   ("format" . "url")
+                   ("expires" . 86400))
+      :post-field "content"
+      :success
+      (cl-function (lambda (&key data &allow-other-keys)
+                     (when data
+                       (webpaste-return-url
+                        (replace-regexp-in-string "\n$" "" data))))))))
 
   "Define all webpaste.el providers.
 Consists of provider name and lambda function to do the actuall call to the

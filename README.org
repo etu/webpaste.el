@@ -19,10 +19,10 @@ easiest way to install and configure packages.
            ("C-c C-p C-r" . webpaste-paste-region)))
 #+END_SRC
 
-** TODO Providers to implement [3/6]
+** TODO Providers to implement [4/6]
  - [X] ix.io
  - [X] dpaste.com
  - [X] sprunge.us
- - [ ] dpaste.de
+ - [X] dpaste.de
  - [ ] paste.pound-python.org
  - [ ] paste.debian.net
