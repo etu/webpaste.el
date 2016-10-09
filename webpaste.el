@@ -106,53 +106,29 @@ Usage:
 ;;; Define providers
 (defcustom webpaste-providers-alist
   '(("ix.io" .
-     (lambda (text)
-       "Paste TEXT to http://ix.io/."
+     (webpaste-provider
+      :domain "http://ix.io/"
+      :parser 'buffer-string
+      :post-field "f:1"
+      :success
+      (cl-function (lambda (&key data &allow-other-keys)
+                     (when data
+                       (webpaste-return-url data))))))
 
-       (let ((post-data))
-         ;; Add TEXT to POST-DATA
-         (cl-pushnew (cons "f:1" text) post-data)
-
-         ;; Use request.el to do request to ix.io to submit data
-         (request "http://ix.io/"
-                  :type "POST"
-                  :data post-data
-                  :parser 'buffer-string
-                  :success (cl-function (lambda (&key data &allow-other-keys)
-                                          (when data
-                                            (webpaste-return-url data))))
-                  :error
-                  (cl-function (lambda (&key error-thrown &allow-other-keys)
-                                 (message "Got error: %S" error-thrown)
-                                 (webpaste-paste-text text)))))
-       nil))
     ("dpaste.com" .
-     (lambda (text)
-       "Paste TEXT to http://dpaste.com/."
+     (webpaste-provider
+      :domain "http://dpaste.com/api/v2/"
+      :parser 'buffer-string
+      :post-data '(("syntax" . "text")
+                   ("title" . "")
+                   ("poster" . "")
+                   ("expiry_days" . "1"))
+      :post-field "content"
+      :success
+      (cl-function (lambda (&key response &allow-other-keys)
+                     (webpaste-return-url
+                      (request-response-header response "Location")))))))
 
-       ;; Prepare post fields
-       (let ((post-data '(("syntax" . "text")
-                          ("title" . "")
-                          ("poster" . "")
-                          ("expiry_days" . "1"))))
-
-         ;; Add TEXT as content
-         (cl-pushnew (cons "content" text) post-data)
-
-         ;; Use request.el to do request to dpaste.com to submit data
-         (request "http://dpaste.com/api/v2/"
-                  :type "POST"
-                  :data post-data
-                  :parser 'buffer-string
-                  :success
-                  (cl-function (lambda (&key response &allow-other-keys)
-                                 (webpaste-return-url
-                                  (request-response-header response "Location"))))
-                  :error
-                  (cl-function (lambda (&key error-thrown &allow-other-keys)
-                                 (message "Got error: %S" error-thrown)
-                                 (webpaste-paste-text text)))))
-       nil)))
   "Define all webpaste.el providers.
 Consists of provider name and lambda function to do the actuall call to the
 provider.  The lamda should call ‘webpaste-return-url’ with resulting url to
