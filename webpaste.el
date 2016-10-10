@@ -81,7 +81,7 @@ Usage:
              `request`.
 :post-data   Default post fields sent to service. Defaults to nil.
 :post-field  Name of the field to insert the code into.
-:success     Callback sent to `requset`, look up how to write these in the
+:success     Callback sent to `request`, look up how to write these in the
              documentation for `request`"
   `(lambda (text)
      "Paste TEXT to provider"
