@@ -135,7 +135,7 @@ Usage:
       :post-data '(("syntax" . "text")
                    ("title" . "")
                    ("poster" . "")
-                   ("expiry_days" . "1"))
+                   ("expiry_days" . 1))
       :post-field "content"
       :success
       (cl-function (lambda (&key response &allow-other-keys)
