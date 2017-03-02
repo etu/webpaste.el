@@ -1,0 +1,8 @@
+# Ignore some common files  created by emacs
+*~
+\#*\#
+*.elc
+.\#*
+
+# Ignore Casks hidden files
+.cask/
