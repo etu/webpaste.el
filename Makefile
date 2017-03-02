@@ -18,3 +18,5 @@ compile:
 
 clean:
 	${CASK} clean-elc
+
+.PHONY: test
