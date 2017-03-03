@@ -1,4 +1,4 @@
-;;; webpaste.el --- Paste to pastebin-like services
+;;; webpaste.el --- Paste to pastebin-like services  -*- lexical-binding: t; -*-
 
 ;; Copyright (c) 2016 Elis Axelsson
 
@@ -59,13 +59,7 @@ if that variable is nil, it will use the list of names from ‘webpaste-provider
 each run.")
 
 
-(cl-defmacro webpaste-provider
-    (&key (domain)
-          (type "POST")
-          (parser)
-          (post-data ())
-          (post-field)
-          (success))
+(cl-defun webpaste-provider (&key domain (type "POST") parser post-data post-field success)
   "Macro to create the lambda function for a provider.
 
 This macro accepts the parameters :domain, :type, :parser, :post-data,
@@ -83,78 +77,76 @@ Usage:
 :post-field  Name of the field to insert the code into.
 :success     Callback sent to `request`, look up how to write these in the
              documentation for `request`"
-  `(lambda (text)
-     "Paste TEXT to provider"
+  (lambda (text)
+    "Paste TEXT to provider"
 
-     ;; Local variable post-data
-     (let ((post-data ,post-data))
-       ;; Push field with text to post-data
-       (cl-pushnew (cons ,post-field text) post-data)
+    ;; Local variable post-data
+    (cl-pushnew (cons post-field text) post-data)
 
-       ;; Do request
-       (request ,domain
-                :type ,type
-                :data post-data
-                :parser ,parser
-                :success ,success
-                :error
-                (cl-function (lambda (&key error-thrown &allow-other-keys)
-                               (message "Got error: %S" error-thrown)
-                               (webpaste-paste-text text))))
-       nil)))
+    ;; Do request
+    (request domain
+             :type type
+             :data post-data
+             :parser parser
+             :success success
+             :error
+             (cl-function (lambda (&key error-thrown &allow-other-keys)
+                            (message "Got error: %S" error-thrown)
+                            (webpaste-paste-text text))))
+    nil))
 
 
 ;;; Define providers
 (defcustom webpaste-providers-alist
-  '(("ix.io" .
-     (webpaste-provider
-      :domain "http://ix.io/"
-      :parser 'buffer-string
-      :post-field "f:1"
-      :success
-      (cl-function (lambda (&key data &allow-other-keys)
-                     (when data
-                       (webpaste-return-url
-                        (replace-regexp-in-string "\n$" "" data)))))))
+  (list (list "ix.io"
+              (webpaste-provider
+               :domain "http://ix.io/"
+               :parser 'buffer-string
+               :post-field "f:1"
+               :success
+               (cl-function (lambda (&key data &allow-other-keys)
+                              (when data
+                                (webpaste-return-url
+                                 (replace-regexp-in-string "\n$" "" data)))))))
 
-    ("sprunge.us" .
-     (webpaste-provider
-      :domain "http://sprunge.us/"
-      :parser 'buffer-string
-      :post-field "sprunge"
-      :success
-      (cl-function (lambda (&key data &allow-other-keys)
-                     (when data
-                       (webpaste-return-url
-                        (replace-regexp-in-string "\n$" "" data)))))))
+        (list "sprunge.us"
+              (webpaste-provider
+               :domain "http://sprunge.us/"
+               :parser 'buffer-string
+               :post-field "sprunge"
+               :success
+               (cl-function (lambda (&key data &allow-other-keys)
+                              (when data
+                                (webpaste-return-url
+                                 (replace-regexp-in-string "\n$" "" data)))))))
 
-    ("dpaste.com" .
-     (webpaste-provider
-      :domain "http://dpaste.com/api/v2/"
-      :parser 'buffer-string
-      :post-data '(("syntax" . "text")
-                   ("title" . "")
-                   ("poster" . "")
-                   ("expiry_days" . 1))
-      :post-field "content"
-      :success
-      (cl-function (lambda (&key response &allow-other-keys)
-                     (webpaste-return-url
-                      (request-response-header response "Location"))))))
+        (list "dpaste.com"
+              (webpaste-provider
+               :domain "http://dpaste.com/api/v2/"
+               :parser 'buffer-string
+               :post-data '(("syntax" . "text")
+                            ("title" . "")
+                            ("poster" . "")
+                            ("expiry_days" . 1))
+               :post-field "content"
+               :success
+               (cl-function (lambda (&key response &allow-other-keys)
+                              (webpaste-return-url
+                               (request-response-header response "Location"))))))
 
-    ("dpaste.de" .
-     (webpaste-provider
-      :domain "https://dpaste.de/api/"
-      :parser 'buffer-string
-      :post-data '(("lexer" . "text")
-                   ("format" . "url")
-                   ("expires" . 86400))
-      :post-field "content"
-      :success
-      (cl-function (lambda (&key data &allow-other-keys)
-                     (when data
-                       (webpaste-return-url
-                        (replace-regexp-in-string "\n$" "" data))))))))
+        (list "dpaste.de"
+              (webpaste-provider
+               :domain "https://dpaste.de/api/"
+               :parser 'buffer-string
+               :post-data '(("lexer" . "text")
+                            ("format" . "url")
+                            ("expires" . 86400))
+               :post-field "content"
+               :success
+               (cl-function (lambda (&key data &allow-other-keys)
+                              (when data
+                                (webpaste-return-url
+                                 (replace-regexp-in-string "\n$" "" data))))))))
 
   "Define all webpaste.el providers.
 Consists of provider name and lambda function to do the actuall call to the
@@ -216,7 +208,7 @@ When we run out of providers to try, it will restart since
     (setq webpaste-tested-providers (cdr webpaste-tested-providers))
 
     ;; Run pasting function
-    (funcall (eval (cdr (assoc provider-name webpaste-providers-alist))) text)))
+    (funcall (cadr (assoc provider-name webpaste-providers-alist)) text)))
 
 
 ;;;###autoload
