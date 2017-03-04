@@ -1,5 +1,6 @@
 [[https://melpa.org/#/webpaste][file:https://melpa.org/packages/webpaste-badge.svg]]
 [[https://stable.melpa.org/#/webpaste][file:https://stable.melpa.org/packages/webpaste-badge.svg]]
+[[https://travis-ci.org/etu/webpaste.el][https://travis-ci.org/etu/webpaste.el.svg?branch=master]]
 
 * Webpaste.el -- Paste text to pastebin-like services
 This mode allows to paste whole buffers or parts of buffers to
