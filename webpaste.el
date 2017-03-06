@@ -156,6 +156,7 @@ return it to the user."
   :type  '(alist :key-type (string :tag "provider name")
                  :value-type (sexp :tag "webpaste-provider macro definition for the provider")))
 
+
 (defun webpaste--get-provider-priority ()
   "Return provider priority."
 
@@ -170,6 +171,7 @@ return it to the user."
         (setq-default webpaste-provider-priority (reverse provider-names))))
 
   webpaste-provider-priority)
+
 
 ;;;###autoload
 (defun webpaste-return-url (returned-url)
