@@ -6,14 +6,14 @@ all: test
 test:
 	${MAKE} clean
 	${MAKE} unit
-	${MAKE} compile
+	${MAKE} build
 	${MAKE} unit
 	${MAKE} clean
 
 unit:
 	${CASK} exec ert-runner
 
-compile:
+build:
 	${CASK} build
 
 clean:
