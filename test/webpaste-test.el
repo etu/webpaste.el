@@ -4,7 +4,7 @@
 (require 'ert)
 (require 'webpaste)
 
-(ert-deftest webpaste-autopupulate-provider-priority ()
+(ert-deftest webpaste--autopupulate-provider-priority ()
   "Test autopopulate of webpaste-provider-priority."
 
   (setq-default webpaste-provider-priority nil)
@@ -17,7 +17,7 @@
                  '("provider1" "provider2" "provider3"))))
 
 
-(ert-deftest callback-from-working-provider ()
+(ert-deftest webpaste--callback-from-working-provider ()
   "This test just sends a message to a good provider that just works."
 
   ;; Temporal storage for result
@@ -41,7 +41,7 @@
     (should (string= returned-result "Works: test-string"))))
 
 
-(ert-deftest callback-from-working-provider-as-fallback ()
+(ert-deftest webpaste--callback-from-working-provider-as-fallback ()
   "This test sends a message to a bad provider that returns some error data.
 
 Then the bad provider pastes again like it should and we check that we got the
