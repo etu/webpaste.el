@@ -156,6 +156,20 @@ return it to the user."
   :type  '(alist :key-type (string :tag "provider name")
                  :value-type (sexp :tag "webpaste-provider macro definition for the provider")))
 
+(defun webpaste--get-provider-priority ()
+  "Return provider priority."
+
+  ;; Populate webpaste-provider-priority if needed
+  (if (eq webpaste-provider-priority nil)
+      (let ((provider-names))
+        ;; Loop provider list
+        (dolist (provider webpaste-providers-alist)
+          (cl-pushnew (car provider) provider-names))
+
+        ;; Set names list
+        (setq-default webpaste-provider-priority (reverse provider-names))))
+
+  webpaste-provider-priority)
 
 ;;;###autoload
 (defun webpaste-return-url (returned-url)
@@ -188,19 +202,9 @@ might call this function again with TEXT as param to retry if it failed.
 When we run out of providers to try, it will restart since
 ‘webpaste-tested-providers’ will be empty and then populated again."
 
-  ;; Populate webpaste-provider-priority if needed
-  (if (eq webpaste-provider-priority nil)
-      (let ((provider-names))
-        ;; Loop provider list
-        (dolist (provider webpaste-providers-alist)
-          (cl-pushnew (car provider) provider-names))
-
-        ;; Set names list
-        (setq-default webpaste-provider-priority (reverse provider-names))))
-
   ;; Populate tested providers for this request if needed
   (if (eq webpaste-tested-providers nil)
-      (setq webpaste-tested-providers webpaste-provider-priority))
+      (setq webpaste-tested-providers (webpaste--get-provider-priority)))
 
   ;; Get name of provider at the top of the list
   (let ((provider-name (car webpaste-tested-providers)))

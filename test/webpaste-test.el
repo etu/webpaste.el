@@ -4,6 +4,18 @@
 (require 'ert)
 (require 'webpaste)
 
+(ert-deftest webpaste-autopupulate-provider-priority ()
+  "Test autopopulate of webpaste-provider-priority."
+
+  (setq-default webpaste-provider-priority nil)
+  (setq-default webpaste-providers-alist
+                (list (list "provider1" "lamba")
+                      (list "provider2" "lamba")
+                      (list "provider3" "lamba")))
+
+  (should (equal (webpaste--get-provider-priority)
+                 '("provider1" "provider2" "provider3"))))
+
 
 (ert-deftest callback-from-working-provider ()
   "This test just sends a message to a good provider that just works."
