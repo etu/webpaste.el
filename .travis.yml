@@ -26,5 +26,6 @@ install:
   - cask install
 
 script:
+  - emacs --version
   # Run tests
   - make test
