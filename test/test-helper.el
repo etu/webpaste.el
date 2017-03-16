@@ -14,5 +14,4 @@
 (require 'webpaste (f-expand "webpaste" webpaste-test--root-path))
 
 
-(provide 'test-helper)
 ;;; test-helper.el ends here
