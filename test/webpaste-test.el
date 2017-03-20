@@ -17,6 +17,17 @@
                  '("provider1" "provider2" "provider3"))))
 
 
+(ert-deftest webpaste--static-provider-priority ()
+  "Test static configuration of webpaste-provider-priority."
+
+  (setq-default webpaste-provider-priority
+                '("provider2" "provider1" "provider3"))
+  (setq-default webpaste-providers-alist '())
+
+  (should (equal (webpaste--get-provider-priority)
+                 '("provider2" "provider1" "provider3"))))
+
+
 (ert-deftest webpaste--callback-from-working-provider ()
   "This test just sends a message to a good provider that just works."
 
