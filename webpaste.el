@@ -98,7 +98,17 @@ Usage:
 
 ;;; Define providers
 (defcustom webpaste-providers-alist
-  (list (list "ix.io"
+  (list (list "ptpb.pw"
+              (webpaste-provider
+               :domain "https://ptpb.pw/"
+               :parser 'buffer-string
+               :post-field "c"
+               :success
+               (cl-function (lambda (&key response &allow-other-keys)
+                              (webpaste-return-url
+                               (request-response-header response "Location"))))))
+
+        (list "ix.io"
               (webpaste-provider
                :domain "http://ix.io/"
                :parser 'buffer-string
