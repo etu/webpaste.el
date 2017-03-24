@@ -167,7 +167,7 @@ return it to the user."
                  :value-type (sexp :tag "webpaste-provider macro definition for the provider")))
 
 
-(defun webpaste--get-provider-priority ()
+(defun webpaste/get-provider-priority ()
   "Return provider priority."
 
   ;; Populate webpaste-provider-priority if needed
@@ -216,7 +216,7 @@ When we run out of providers to try, it will restart since
 
   ;; Populate tested providers for this request if needed
   (if (eq webpaste-tested-providers nil)
-      (setq webpaste-tested-providers (webpaste--get-provider-priority)))
+      (setq webpaste-tested-providers (webpaste/get-provider-priority)))
 
   ;; Get name of provider at the top of the list
   (let ((provider-name (car webpaste-tested-providers)))

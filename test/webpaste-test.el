@@ -15,28 +15,29 @@
 
 
 
-(ert-deftest webpaste--autopupulate-provider-priority ()
-  "Test autopopulate of webpaste-provider-priority."
+(ert-deftest webpaste-test/get-provider-priority ()
+  "Test how it populates webpaste/get-provider-priority."
 
+  ;;; Test autopopulation of list based on providers avaliable
+  ;; Prepare variables
   (setq-default webpaste-provider-priority nil)
   (setq-default webpaste-providers-alist
-                (list (list "provider1" "lamba")
-                      (list "provider2" "lamba")
-                      (list "provider3" "lamba")))
+                (list (list "provider1" "lambda")
+                      (list "provider2" "lambda")
+                      (list "provider3" "lambda")))
 
-  (should (equal (webpaste--get-provider-priority)
-                 '("provider1" "provider2" "provider3"))))
+  ;; Do test
+  (should (equal (webpaste/get-provider-priority)
+                 '("provider1" "provider2" "provider3")))
 
-
-
-(ert-deftest webpaste--static-provider-priority ()
-  "Test static configuration of webpaste-provider-priority."
-
+  ;;; Test static population of provider priority
+  ;; Prepare variables
   (setq-default webpaste-provider-priority
                 '("provider2" "provider1" "provider3"))
   (setq-default webpaste-providers-alist '())
 
-  (should (equal (webpaste--get-provider-priority)
+  ;; Do test
+  (should (equal (webpaste/get-provider-priority)
                  '("provider2" "provider1" "provider3"))))
 
 
