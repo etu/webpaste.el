@@ -4,6 +4,8 @@
 (require 'ert)
 (require 'webpaste)
 
+
+
 (ert-deftest webpaste--autopupulate-provider-priority ()
   "Test autopopulate of webpaste-provider-priority."
 
@@ -17,6 +19,7 @@
                  '("provider1" "provider2" "provider3"))))
 
 
+
 (ert-deftest webpaste--static-provider-priority ()
   "Test static configuration of webpaste-provider-priority."
 
@@ -26,6 +29,7 @@
 
   (should (equal (webpaste--get-provider-priority)
                  '("provider2" "provider1" "provider3"))))
+
 
 
 (ert-deftest webpaste--callback-from-working-provider ()
@@ -52,6 +56,7 @@
     (should (string= returned-result "Works: test-string"))))
 
 
+
 (ert-deftest webpaste--callback-from-working-provider-as-fallback ()
   "This test sends a message to a bad provider that returns some error data.
 
@@ -64,44 +69,29 @@ result from the good provider only."
     (setq-default webpaste-tested-providers nil)
     (setq-default webpaste-provider-priority nil)
 
-    ;; Make two broken providers that "returns" the result by setting the
-    ;; variable and then failover.
-    ;; Also make two working providers that returns different messages so the
-    ;; test can detect which provider was used easily.
+    ;; Creates a "broken" provider that will call on the next provider due to a
+    ;; faked failure and checks that the next provider is picked up correctly.
     (setq-default webpaste-providers-alist
-                  (list (list "brokenprovider1"
+                  (list (list "brokenprovider"
                               (lambda (text)
                                 ;; Set return text
                                 (setq returned-result
-                                      (concat "Broken1: " text))
+                                      (concat "Broken: " text))
 
                                 ;; Call paste again
                                 (webpaste-paste-text text)))
 
-                        (list "workingprovider1"
+                        (list "workingprovider"
                               (lambda (text)
                                 (setq returned-result
-                                      (concat "Works1: " text))))
-
-                        (list "workingprovider2"
-                              (lambda (text)
-                                (setq returned-result
-                                      (concat "Works2: " text))))
-
-                        (list "brokenprovider2"
-                              (lambda (text)
-                                ;; Set return text
-                                (setq returned-result
-                                      (concat "Broken2: " text))
-
-                                ;; Call paste again
-                                (webpaste-paste-text text)))))
+                                      (concat "Working: " text))))))
 
     ;; Call webpaste
     (webpaste-paste-text "test-string")
 
     ;; Check that we got the expected result
-    (should (string= returned-result "Works1: test-string"))))
+    (should (string= returned-result "Working: test-string"))))
+
 
 
 (provide 'webpaste-test)
