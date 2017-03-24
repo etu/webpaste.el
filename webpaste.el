@@ -59,7 +59,12 @@ if that variable is nil, it will use the list of names from ‘webpaste-provider
 each run.")
 
 
-(cl-defun webpaste-provider (&key domain (type "POST") parser post-data post-field success)
+(cl-defun webpaste-provider (&key domain
+                                  (type "POST")
+                                  (parser 'buffer-string)
+                                  (post-data '())
+                                  post-field
+                                  success)
   "Macro to create the lambda function for a provider.
 
 This macro accepts the parameters :domain, :type, :parser, :post-data,
@@ -72,7 +77,7 @@ Usage:
 :domain      URL that we should do the request to to paste data.
 :type        HTTP Request type, defaults to POST.
 :parser      Defines how request.el parses the result. Look up :parser for
-             `request`.
+             `request`. This defaults to 'buffer-string.
 :post-data   Default post fields sent to service. Defaults to nil.
 :post-field  Name of the field to insert the code into.
 :success     Callback sent to `request`, look up how to write these in the
@@ -101,7 +106,6 @@ Usage:
   (list (list "ptpb.pw"
               (webpaste-provider
                :domain "https://ptpb.pw/"
-               :parser 'buffer-string
                :post-field "c"
                :success
                (cl-function (lambda (&key response &allow-other-keys)
@@ -111,7 +115,6 @@ Usage:
         (list "ix.io"
               (webpaste-provider
                :domain "http://ix.io/"
-               :parser 'buffer-string
                :post-field "f:1"
                :success
                (cl-function (lambda (&key data &allow-other-keys)
@@ -122,7 +125,6 @@ Usage:
         (list "sprunge.us"
               (webpaste-provider
                :domain "http://sprunge.us/"
-               :parser 'buffer-string
                :post-field "sprunge"
                :success
                (cl-function (lambda (&key data &allow-other-keys)
@@ -133,7 +135,6 @@ Usage:
         (list "dpaste.com"
               (webpaste-provider
                :domain "http://dpaste.com/api/v2/"
-               :parser 'buffer-string
                :post-data '(("syntax" . "text")
                             ("title" . "")
                             ("poster" . "")
@@ -147,7 +148,6 @@ Usage:
         (list "dpaste.de"
               (webpaste-provider
                :domain "https://dpaste.de/api/"
-               :parser 'buffer-string
                :post-data '(("lexer" . "text")
                             ("format" . "url")
                             ("expires" . 86400))
