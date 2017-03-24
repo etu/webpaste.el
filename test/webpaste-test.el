@@ -6,6 +6,15 @@
 
 
 
+(ert-deftest webpaste-test/return-url ()
+  "Test returning of URL's to the user."
+
+  (webpaste-return-url "https://example.com/")
+
+  (should (equal (car kill-ring) "https://example.com/")))
+
+
+
 (ert-deftest webpaste--autopupulate-provider-priority ()
   "Test autopopulate of webpaste-provider-priority."
 
