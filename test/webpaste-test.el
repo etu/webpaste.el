@@ -42,7 +42,7 @@
 
 
 
-(ert-deftest webpaste--callback-from-working-provider ()
+(ert-deftest webpaste-test/callback-from-working-provider ()
   "This test just sends a message to a good provider that just works."
 
   ;; Temporal storage for result
@@ -67,7 +67,7 @@
 
 
 
-(ert-deftest webpaste--callback-from-working-provider-as-fallback ()
+(ert-deftest webpaste-test/callback-from-working-provider-as-fallback ()
   "This test sends a message to a bad provider that returns some error data.
 
 Then the bad provider pastes again like it should and we check that we got the
@@ -104,5 +104,4 @@ result from the good provider only."
 
 
 
-(provide 'webpaste-test)
 ;;; webpaste-test.el ends here
