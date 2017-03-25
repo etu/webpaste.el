@@ -68,27 +68,27 @@ each run.")
                                   (no-failover nil)
                                   (sync nil)
                                   post-field
-                                  success)
+                                  success-lambda)
   "Macro to create the lambda function for a provider.
 
 This macro accepts the parameters :uri, :type, :parser, :post-data, :post-field
-and :success.
+and :success-lambda.
 
 Usage:
   (webpaste-provider
     [:keyword [option]]...)
 
-:uri         URI that we should do the request to to paste data.
-:type        HTTP Request type, defaults to POST.
-:parser      Defines how request.el parses the result. Look up :parser for
-             `request`. This defaults to 'buffer-string.
-:post-data   Default post fields sent to service. Defaults to nil.
-:post-field  Name of the field to insert the code into.
-:no-failover Set to t to not allow doing failovers, Defaults to nil.
-:sync        Set to t to wait until request is done.  Defaults to nil.
-             This should only be used for debugging purposes.
-:success     Callback sent to `request`, look up how to write these in the
-             documentation for `request`"
+:uri            URI that we should do the request to to paste data.
+:type           HTTP Request type, defaults to POST.
+:parser         Defines how request.el parses the result. Look up :parser for
+                `request'. This defaults to 'buffer-string.
+:post-data      Default post fields sent to service. Defaults to nil.
+:post-field     Name of the field to insert the code into.
+:no-failover    Set to t to not allow doing failovers.  Defaults to nil.
+:sync           Set to t to wait until request is done.  Defaults to nil.  This
+                should only be used for debugging purposes.
+:success-lambda Callback sent to `request', look up how to write these in the
+                documentation for `request'."
   (lambda (text)
     "Paste TEXT to provider"
 
@@ -101,7 +101,7 @@ Usage:
                :type type
                :data post-data
                :parser parser
-               :success success
+               :success success-lambda
                :sync sync
                :error
                (cl-function (lambda (&key error-thrown &allow-other-keys)
@@ -111,36 +111,43 @@ Usage:
 
 
 
+;;; Predefined success lambdas for providers
+(defvar webpaste/providers-success-location-header
+  (cl-function (lambda (&key response &allow-other-keys)
+                 (when response
+                   (webpaste-return-url
+                    (request-response-header response "Location")))))
+  "Predefined success callback for providers returning a Location header.")
+
+
+(defvar webpaste/providers-success-returned-string
+  (cl-function (lambda (&key data &allow-other-keys)
+                 (when data
+                   (webpaste-return-url
+                    (replace-regexp-in-string "\n$" "" data)))))
+  "Predefined success callback for providers returning a string with URL.")
+
+
+
 ;;; Define providers
 (defcustom webpaste-providers-alist
   `(("ptpb.pw"
      ,(webpaste-provider
        :uri "https://ptpb.pw/"
        :post-field "c"
-       :success
-       (cl-function (lambda (&key response &allow-other-keys)
-                      (webpaste-return-url
-                       (request-response-header response "Location"))))))
+       :success-lambda webpaste/providers-success-location-header))
 
     ("ix.io"
      ,(webpaste-provider
        :uri "http://ix.io/"
        :post-field "f:1"
-       :success
-       (cl-function (lambda (&key data &allow-other-keys)
-                      (when data
-                        (webpaste-return-url
-                         (replace-regexp-in-string "\n$" "" data)))))))
+       :success-lambda webpaste/providers-success-returned-string))
 
     ("sprunge.us"
      ,(webpaste-provider
        :uri "http://sprunge.us/"
        :post-field "sprunge"
-       :success
-       (cl-function (lambda (&key data &allow-other-keys)
-                      (when data
-                        (webpaste-return-url
-                         (replace-regexp-in-string "\n$" "" data)))))))
+       :success-lambda webpaste/providers-success-returned-string))
 
     ("dpaste.com"
      ,(webpaste-provider
@@ -150,10 +157,7 @@ Usage:
                     ("poster" . "")
                     ("expiry_days" . 1))
        :post-field "content"
-       :success
-       (cl-function (lambda (&key response &allow-other-keys)
-                      (webpaste-return-url
-                       (request-response-header response "Location"))))))
+       :success-lambda webpaste/providers-success-location-header))
 
     ("dpaste.de"
      ,(webpaste-provider
@@ -162,11 +166,7 @@ Usage:
                     ("format" . "url")
                     ("expires" . 86400))
        :post-field "content"
-       :success
-       (cl-function (lambda (&key data &allow-other-keys)
-                      (when data
-                        (webpaste-return-url
-                         (replace-regexp-in-string "\n$" "" data))))))))
+       :success-lambda webpaste/providers-success-returned-string)))
 
   "Define all webpaste.el providers.
 Consists of provider name and lambda function to do the actuall call to the
