@@ -9,8 +9,12 @@
 (ert-deftest webpaste-test/return-url ()
   "Test returning of URL's to the user."
 
-  (webpaste-return-url "https://example.com/")
+  ;; Test to return a link and check that the message logged is the expected one
+  (should (equal
+           (webpaste-return-url "https://example.com/")
+           "Added https://example.com/ to kill ring."))
 
+  ;; Check so the kill ring contain the correct contents
   (should (equal (car kill-ring) "https://example.com/")))
 
 
