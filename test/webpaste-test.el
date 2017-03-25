@@ -2,7 +2,31 @@
 ;;; Commentary:
 ;;; Code:
 (require 'ert)
+(require 'cl-lib)
 (require 'webpaste)
+
+
+
+(ert-deftest webpaste-test/paste-region-and-buffer ()
+  "Test pasting of regions and buffers."
+
+  ;; Override pasting function to just return the inserted string
+  (cl-letf (((symbol-function 'webpaste-paste-text)
+             (lambda (text) text)))
+
+    ;; Set up a temporary buffer
+    (with-temp-buffer
+      ;; With README as content
+      (insert-file-contents "README.org")
+
+      ;; And make sure that the paste buffer function returns the same as we had
+      ;; in the buffer.
+      (should (equal (webpaste-paste-buffer) (buffer-string)))
+
+      ;; Test so webpaste-paste-region selects the same part of the buffer as to
+      ;; be expected.
+      (should (equal (webpaste-paste-region 10 100)
+                     (buffer-substring 10 100))))))
 
 
 
