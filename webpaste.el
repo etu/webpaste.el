@@ -37,6 +37,7 @@
 (require 'request)
 (require 'cl-lib)
 
+
 
 (defgroup webpaste nil
   "Configuration options for webpaste.el where you can define paste providers,
@@ -58,6 +59,7 @@ This list will be re-populated each run based on ‘webpaste-provider-priority�
 if that variable is nil, it will use the list of names from ‘webpaste-providers’
 each run.")
 
+
 
 (cl-defun webpaste-provider (&key domain
                                   (type "POST")
@@ -100,6 +102,7 @@ Usage:
                             (webpaste-paste-text text))))
     nil))
 
+
 
 ;;; Define providers
 (defcustom webpaste-providers-alist
@@ -166,6 +169,7 @@ return it to the user."
   :type  '(alist :key-type (string :tag "provider name")
                  :value-type (sexp :tag "webpaste-provider macro definition for the provider")))
 
+
 
 (defun webpaste/get-provider-priority ()
   "Return provider priority."
@@ -182,6 +186,7 @@ return it to the user."
 
   webpaste-provider-priority)
 
+
 
 ;;;###autoload
 (defun webpaste-return-url (returned-url)
@@ -196,6 +201,7 @@ return it to the user."
   ;; Notify user
   (message (concat "Added " returned-url " to kill ring.")))
 
+
 
 ;;;###autoload
 (defun webpaste-paste-text (text)
@@ -246,6 +252,7 @@ Argument MARK Current mark."
   ;; Extract the buffer contents with buffer-substring and paste it
   (webpaste-paste-text (buffer-substring (point-min) (point-max))))
 
+
 
 (provide 'webpaste)
 

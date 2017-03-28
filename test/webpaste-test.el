@@ -5,7 +5,7 @@
 (require 'cl-lib)
 (require 'webpaste)
 
-
+
 
 (ert-deftest webpaste-test/paste-region-and-buffer ()
   "Test pasting of regions and buffers."
@@ -28,7 +28,7 @@
       (should (equal (webpaste-paste-region 10 100)
                      (buffer-substring 10 100))))))
 
-
+
 
 (ert-deftest webpaste-test/return-url ()
   "Test returning of URL's to the user."
@@ -41,7 +41,7 @@
   ;; Check so the kill ring contain the correct contents
   (should (equal (car kill-ring) "https://example.com/")))
 
-
+
 
 (ert-deftest webpaste-test/get-provider-priority ()
   "Test how it populates webpaste/get-provider-priority."
@@ -68,7 +68,7 @@
   (should (equal (webpaste/get-provider-priority)
                  '("provider2" "provider1" "provider3"))))
 
-
+
 
 (ert-deftest webpaste-test/callback-from-working-provider ()
   "This test just sends a message to a good provider that just works."
@@ -93,7 +93,7 @@
     ;; Check that we got the expected result
     (should (string= returned-result "Works: test-string"))))
 
-
+
 
 (ert-deftest webpaste-test/callback-from-working-provider-as-fallback ()
   "This test sends a message to a bad provider that returns some error data.
