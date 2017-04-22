@@ -69,10 +69,7 @@ each run.")
                                   (sync nil)
                                   post-field
                                   success-lambda)
-  "Macro to create the lambda function for a provider.
-
-This macro accepts the parameters :uri, :type, :parser, :post-data, :post-field
-and :success-lambda.
+  "Function to create the lambda function for a provider.
 
 Usage:
   (webpaste-provider
