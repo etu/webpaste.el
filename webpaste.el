@@ -92,22 +92,22 @@ Usage:
   (lambda (text)
     "Paste TEXT to provider"
 
-    ;; Local variable post-data
-    (cl-pushnew (cons post-field text) post-data)
+    (prog1 nil
+      ;; Local variable post-data
+      (cl-pushnew (cons post-field text) post-data)
 
-    ;; Do request
-    (request uri
-             :type type
-             :data post-data
-             :parser parser
-             :success success
-             :sync sync
-             :error
-             (cl-function (lambda (&key error-thrown &allow-other-keys)
-                            (message "Got error: %S" error-thrown)
-                            (unless no-failover
-                              (webpaste-paste-text text)))))
-    nil))
+      ;; Do request
+      (request uri
+               :type type
+               :data post-data
+               :parser parser
+               :success success
+               :sync sync
+               :error
+               (cl-function (lambda (&key error-thrown &allow-other-keys)
+                              (message "Got error: %S" error-thrown)
+                              (unless no-failover
+                                (webpaste-paste-text text))))))))
 
 
 
