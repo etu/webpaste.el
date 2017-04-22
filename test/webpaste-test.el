@@ -7,6 +7,24 @@
 
 
 
+(ert-deftest webpaste-test/provider ()
+  "Test creation of providers."
+
+  (let ((success-lambda t)
+        (provider (webpaste-provider
+                   :uri "http://invalid-domain-name/"
+                   :post-field "data"
+                   :no-failover t
+                   :sync t
+                   :success (cl-function (lambda (&allow-other-keys)
+                                           (setq success-lambda nil))))))
+
+    (funcall provider "dummy-text")
+
+    (should (equal t success-lambda))))
+
+
+
 (ert-deftest webpaste-test/paste-region-and-buffer ()
   "Test pasting of regions and buffers."
 
