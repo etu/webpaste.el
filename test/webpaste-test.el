@@ -68,9 +68,9 @@
   ;; Prepare variables
   (setq-default webpaste-provider-priority nil)
   (setq-default webpaste-providers-alist
-                (list (list "provider1" "lambda")
-                      (list "provider2" "lambda")
-                      (list "provider3" "lambda")))
+                `(("provider1" "lambda")
+                  ("provider2" "lambda")
+                  ("provider3" "lambda")))
 
   ;; Do test
   (should (equal (webpaste/get-provider-priority)
@@ -100,10 +100,10 @@
     ;; Make a fake provider that just "returns" the paste result by setting a
     ;; variable and concatinate it with "Works: " so we can see it showing up
     (setq-default webpaste-providers-alist
-                  (list (list "workingprovider"
-                              (lambda (text)
-                                (setq returned-result
-                                      (concat "Works: " text))))))
+                  `(("workingprovider"
+                     ,(lambda (text)
+                        (setq returned-result
+                              (concat "Works: " text))))))
 
     ;; Call webpaste
     (webpaste-paste-text "test-string")
@@ -128,19 +128,19 @@ result from the good provider only."
     ;; Creates a "broken" provider that will call on the next provider due to a
     ;; faked failure and checks that the next provider is picked up correctly.
     (setq-default webpaste-providers-alist
-                  (list (list "brokenprovider"
-                              (lambda (text)
-                                ;; Set return text
-                                (setq returned-result
-                                      (concat "Broken: " text))
+                  `(("brokenprovider"
+                     ,(lambda (text)
+                        ;; Set return text
+                        (setq returned-result
+                              (concat "Broken: " text))
 
-                                ;; Call paste again
-                                (webpaste-paste-text text)))
+                        ;; Call paste again
+                        (webpaste-paste-text text)))
 
-                        (list "workingprovider"
-                              (lambda (text)
-                                (setq returned-result
-                                      (concat "Working: " text))))))
+                    ("workingprovider"
+                     ,(lambda (text)
+                        (setq returned-result
+                              (concat "Working: " text))))))
 
     ;; Call webpaste
     (webpaste-paste-text "test-string")
