@@ -1,11 +1,11 @@
 ;;; webpaste.el --- Paste to pastebin-like services  -*- lexical-binding: t; -*-
 
-;; Copyright (c) 2016 Elis Axelsson
+;; Copyright (c) 2016-2017 Elis Axelsson
 
 ;; Author: Elis "etu" Axelsson
 ;; URL: https://github.com/etu/webpaste.el
-;; Package-Version: 1.1.0
-;; Version: 1.1.0
+;; Package-Version: 1.2.0
+;; Version: 1.2.0
 ;; Keywords: convenience, comm, paste
 ;; Package-Requires: ((emacs "24.4") (request "0.2.0") (cl-lib "0.5"))
 
