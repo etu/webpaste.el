@@ -61,6 +61,24 @@ each run.")
 
 
 
+;;; Predefined success lambdas for providers
+(defvar webpaste/providers-success-location-header
+  (cl-function (lambda (&key response &allow-other-keys)
+                 (when response
+                   (webpaste-return-url
+                    (request-response-header response "Location")))))
+  "Predefined success callback for providers returning a Location header.")
+
+
+(defvar webpaste/providers-success-returned-string
+  (cl-function (lambda (&key data &allow-other-keys)
+                 (when data
+                   (webpaste-return-url
+                    (replace-regexp-in-string "\n$" "" data)))))
+  "Predefined success callback for providers returning a string with URL.")
+
+
+
 (cl-defun webpaste-provider (&key uri
                                   (type "POST")
                                   (parser 'buffer-string)
@@ -105,24 +123,6 @@ Usage:
                               (message "Got error: %S" error-thrown)
                               (unless no-failover
                                 (webpaste-paste-text text))))))))
-
-
-
-;;; Predefined success lambdas for providers
-(defvar webpaste/providers-success-location-header
-  (cl-function (lambda (&key response &allow-other-keys)
-                 (when response
-                   (webpaste-return-url
-                    (request-response-header response "Location")))))
-  "Predefined success callback for providers returning a Location header.")
-
-
-(defvar webpaste/providers-success-returned-string
-  (cl-function (lambda (&key data &allow-other-keys)
-                 (when data
-                   (webpaste-return-url
-                    (replace-regexp-in-string "\n$" "" data)))))
-  "Predefined success callback for providers returning a string with URL.")
 
 
 
