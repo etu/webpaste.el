@@ -203,7 +203,7 @@ return it to the user."
   (kill-new returned-url)
 
   ;; Notify user
-  (message (concat "Added " returned-url " to kill ring.")))
+  (message "Added %S to kill ring." returned-url))
 
 
 
