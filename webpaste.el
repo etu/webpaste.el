@@ -113,60 +113,60 @@ Usage:
 
 ;;; Define providers
 (defcustom webpaste-providers-alist
-  (list (list "ptpb.pw"
-              (webpaste-provider
-               :uri "https://ptpb.pw/"
-               :post-field "c"
-               :success
-               (cl-function (lambda (&key response &allow-other-keys)
-                              (webpaste-return-url
-                               (request-response-header response "Location"))))))
+  `(("ptpb.pw"
+     ,(webpaste-provider
+       :uri "https://ptpb.pw/"
+       :post-field "c"
+       :success
+       (cl-function (lambda (&key response &allow-other-keys)
+                      (webpaste-return-url
+                       (request-response-header response "Location"))))))
 
-        (list "ix.io"
-              (webpaste-provider
-               :uri "http://ix.io/"
-               :post-field "f:1"
-               :success
-               (cl-function (lambda (&key data &allow-other-keys)
-                              (when data
-                                (webpaste-return-url
-                                 (replace-regexp-in-string "\n$" "" data)))))))
+    ("ix.io"
+     ,(webpaste-provider
+       :uri "http://ix.io/"
+       :post-field "f:1"
+       :success
+       (cl-function (lambda (&key data &allow-other-keys)
+                      (when data
+                        (webpaste-return-url
+                         (replace-regexp-in-string "\n$" "" data)))))))
 
-        (list "sprunge.us"
-              (webpaste-provider
-               :uri "http://sprunge.us/"
-               :post-field "sprunge"
-               :success
-               (cl-function (lambda (&key data &allow-other-keys)
-                              (when data
-                                (webpaste-return-url
-                                 (replace-regexp-in-string "\n$" "" data)))))))
+    ("sprunge.us"
+     ,(webpaste-provider
+       :uri "http://sprunge.us/"
+       :post-field "sprunge"
+       :success
+       (cl-function (lambda (&key data &allow-other-keys)
+                      (when data
+                        (webpaste-return-url
+                         (replace-regexp-in-string "\n$" "" data)))))))
 
-        (list "dpaste.com"
-              (webpaste-provider
-               :uri "http://dpaste.com/api/v2/"
-               :post-data '(("syntax" . "text")
-                            ("title" . "")
-                            ("poster" . "")
-                            ("expiry_days" . 1))
-               :post-field "content"
-               :success
-               (cl-function (lambda (&key response &allow-other-keys)
-                              (webpaste-return-url
-                               (request-response-header response "Location"))))))
+    ("dpaste.com"
+     ,(webpaste-provider
+       :uri "http://dpaste.com/api/v2/"
+       :post-data '(("syntax" . "text")
+                    ("title" . "")
+                    ("poster" . "")
+                    ("expiry_days" . 1))
+       :post-field "content"
+       :success
+       (cl-function (lambda (&key response &allow-other-keys)
+                      (webpaste-return-url
+                       (request-response-header response "Location"))))))
 
-        (list "dpaste.de"
-              (webpaste-provider
-               :uri "https://dpaste.de/api/"
-               :post-data '(("lexer" . "text")
-                            ("format" . "url")
-                            ("expires" . 86400))
-               :post-field "content"
-               :success
-               (cl-function (lambda (&key data &allow-other-keys)
-                              (when data
-                                (webpaste-return-url
-                                 (replace-regexp-in-string "\n$" "" data))))))))
+    ("dpaste.de"
+     ,(webpaste-provider
+       :uri "https://dpaste.de/api/"
+       :post-data '(("lexer" . "text")
+                    ("format" . "url")
+                    ("expires" . 86400))
+       :post-field "content"
+       :success
+       (cl-function (lambda (&key data &allow-other-keys)
+                      (when data
+                        (webpaste-return-url
+                         (replace-regexp-in-string "\n$" "" data))))))))
 
   "Define all webpaste.el providers.
 Consists of provider name and lambda function to do the actuall call to the
