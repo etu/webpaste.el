@@ -105,8 +105,8 @@ Usage:
              :error
              (cl-function (lambda (&key error-thrown &allow-other-keys)
                             (message "Got error: %S" error-thrown)
-                            (if (eq no-failover nil)
-                                (webpaste-paste-text text)))))
+                            (unless no-failover
+                              (webpaste-paste-text text)))))
     nil))
 
 
@@ -182,14 +182,14 @@ return it to the user."
   "Return provider priority."
 
   ;; Populate webpaste-provider-priority if needed
-  (if (eq webpaste-provider-priority nil)
-      (let ((provider-names))
-        ;; Loop provider list
-        (dolist (provider webpaste-providers-alist)
-          (cl-pushnew (car provider) provider-names))
+  (unless webpaste-provider-priority
+    (let ((provider-names))
+      ;; Loop provider list
+      (dolist (provider webpaste-providers-alist)
+        (cl-pushnew (car provider) provider-names))
 
-        ;; Set names list
-        (setq-default webpaste-provider-priority (reverse provider-names))))
+      ;; Set names list
+      (setq-default webpaste-provider-priority (reverse provider-names))))
 
   webpaste-provider-priority)
 
@@ -236,8 +236,8 @@ When we run out of providers to try, it will restart since
 ‘webpaste-tested-providers’ will be empty and then populated again."
 
   ;; Populate tested providers for this request if needed
-  (if (eq webpaste-tested-providers nil)
-      (setq webpaste-tested-providers (webpaste/get-provider-priority)))
+  (unless webpaste-tested-providers
+    (setq webpaste-tested-providers (webpaste/get-provider-priority)))
 
   ;; Get name of provider at the top of the list
   (let ((provider-name (car webpaste-tested-providers)))
