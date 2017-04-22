@@ -204,6 +204,14 @@ return it to the user."
 
 
 ;;;###autoload
+(defun webpaste-paste-text-to-provider (text provider-name)
+  "Paste TEXT to specific PROVIDER-NAME.
+This function sends a paste to a spacific provider.  This function is created to
+make `webpaste-paste-text' do less magic things all at once."
+  (funcall (cadr (assoc provider-name webpaste-providers-alist)) text))
+
+
+;;;###autoload
 (defun webpaste-paste-text (text)
   "Paste TEXT to some paste service.
 If ‘webpaste-provider-priority’ isn't populated, it will populate it with the
@@ -230,7 +238,7 @@ When we run out of providers to try, it will restart since
     (setq webpaste-tested-providers (cdr webpaste-tested-providers))
 
     ;; Run pasting function
-    (funcall (cadr (assoc provider-name webpaste-providers-alist)) text)))
+    (webpaste-paste-text-to-provider text provider-name)))
 
 
 ;;;###autoload
