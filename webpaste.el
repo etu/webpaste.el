@@ -66,6 +66,7 @@ each run.")
                                   (parser 'buffer-string)
                                   (post-data '())
                                   (no-failover nil)
+                                  (sync nil)
                                   post-field
                                   success)
   "Macro to create the lambda function for a provider.
@@ -84,6 +85,8 @@ Usage:
 :post-data   Default post fields sent to service. Defaults to nil.
 :post-field  Name of the field to insert the code into.
 :no-failover Set to t to not allow doing failovers, Defaults to nil.
+:sync        Set to t to wait until request is done.  Defaults to nil.
+             This should only be used for debugging purposes.
 :success     Callback sent to `request`, look up how to write these in the
              documentation for `request`"
   (lambda (text)
@@ -98,6 +101,7 @@ Usage:
              :data post-data
              :parser parser
              :success success
+             :sync sync
              :error
              (cl-function (lambda (&key error-thrown &allow-other-keys)
                             (message "Got error: %S" error-thrown)
