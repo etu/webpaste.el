@@ -10,18 +10,37 @@
 (ert-deftest webpaste-test/provider ()
   "Test creation of providers."
 
-  (let ((success-lambda t)
+  (let ((used-lambda nil)
         (provider (webpaste-provider
                    :uri "http://invalid-domain-name/"
                    :post-field "data"
-                   :no-failover t
                    :sync t
-                   :success-lambda (cl-function (lambda (&allow-other-keys)
-                                                  (setq success-lambda nil))))))
+                   :success-lambda (cl-function
+                                    (lambda (&key data &allow-other-keys)
+                                      (setq used-lambda "success")))
+                   :error-lambda (cl-function
+                                  (lambda (&key error-thrown &allow-other-keys)
+                                    (setq used-lambda "error"))))))
 
     (funcall provider "dummy-text")
 
-    (should (equal t success-lambda))))
+    (should (equal "error" used-lambda)))
+
+  (let ((used-lambda nil)
+        (provider (webpaste-provider
+                   :uri "https://httpbin.org/status/200"
+                   :post-field "data"
+                   :sync t
+                   :success-lambda (cl-function
+                                    (lambda (&key data &allow-other-keys)
+                                        (setq used-lambda "success")))
+                   :error-lambda (cl-function
+                                  (lambda (&key error-thrown &allow-other-keys)
+                                    (setq used-lambda "error"))))))
+
+    (funcall provider "dummy-text")
+
+    (should (equal "success" used-lambda))))
 
 
 
