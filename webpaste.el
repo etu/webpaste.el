@@ -123,7 +123,10 @@ Required params:
 :post-field        Name of the field to insert the code into.
 
 :success-lambda    Callback sent to `request', look up how to write these in the
-                   documentation for `request'.
+                   documentation for `request'.  Two good examples are
+                   `webpaste/providers-success-location-header' and
+                   `webpaste/providers-success-returned-string' as well as the
+                   custom one used for the gist.github.com provider.
 
 Optional params:
 :type              HTTP Request type, defaults to POST.
@@ -140,8 +143,12 @@ Optional params:
                    you need a provider that isn't allowed to failover.
 
 :post-field-lambda Function that builds and returns the post data that should be
-                   sent to the provider.  It should accept the parameter TEXT
-                   only which contains the content that should be sent.
+                   sent to the provider.  It should accept the parameter TEXT,
+                   POST-FIELD and POST-DATA.
+
+                   TEXT contains the data that should be sent.
+                   POST-FIELD cointains the name of the field to be sent.
+                   POST-DATA contains predefined fields that the provider needs.
 
 :sync              Set to t to wait until request is done.  Defaults to nil.
                    This should only be used for debugging purposes."
@@ -220,7 +227,7 @@ provider.  The lamda should call ‘webpaste-return-url’ with resulting url to
 return it to the user."
   :group 'webpaste
   :type  '(alist :key-type (string :tag "provider name")
-                 :value-type (sexp :tag "webpaste-provider macro definition for the provider")))
+                 :value-type (sexp :tag "webpaste-provider function definition for the provider")))
 
 
 
