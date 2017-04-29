@@ -102,38 +102,48 @@ each run.")
 
 
 (cl-defun webpaste-provider (&key uri
-                                  (type "POST")
-                                  (parser 'buffer-string)
-                                  (post-data '())
-                                  (sync nil)
                                   post-field
-                                  (post-field-lambda webpaste/providers-default-post-field-lambda)
+                                  success-lambda
+                                  (type "POST")
+                                  (post-data '())
+                                  (parser 'buffer-string)
                                   (error-lambda webpaste/providers-error-lambda)
-                                  success-lambda)
+                                  (post-field-lambda webpaste/providers-default-post-field-lambda)
+                                  (sync nil))
   "Function to create the lambda function for a provider.
 
 Usage:
   (webpaste-provider
     [:keyword [option]]...)
 
-:uri            URI that we should do the request to to paste data.
-:type           HTTP Request type, defaults to POST.
-:parser         Defines how request.el parses the result. Look up :parser for
-                `request'. This defaults to 'buffer-string.
-:post-data      Default post fields sent to service. Defaults to nil.
-:post-field     Name of the field to insert the code into.
-:sync           Set to t to wait until request is done.  Defaults to nil.  This
-                should only be used for debugging purposes.
+Required params:
+:uri               URI that we should do the request to to paste data.
+
+:post-field        Name of the field to insert the code into.
+
+:success-lambda    Callback sent to `request', look up how to write these in the
+                   documentation for `request'.
+
+Optional params:
+:type              HTTP Request type, defaults to POST.
+
+:post-data         Default post fields sent to service. Defaults to nil.
+
+:parser            Defines how request.el parses the result. Look up :parser for
+                  `request'. This defaults to 'buffer-string.
+
+:error-lambda      Callback sent to `request', look up how to write these in the
+                   documentation for `request'.  The default value for this is
+                   `webpaste/providers-error-lambda', but there's also
+                   `webpaste/providers-error-lambda-no-failover' available if
+                   you need a provider that isn't allowed to failover.
+
 :post-field-lambda Function that builds and returns the post data that should be
                    sent to the provider.  It should accept the parameter TEXT
                    only which contains the content that should be sent.
-:success-lambda Callback sent to `request', look up how to write these in the
-                documentation for `request'.
-:error-lambda   Callback sent to `request', look up how to write these in the
-                documentation for `request'.  The default value for this is
-                `webpaste/providers-error-lambda', but there's also
-                `webpaste/providers-error-lambda-no-failover' available if you
-                need a provider that isn't allowed to failover."
+
+:sync              Set to t to wait until request is done.  Defaults to nil.
+                   This should only be used for debugging purposes."
   (lambda (text)
     "Paste TEXT to provider"
 
