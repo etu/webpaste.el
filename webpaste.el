@@ -108,7 +108,7 @@ each run.")
                                   (sync nil)
                                   post-field
                                   (post-field-lambda webpaste/providers-default-post-field-lambda)
-                                  error-lambda
+                                  (error-lambda webpaste/providers-error-lambda)
                                   success-lambda)
   "Function to create the lambda function for a provider.
 
@@ -130,7 +130,7 @@ Usage:
 :success-lambda Callback sent to `request', look up how to write these in the
                 documentation for `request'.
 :error-lambda   Callback sent to `request', look up how to write these in the
-                documentation for `request'.  A good default value forr this is
+                documentation for `request'.  The default value for this is
                 `webpaste/providers-error-lambda', but there's also
                 `webpaste/providers-error-lambda-no-failover' available if you
                 need a provider that isn't allowed to failover."
@@ -155,22 +155,19 @@ Usage:
      ,(webpaste-provider
        :uri "https://ptpb.pw/"
        :post-field "c"
-       :success-lambda webpaste/providers-success-location-header
-       :error-lambda webpaste/providers-error-lambda))
+       :success-lambda webpaste/providers-success-location-header))
 
     ("ix.io"
      ,(webpaste-provider
        :uri "http://ix.io/"
        :post-field "f:1"
-       :success-lambda webpaste/providers-success-returned-string
-       :error-lambda webpaste/providers-error-lambda))
+       :success-lambda webpaste/providers-success-returned-string))
 
     ("sprunge.us"
      ,(webpaste-provider
        :uri "http://sprunge.us/"
        :post-field "sprunge"
-       :success-lambda webpaste/providers-success-returned-string
-       :error-lambda webpaste/providers-error-lambda))
+       :success-lambda webpaste/providers-success-returned-string))
 
     ("dpaste.com"
      ,(webpaste-provider
@@ -180,8 +177,7 @@ Usage:
                     ("poster" . "")
                     ("expiry_days" . 1))
        :post-field "content"
-       :success-lambda webpaste/providers-success-location-header
-       :error-lambda webpaste/providers-error-lambda))
+       :success-lambda webpaste/providers-success-location-header))
 
     ("dpaste.de"
      ,(webpaste-provider
@@ -190,8 +186,7 @@ Usage:
                     ("format" . "url")
                     ("expires" . 86400))
        :post-field "content"
-       :success-lambda webpaste/providers-success-returned-string
-       :error-lambda webpaste/providers-error-lambda)))
+       :success-lambda webpaste/providers-success-returned-string)))
 
   "Define all webpaste.el providers.
 Consists of provider name and lambda function to do the actuall call to the
