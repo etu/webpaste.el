@@ -22,7 +22,7 @@ easiest way to install and configure packages.
            ("C-c C-p C-r" . webpaste-paste-region)))
 #+END_SRC
 
-** TODO Providers to implement [5/8]
+** TODO Providers to implement [6/9]
  - [X] ptpb.pw
  - [X] ix.io
  - [X] dpaste.com
@@ -31,3 +31,4 @@ easiest way to install and configure packages.
  - [ ] paste.pound-python.org
  - [ ] paste.debian.net
  - [ ] bpaste.net
+ - [X] gist.github.com

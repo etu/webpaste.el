@@ -7,7 +7,7 @@
 ;; Package-Version: 1.2.1
 ;; Version: 1.2.1
 ;; Keywords: convenience, comm, paste
-;; Package-Requires: ((emacs "24.4") (request "0.2.0") (cl-lib "0.5"))
+;; Package-Requires: ((emacs "24.4") (request "0.2.0") (cl-lib "0.5") (json "1.4"))
 
 ;;; Commentary:
 
@@ -36,6 +36,7 @@
 ;;; Code:
 (require 'request)
 (require 'cl-lib)
+(require 'json)
 
 
 
@@ -97,7 +98,6 @@ each run.")
 
     post-data)
   "Predefined lambda for building post fields.")
-
 
 
 
@@ -196,7 +196,23 @@ Optional params:
                     ("format" . "url")
                     ("expires" . 86400))
        :post-field "content"
-       :success-lambda webpaste/providers-success-returned-string)))
+       :success-lambda webpaste/providers-success-returned-string))
+
+    ("gist.github.com"
+     ,(webpaste-provider
+       :uri "https://api.github.com/gists"
+       :post-field nil
+       :post-field-lambda (lambda (text post-field post-data)
+                            (json-encode `(("description" . "Pasted from Emacs with webpaste.el")
+                                           ("public" . "true")
+                                           ("files" .
+                                            (("file.txt" .
+                                              (("content" . ,text))))))))
+       :success-lambda (cl-function (lambda (&key data &allow-other-keys)
+                                      (message "fubar")
+                                      (when data
+                                        (webpaste-return-url
+                                         (cdr (assoc 'html_url (json-read-from-string data))))))))))
 
   "Define all webpaste.el providers.
 Consists of provider name and lambda function to do the actuall call to the
