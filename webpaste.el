@@ -4,8 +4,8 @@
 
 ;; Author: Elis "etu" Axelsson
 ;; URL: https://github.com/etu/webpaste.el
-;; Package-Version: 1.2.1
-;; Version: 1.2.1
+;; Package-Version: 1.2.2
+;; Version: 1.2.2
 ;; Keywords: convenience, comm, paste
 ;; Package-Requires: ((emacs "24.4") (request "0.2.0") (cl-lib "0.5") (json "1.4"))
 
@@ -92,6 +92,7 @@ each run.")
                     (replace-regexp-in-string "\n$" "" data)))))
   "Predefined success callback for providers returning a string with URL.")
 
+
 (defvar webpaste/providers-default-post-field-lambda
   (lambda (text post-field post-data)
     (cl-pushnew (cons post-field text) post-data)
@@ -130,7 +131,7 @@ Optional params:
 :post-data         Default post fields sent to service. Defaults to nil.
 
 :parser            Defines how request.el parses the result. Look up :parser for
-                  `request'. This defaults to 'buffer-string.
+                   `request'. This defaults to 'buffer-string.
 
 :error-lambda      Callback sent to `request', look up how to write these in the
                    documentation for `request'.  The default value for this is
@@ -209,7 +210,6 @@ Optional params:
                                             (("file.txt" .
                                               (("content" . ,text))))))))
        :success-lambda (cl-function (lambda (&key data &allow-other-keys)
-                                      (message "fubar")
                                       (when data
                                         (webpaste-return-url
                                          (cdr (assoc 'html_url (json-read-from-string data))))))))))
