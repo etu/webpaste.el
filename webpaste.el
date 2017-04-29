@@ -91,6 +91,14 @@ each run.")
                     (replace-regexp-in-string "\n$" "" data)))))
   "Predefined success callback for providers returning a string with URL.")
 
+(defvar webpaste/providers-default-post-field-lambda
+  (lambda (text post-field post-data)
+    (cl-pushnew (cons post-field text) post-data)
+
+    post-data)
+  "Predefined lambda for building post fields.")
+
+
 
 
 (cl-defun webpaste-provider (&key uri
@@ -99,6 +107,7 @@ each run.")
                                   (post-data '())
                                   (sync nil)
                                   post-field
+                                  (post-field-lambda webpaste/providers-default-post-field-lambda)
                                   error-lambda
                                   success-lambda)
   "Function to create the lambda function for a provider.
@@ -115,6 +124,9 @@ Usage:
 :post-field     Name of the field to insert the code into.
 :sync           Set to t to wait until request is done.  Defaults to nil.  This
                 should only be used for debugging purposes.
+:post-field-lambda Function that builds and returns the post data that should be
+                   sent to the provider.  It should accept the parameter TEXT
+                   only which contains the content that should be sent.
 :success-lambda Callback sent to `request', look up how to write these in the
                 documentation for `request'.
 :error-lambda   Callback sent to `request', look up how to write these in the
@@ -126,13 +138,10 @@ Usage:
     "Paste TEXT to provider"
 
     (prog1 nil
-      ;; Local variable post-data
-      (cl-pushnew (cons post-field text) post-data)
-
       ;; Do request
       (request uri
                :type type
-               :data post-data
+               :data (funcall post-field-lambda text post-field post-data)
                :parser parser
                :success success-lambda
                :sync sync
