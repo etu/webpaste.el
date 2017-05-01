@@ -212,7 +212,7 @@ Optional params:
        :post-field nil
        :post-field-lambda (lambda (text post-field post-data)
                             (json-encode `(("description" . "Pasted from Emacs with webpaste.el")
-                                           ("public" . "true")
+                                           ("public" . "false")
                                            ("files" .
                                             (("file.txt" .
                                               (("content" . ,text))))))))
