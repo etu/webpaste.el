@@ -54,6 +54,21 @@ default to all providers in order defined in ‘webpaste-providers’ list."
   :type '(repeat string))
 
 
+(defcustom webpaste/default-lang-alist
+  '((css-mode . "css")
+    (fundamental-mode . "text")
+    (html-mode . "html")
+    (java-mode . "java")
+    (js-mode . "js")
+    (go-mode . "go")
+    (php-mode . "php")
+    (python-mode . "python")
+    (yaml-mode . "yaml"))
+  "Alist that maps `major-mode' names to language names."
+  :type '(alist :key-type symbol :value-type string)
+  :group 'webpaste)
+
+
 (defvar webpaste-tested-providers ()
   "Variable for storing which providers to try in which order while running.
 This list will be re-populated each run based on ‘webpaste-provider-priority’ or
@@ -98,8 +113,20 @@ each run.")
 (defvar webpaste/providers-default-post-field-lambda
   (cl-function (lambda (&key text
                         post-field
+                        (post-lang-field-name nil)
+                        (lang-overrides nil)
                         (post-data '()))
                  (cl-pushnew (cons post-field text) post-data)
+
+                 (when post-lang-field-name
+                   ;; Get language name based on major-mode
+                   (let ((language-name (cdr (assoc major-mode (webpaste/get-lang-alist-with-overrides lang-overrides)))))
+                     ;; If not set correctly, get the fundamental-mode one which should be plaintext
+                     (unless language-name
+                       (setq language-name (cdr (assoc 'fundamental-mode (webpaste/get-lang-alist-with-overrides lang-overrides)))))
+
+                     ;; Append language to the post-data
+                     (cl-pushnew (cons post-lang-field-name language-name) post-data)))
 
                  post-data))
   "Predefined lambda for building post fields.")
@@ -111,7 +138,9 @@ each run.")
                                   success-lambda
                                   (type "POST")
                                   (post-data '())
+                                  (post-lang-field-name nil)
                                   (parser 'buffer-string)
+                                  (lang-overrides '())
                                   (error-lambda webpaste/providers-error-lambda)
                                   (post-field-lambda webpaste/providers-default-post-field-lambda)
                                   (sync nil))
@@ -137,6 +166,13 @@ Optional params:
 
 :post-data         Default post fields sent to service. Defaults to nil.
 
+:post-lang-field-name   Fieldname for defining which language your paste should
+                        use to the provider.
+
+:lang-overrides    Alist defining overides for languages for this provider. If
+                   a mode is set to nil, it will use fundamental-mode's value as
+                   fallback. Fundamental-mode's value can also be overridden.
+
 :parser            Defines how request.el parses the result. Look up :parser for
                    `request'. This defaults to 'buffer-string.
 
@@ -149,7 +185,9 @@ Optional params:
 :post-field-lambda Function that builds and returns the post data that should be
                    sent to the provider.  It should accept named parameters by
                    the names TEXT, POST-FIELD and POST-DATA.  POST-DATA should
-                   default to `nil' or empty list.
+                   default to `nil' or empty list.  It also takes the option
+                   LANG-OVERRIDES which is a list that enables overiding of
+                   `webpaste/default-lang-alist'.
 
                    TEXT contains the data that should be sent.
                    POST-FIELD cointains the name of the field to be sent.
@@ -167,6 +205,8 @@ Optional params:
                :data (funcall post-field-lambda
                               :text text
                               :post-field post-field
+                              :post-lang-field-name post-lang-field-name
+                              :lang-overrides lang-overrides
                               :post-data post-data)
                :parser parser
                :success success-lambda
@@ -198,32 +238,37 @@ Optional params:
     ("dpaste.com"
      ,(webpaste-provider
        :uri "http://dpaste.com/api/v2/"
-       :post-data '(("syntax" . "text")
-                    ("title" . "")
+       :post-data '(("title" . "")
                     ("poster" . "")
                     ("expiry_days" . 1))
        :post-field "content"
+       :post-lang-field-name "syntax"
+       :lang-overrides '((emacs-lisp-mode . "clojure"))
        :success-lambda webpaste/providers-success-location-header))
 
     ("dpaste.de"
      ,(webpaste-provider
        :uri "https://dpaste.de/api/"
-       :post-data '(("lexer" . "text")
-                    ("format" . "url")
-                    ("expires" . 86400))
+       :post-data '(("expires" . 86400))
        :post-field "content"
+       :post-lang-field-name "lexer"
+       :lang-overrides '((emacs-lisp-mode . "clojure"))
        :success-lambda webpaste/providers-success-returned-string))
 
     ("gist.github.com"
      ,(webpaste-provider
        :uri "https://api.github.com/gists"
        :post-field nil
-       :post-field-lambda (cl-function (lambda (&key text post-field (post-data '()))
-                            (json-encode `(("description" . "Pasted from Emacs with webpaste.el")
-                                           ("public" . "false")
-                                           ("files" .
-                                            (("file.txt" .
-                                              (("content" . ,text)))))))))
+       :post-field-lambda (cl-function (lambda (&key text
+                                                post-field
+                                                (post-data '())
+                                                &allow-other-keys)
+                                         (let ((filename (or (file-name-nondirectory (buffer-file-name)) "file.txt")))
+                                           (json-encode `(("description" . "Pasted from Emacs with webpaste.el")
+                                                          ("public" . "false")
+                                                          ("files" .
+                                                           ((,filename .
+                                                             (("content" . ,text))))))))))
        :success-lambda (cl-function (lambda (&key data &allow-other-keys)
                                       (when data
                                         (webpaste-return-url
@@ -236,6 +281,28 @@ return it to the user."
   :group 'webpaste
   :type  '(alist :key-type (string :tag "provider name")
                  :value-type (sexp :tag "webpaste-provider function definition for the provider")))
+
+
+
+(defun webpaste/get-lang-alist-with-overrides (overrides)
+  "Fetches lang-alist with OVERRIDES applied."
+
+  (let ((lang-alist webpaste/default-lang-alist))
+    ;; Go through list of overrides
+    (dolist (override-element overrides)
+      ;; Set key and value from override list
+      (let ((key (car override-element))
+            (value (cdr override-element)))
+
+        ;; If the element doesn't exist, add it
+        (unless (assoc (car override-element) lang-alist)
+          (cl-pushnew (cons key value) lang-alist))
+
+        ;; If the element in the list is changed
+        (unless (equal (cdr (assoc key lang-alist)) value)
+          (cl-pushnew (cons key value) lang-alist))))
+
+    lang-alist))
 
 
 

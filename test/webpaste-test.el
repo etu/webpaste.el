@@ -167,6 +167,37 @@ result from the good provider only."
     ;; Check that we got the expected result
     (should (string= returned-result "Working: test-string"))))
 
+
+
+(ert-deftest webpaste-test/get-lang-alist-with-overrides ()
+  "This test tests all cases that should happen when overriding langs."
+
+  (let ((webpaste/default-lang-alist '((python-mode . "python")
+                                       (php-mode . "php"))))
+
+    ;; Test adding mode
+    (should (equal (webpaste/get-lang-alist-with-overrides
+                    '((emacs-lisp-mode . "lisp")))
+
+                   '((emacs-lisp-mode . "lisp")
+                     (python-mode . "python")
+                     (php-mode . "php"))))
+
+    ;; Test removing mode / clearing it's value
+    (should (equal (webpaste/get-lang-alist-with-overrides
+                    '((python-mode . nil)))
+
+                   '((python-mode)
+                     (python-mode . "python")
+                     (php-mode . "php"))))
+
+    ;; Test overriding mode
+    (should (equal (webpaste/get-lang-alist-with-overrides
+                    '((python-mode . "python3")))
+
+                   '((python-mode . "python3")
+                     (python-mode . "python")
+                     (php-mode . "php"))))))
 
 
 ;;; webpaste-test.el ends here
