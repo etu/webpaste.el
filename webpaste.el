@@ -88,8 +88,10 @@ each run.")
 (defvar webpaste/providers-success-returned-string
   (cl-function (lambda (&key data &allow-other-keys)
                  (when data
-                   (webpaste-return-url
-                    (replace-regexp-in-string "\n$" "" data)))))
+                   (setq data (replace-regexp-in-string "\n$" "" data))
+                   (setq data (replace-regexp-in-string "\"" "" data))
+
+                   (webpaste-return-url data))))
   "Predefined success callback for providers returning a string with URL.")
 
 
