@@ -22,6 +22,38 @@ easiest way to install and configure packages.
            ("C-c C-p C-r" . webpaste-paste-region)))
 #+END_SRC
 
+** Configuration
+*** Choosing providers / provider priority
+To select which providers to use in which order you need to set the variable
+=webpaste-provider-priority= which is a list of strings containing the
+providers names.
+
+Examples:
+#+begin_src emacs-lisp :tangle yes
+  ;; Choosing githup gist only
+  (setq webpaste-provider-priority '("gist.github.com"))
+
+  ;; Choosing ptpb.pw as first provider and dpaste.de as second
+  (setq webpaste-provider-priority '("ptpb.pw" "dpaste.de"))
+
+  ;; Choosing 1) ptpb.pw, 2) dpaste.de, 3) ix.io
+  (setq webpaste-provider-priority '("ptpb.pw" "dpaste.de" "ix.io"))
+
+  ;; You can always append this list as much as you like, and which providers
+  ;; that exists is documented below in the readme.
+#+end_src
+
+This can be added to the =:config= section of use-package:
+#+BEGIN_SRC emacs-lisp
+  (use-package webpaste
+    :ensure t
+    :bind (("C-c C-p C-b" . webpaste-paste-buffer)
+           ("C-c C-p C-r" . webpaste-paste-region))
+    :config
+    (progn
+      (setq webpaste-provider-priority '("ptpb.pw" "dpaste.de"))))
+#+END_SRC
+
 ** TODO Providers to implement [6/9]
  - [X] ptpb.pw
  - [X] ix.io
