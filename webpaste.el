@@ -69,7 +69,7 @@ default to all providers in order defined in ‘webpaste-providers’ list."
   :group 'webpaste)
 
 
-(defvar webpaste-tested-providers ()
+(defvar webpaste/tested-providers ()
   "Variable for storing which providers to try in which order while running.
 This list will be re-populated each run based on ‘webpaste-provider-priority’ or
 if that variable is nil, it will use the list of names from ‘webpaste-providers’
@@ -320,7 +320,7 @@ return it to the user."
   "Return RETURNED-URL to user from the result of the paste service."
 
   ;; Reset tested providers after successful paste
-  (setq webpaste-tested-providers nil)
+  (setq webpaste/tested-providers nil)
 
   ;; Add RETURNED-URL to killring for easy pasting
   (kill-new returned-url)
@@ -344,25 +344,25 @@ make `webpaste-paste-text' do less magic things all at once."
 If ‘webpaste-provider-priority’ isn't populated, it will populate it with the
 default providers.
 
-Then if ‘webpaste-tested-providers’ isn't populated it will be populated by
+Then if ‘webpaste/tested-providers’ isn't populated it will be populated by
 ‘webpaste-provider-priority’.
 
-Then it extracts the first element of ‘webpaste-tested-providers’ and drops
+Then it extracts the first element of ‘webpaste/tested-providers’ and drops
 the first element from that list and gets the lambda for the provider and
 runs the lambda to paste TEXT to the paste service.  The paste-service in turn
 might call this function again with TEXT as param to retry if it failed.
 
 When we run out of providers to try, it will restart since
-‘webpaste-tested-providers’ will be empty and then populated again."
+‘webpaste/tested-providers’ will be empty and then populated again."
 
   ;; Populate tested providers for this request if needed
-  (unless webpaste-tested-providers
-    (setq webpaste-tested-providers (webpaste/get-provider-priority)))
+  (unless webpaste/tested-providers
+    (setq webpaste/tested-providers (webpaste/get-provider-priority)))
 
   ;; Get name of provider at the top of the list
-  (let ((provider-name (car webpaste-tested-providers)))
+  (let ((provider-name (car webpaste/tested-providers)))
     ;; Drop the name at the top of the list
-    (setq webpaste-tested-providers (cdr webpaste-tested-providers))
+    (setq webpaste/tested-providers (cdr webpaste/tested-providers))
 
     ;; Run pasting function
     (webpaste-paste-text-to-provider text provider-name)))
