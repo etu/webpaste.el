@@ -68,9 +68,9 @@ default to all providers in order defined in ‘webpaste-providers’ list."
   :type '(alist :key-type symbol :value-type string)
   :group 'webpaste)
 
+
 (defcustom webpaste/paste-confirmation nil
-  "Prompt for a yes/no confirmation before attempting to paste a region or
-buffer"
+  "Prompt for a yes/no confirmation before attempting to paste a region or buffer."
   :group 'webpaste)
 
 

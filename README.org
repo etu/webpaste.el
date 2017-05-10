@@ -54,6 +54,20 @@ This can be added to the =:config= section of use-package:
       (setq webpaste-provider-priority '("ptpb.pw" "dpaste.de"))))
 #+END_SRC
 
+*** Confirm pasting with a yes/no confirmation before pasting
+To enable a confirmation dialog to always pop up and require you to confirm
+pasting before text is actually sent to a paste-provider you just need to set
+the variable =webpaste/paste-confirmation= to a value that is non-nil.
+
+Example:
+#+begin_src emacs-lisp :tangle yes
+  ;; Require confirmation before doing paste
+  (setq webpaste/paste-confirmation t)
+#+end_src
+
+Can also be put in the =:config= section of =use-package= the same way as the
+provider definitions above.
+
 ** TODO Providers to implement [6/9]
  - [X] ptpb.pw
  - [X] ix.io
