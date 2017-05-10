@@ -259,10 +259,7 @@ Optional params:
      ,(webpaste-provider
        :uri "https://api.github.com/gists"
        :post-field nil
-       :post-field-lambda (cl-function (lambda (&key text
-                                                post-field
-                                                (post-data '())
-                                                &allow-other-keys)
+       :post-field-lambda (cl-function (lambda (&key text &allow-other-keys)
                                          (let ((filename (or (file-name-nondirectory (buffer-file-name)) "file.txt")))
                                            (json-encode `(("description" . "Pasted from Emacs with webpaste.el")
                                                           ("public" . "false")
