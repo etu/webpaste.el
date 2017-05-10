@@ -68,6 +68,11 @@ default to all providers in order defined in ‘webpaste-providers’ list."
   :type '(alist :key-type symbol :value-type string)
   :group 'webpaste)
 
+(defcustom webpaste/paste-confirmation nil
+  "Prompt for a yes/no confirmation before attempting to paste a region or
+buffer"
+  :group 'webpaste)
+
 
 (defvar webpaste/tested-providers ()
   "Variable for storing which providers to try in which order while running.
@@ -375,8 +380,11 @@ Argument POINT Current point.
 Argument MARK Current mark."
   (interactive "r")
 
-  ;; Extract the buffer contents with buffer-substring and paste it
-  (webpaste-paste-text (buffer-substring point mark)))
+  ;; unless we wanted a paste confirmation and declined
+  (unless (and webpaste/paste-confirmation
+               (not (yes-or-no-p "paste entire region?")))
+    ;; Extract the buffer contents with buffer-substring and paste it
+    (webpaste-paste-text (buffer-substring point mark))))
 
 
 ;;;###autoload
@@ -384,8 +392,11 @@ Argument MARK Current mark."
   "Paste current buffer to some paste service."
   (interactive)
 
-  ;; Extract the buffer contents with buffer-substring and paste it
-  (webpaste-paste-text (buffer-substring (point-min) (point-max))))
+  ;; unless we wanted a paste confirmation and declined
+  (unless (and webpaste/paste-confirmation
+               (not (yes-or-no-p "paste entire buffer?")))
+    ;; Extract the buffer contents with buffer-substring and paste it
+    (webpaste-paste-text (buffer-substring (point-min) (point-max)))))
 
 
 
