@@ -65,8 +65,7 @@ default to all providers in order defined in ‘webpaste-providers’ list."
     (python-mode . "python")
     (yaml-mode . "yaml"))
   "Alist that maps `major-mode' names to language names."
-  :type '(alist :key-type symbol :value-type string)
-  :group 'webpaste)
+  :type '(alist :key-type symbol :value-type string))
 
 
 (defcustom webpaste/paste-confirmation nil
@@ -329,7 +328,6 @@ Optional params:
 Consists of provider name and lambda function to do the actuall call to the
 provider.  The lamda should call ‘webpaste-return-url’ with resulting url to
 return it to the user."
-  :group 'webpaste
   :type  '(alist :key-type (string :tag "provider name")
                  :value-type (sexp :tag "webpaste-provider function definition for the provider")))
 
