@@ -96,8 +96,7 @@ precalculated, and also available both for pre and post request access.")
     (php-mode . "php")
     (python-mode . "python")
     (yaml-mode . "yaml"))
-  "Alist that maps `major-mode' names to language names."
-  :type '(alist :key-type symbol :value-type string))
+  "Alist that maps `major-mode' names to language names.")
 
 
 ;;; Predefined error lambda for providers
@@ -259,7 +258,6 @@ Optional params:
                               :provider-uri uri
                               :post-field post-field
                               :post-lang-field-name post-lang-field-name
-                              :lang-overrides lang-overrides
                               :post-data post-data)
                :parser parser
                :success success-lambda
@@ -333,9 +331,7 @@ Optional params:
   "Define all webpaste.el providers.
 Consists of provider name and lambda function to do the actuall call to the
 provider.  The lamda should call ‘webpaste-return-url’ with resulting url to
-return it to the user."
-  :type  '(alist :key-type (string :tag "provider name")
-                 :value-type (sexp :tag "webpaste-provider function definition for the provider")))
+return it to the user.")
 
 
 
