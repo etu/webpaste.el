@@ -138,6 +138,20 @@ each run.")
 
 
 
+(defun webpaste/get-lang-alist-with-overrides (overrides)
+  "Fetches lang-alist with OVERRIDES applied."
+
+  ;; Copy original list to temporary list
+  (let ((lang-alist webpaste/default-lang-alist))
+    ;; Go through list of overrides and append them to the temporary list
+    (dolist (override-element overrides)
+      (cl-pushnew override-element lang-alist))
+
+    ;; Return temporary list
+    lang-alist))
+
+
+
 (cl-defun webpaste-provider (&key uri
                                   post-field
                                   success-lambda
@@ -283,20 +297,6 @@ return it to the user."
   :group 'webpaste
   :type  '(alist :key-type (string :tag "provider name")
                  :value-type (sexp :tag "webpaste-provider function definition for the provider")))
-
-
-
-(defun webpaste/get-lang-alist-with-overrides (overrides)
-  "Fetches lang-alist with OVERRIDES applied."
-
-  ;; Copy original list to temporary list
-  (let ((lang-alist webpaste/default-lang-alist))
-    ;; Go through list of overrides and append them to the temporary list
-    (dolist (override-element overrides)
-      (cl-pushnew override-element lang-alist))
-
-    ;; Return temporary list
-    lang-alist))
 
 
 
