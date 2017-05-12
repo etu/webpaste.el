@@ -68,13 +68,14 @@ Example:
 Can also be put in the =:config= section of =use-package= the same way as the
 provider definitions above.
 
-** TODO Providers to implement [6/9]
+** TODO Providers to implement [6/10]
  - [X] ptpb.pw
  - [X] ix.io
  - [X] dpaste.com
  - [X] sprunge.us
  - [X] dpaste.de
+ - [X] gist.github.com
  - [ ] paste.pound-python.org
  - [ ] paste.debian.net
  - [ ] bpaste.net
- - [X] gist.github.com
+ - [ ] eval.in
