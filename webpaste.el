@@ -54,24 +54,11 @@ default to all providers in order defined in ‘webpaste-providers’ list."
   :type '(repeat string))
 
 
-(defcustom webpaste/default-lang-alist
-  '((css-mode . "css")
-    (fundamental-mode . "text")
-    (html-mode . "html")
-    (java-mode . "java")
-    (js-mode . "js")
-    (go-mode . "go")
-    (php-mode . "php")
-    (python-mode . "python")
-    (yaml-mode . "yaml"))
-  "Alist that maps `major-mode' names to language names."
-  :type '(alist :key-type symbol :value-type string))
-
-
 (defcustom webpaste/paste-confirmation nil
   "Prompt for a yes/no confirmation before attempting to paste a region or buffer."
   :group 'webpaste)
 
+
 
 (defvar webpaste/tested-providers ()
   "Variable for storing which providers to try in which order while running.
@@ -91,7 +78,20 @@ some providers want to append the language to the resulting URL.")
 This list will be populated when you add providers to have the languages
 precalculated, and also available both for pre and post request access.")
 
-
+
+(defvar webpaste/default-lang-alist
+  '((css-mode . "css")
+    (fundamental-mode . "text")
+    (html-mode . "html")
+    (java-mode . "java")
+    (js-mode . "js")
+    (go-mode . "go")
+    (php-mode . "php")
+    (python-mode . "python")
+    (yaml-mode . "yaml"))
+  "Alist that maps `major-mode' names to language names."
+  :type '(alist :key-type symbol :value-type string))
+
 
 ;;; Predefined error lambda for providers
 (defvar webpaste/providers-error-lambda
@@ -263,7 +263,7 @@ Optional params:
 
 
 ;;; Define providers
-(defcustom webpaste-providers-alist
+(defvar webpaste-providers-alist
   `(("ptpb.pw"
      ,(webpaste-provider
        :uri "https://ptpb.pw/"
