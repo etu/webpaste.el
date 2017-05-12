@@ -81,6 +81,12 @@ if that variable is nil, it will use the list of names from ‘webpaste-provider
 each run.")
 
 
+(defvar webpaste/provider-separators ()
+  "Variable for storing separators for providers that doesn't post language.
+Some providers accepts a post parameter with which language the code is.  But
+some providers want to append the language to the resulting URL.")
+
+
 (defvar webpaste/provider-lang-alists ()
   "Variable for storing alists with languages for highlighting for providers.
 This list will be populated when you add providers to have the languages
@@ -168,6 +174,7 @@ precalculated, and also available both for pre and post request access.")
                                   (post-lang-field-name nil)
                                   (parser 'buffer-string)
                                   (lang-overrides '())
+                                  (lang-uri-separator nil)
                                   (error-lambda webpaste/providers-error-lambda)
                                   (post-field-lambda webpaste/providers-default-post-field-lambda)
                                   (sync nil))
@@ -200,6 +207,10 @@ Optional params:
                    a mode is set to nil, it will use fundamental-mode's value as
                    fallback. Fundamental-mode's value can also be overridden.
 
+:lang-uri-separator   Lang URI separator.  This is used for providers that
+                      appends the language to the end of the resulting URI and
+                      needs a separator between language and link.
+
 :parser            Defines how request.el parses the result. Look up :parser for
                    `request'. This defaults to 'buffer-string.
 
@@ -222,6 +233,11 @@ Optional params:
 
 :sync              Set to t to wait until request is done.  Defaults to nil.
                    This should only be used for debugging purposes."
+  ;; If we get a separator sent to the function, append it to the list of
+  ;; separators for later use
+  (when lang-uri-separator
+    (cl-pushnew (cons uri lang-uri-separator) webpaste/provider-separators))
+
   ;; Add pre-calculated list of webpaste lang alists
   (cl-pushnew (cons uri (webpaste/get-lang-alist-with-overrides lang-overrides))
               webpaste/provider-lang-alists)
@@ -253,18 +269,24 @@ Optional params:
      ,(webpaste-provider
        :uri "https://ptpb.pw/"
        :post-field "c"
+       :lang-uri-separator "/"
+       :lang-overrides '((emacs-lisp-mode . "elisp"))
        :success-lambda webpaste/providers-success-location-header))
 
     ("ix.io"
      ,(webpaste-provider
        :uri "http://ix.io/"
        :post-field "f:1"
+       :lang-uri-separator "/"
+       :lang-overrides '((emacs-lisp-mode . "elisp"))
        :success-lambda webpaste/providers-success-returned-string))
 
     ("sprunge.us"
      ,(webpaste-provider
        :uri "http://sprunge.us/"
        :post-field "sprunge"
+       :lang-uri-separator "?"
+       :lang-overrides '((emacs-lisp-mode . "elisp"))
        :success-lambda webpaste/providers-success-returned-string))
 
     ("dpaste.com"
@@ -333,6 +355,19 @@ return it to the user."
 ;;;###autoload
 (defun webpaste-return-url (returned-url)
   "Return RETURNED-URL to user from the result of the paste service."
+
+  ;; Loop providers separators
+  (dolist (provider-separator webpaste/provider-separators)
+    ;; Match if the separator is for this URI
+    (when (string-match-p (regexp-quote (car provider-separator)) returned-url)
+      ;; Get alist of languages for this provider
+      (let ((provider-lang-alist (cdr (assoc (car provider-separator) webpaste/provider-lang-alists))))
+        ;; Get language name from list of languages
+        (let ((language-name (cdr (assoc major-mode provider-lang-alist))))
+          ;; If we get a language name
+          (when language-name
+            ;; Override link with link where we appended the language
+            (setq returned-url (concat returned-url (cdr provider-separator) language-name)))))))
 
   ;; Reset tested providers after successful paste
   (setq webpaste/tested-providers nil)
