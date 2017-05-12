@@ -80,6 +80,12 @@ This list will be re-populated each run based on ‘webpaste-provider-priority�
 if that variable is nil, it will use the list of names from ‘webpaste-providers’
 each run.")
 
+
+(defvar webpaste/provider-lang-alists ()
+  "Variable for storing alists with languages for highlighting for providers.
+This list will be populated when you add providers to have the languages
+precalculated, and also available both for pre and post request access.")
+
 
 
 ;;; Predefined error lambda for providers
@@ -118,17 +124,19 @@ each run.")
 (defvar webpaste/providers-default-post-field-lambda
   (cl-function (lambda (&key text
                         post-field
+                        provider-uri
                         (post-lang-field-name nil)
                         (lang-overrides nil)
                         (post-data '()))
                  (cl-pushnew (cons post-field text) post-data)
 
-                 (when post-lang-field-name
-                   ;; Get language name based on major-mode
-                   (let ((language-name (cdr (assoc major-mode (webpaste/get-lang-alist-with-overrides lang-overrides)))))
+                 ;; Fetch alist of languages for this provider
+                 (let ((provider-lang-alist (cdr (assoc provider-uri webpaste/provider-lang-alists))))
+                   ;; Fetch language name for this major mode for this provider
+                   (let ((language-name (cdr (assoc major-mode provider-lang-alist))))
                      ;; If not set correctly, get the fundamental-mode one which should be plaintext
                      (unless language-name
-                       (setq language-name (cdr (assoc 'fundamental-mode (webpaste/get-lang-alist-with-overrides lang-overrides)))))
+                       (setq language-name (cdr (assoc 'fundamental-mode provider-lang-alist))))
 
                      ;; Append language to the post-data
                      (cl-pushnew (cons post-lang-field-name language-name) post-data)))
@@ -214,6 +222,10 @@ Optional params:
 
 :sync              Set to t to wait until request is done.  Defaults to nil.
                    This should only be used for debugging purposes."
+  ;; Add pre-calculated list of webpaste lang alists
+  (cl-pushnew (cons uri (webpaste/get-lang-alist-with-overrides lang-overrides))
+              webpaste/provider-lang-alists)
+
   (lambda (text)
     "Paste TEXT to provider"
 
@@ -223,6 +235,7 @@ Optional params:
                :type type
                :data (funcall post-field-lambda
                               :text text
+                              :provider-uri uri
                               :post-field post-field
                               :post-lang-field-name post-lang-field-name
                               :lang-overrides lang-overrides
