@@ -68,6 +68,20 @@ Example:
 Can also be put in the =:config= section of =use-package= the same way as the
 provider definitions above.
 
+*** Open recently created pastes in browser
+To enable opening of recently created pastes in an external browser, you can
+enable the option =webpaste/open-in-browser= by setting this value to a
+non-nil value.
+
+Example:
+#+begin_src emacs-lisp :tangle yes
+  ;; Open recently created pastes in an external browser
+  (setq webpaste/open-in-browser t)
+#+end_src
+
+Can also be put in the =:config= section of =use-package= the same way as the
+provider definitions above.
+
 ** TODO Providers to implement [6/10]
  - [X] ptpb.pw
  - [X] ix.io

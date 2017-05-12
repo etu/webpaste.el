@@ -58,6 +58,13 @@ default to all providers in order defined in ‘webpaste-providers’ list."
   "Prompt for a yes/no confirmation before attempting to paste a region or buffer."
   :group 'webpaste)
 
+
+(defcustom webpaste/open-in-browser nil
+  "Open recently created pastes in a browser.
+
+This uses `browse-url-generic' to open URLs."
+  :group 'webpaste)
+
 
 
 (defvar webpaste/tested-providers ()
@@ -368,6 +375,10 @@ return it to the user."
 
   ;; Reset tested providers after successful paste
   (setq webpaste/tested-providers nil)
+
+  ;; If the user want to open the link in an external browser, do so.
+  (when webpaste/open-in-browser
+    (browse-url-generic returned-url))
 
   ;; Add RETURNED-URL to killring for easy pasting
   (kill-new returned-url)
