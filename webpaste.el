@@ -122,6 +122,14 @@ precalculated, and also available both for pre and post request access.")
   "Predefined success callback for providers returning a Location header.")
 
 
+(defvar webpaste/providers-success-response-url
+  (cl-function (lambda (&key response &allow-other-keys)
+                 (when response
+                   (webpaste-return-url
+                    (request-response-url response)))))
+  "Predefined success callback for providers that and up with an URL somehow.")
+
+
 (defvar webpaste/providers-success-returned-string
   (cl-function (lambda (&key data &allow-other-keys)
                  (when data
@@ -326,7 +334,16 @@ Optional params:
        :success-lambda (cl-function (lambda (&key data &allow-other-keys)
                                       (when data
                                         (webpaste-return-url
-                                         (cdr (assoc 'html_url (json-read-from-string data))))))))))
+                                         (cdr (assoc 'html_url (json-read-from-string data)))))))))
+
+    ("paste.pound-python.org"
+     ,(webpaste-provider
+       :uri "https://paste.pound-python.org/"
+       :post-data '(("webpage" . ""))
+       :post-field "code"
+       :post-lang-field-name "language"
+       :lang-overrides '((emacs-lisp-mode . "clojure"))
+       :success-lambda webpaste/providers-success-response-url)))
 
   "Define all webpaste.el providers.
 Consists of provider name and lambda function to do the actuall call to the
