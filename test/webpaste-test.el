@@ -117,27 +117,21 @@
 (ert-deftest webpaste-test/get-provider-priority ()
   "Test how it populates webpaste/get-provider-priority."
 
-  ;;; Test autopopulation of list based on providers avaliable
-  ;; Prepare variables
-  (setq-default webpaste-provider-priority nil)
-  (setq-default webpaste-providers-alist
-                `(("provider1" "lambda")
-                  ("provider2" "lambda")
-                  ("provider3" "lambda")))
-
-  ;; Do test
-  (should (equal (webpaste/get-provider-priority)
-                 '("provider1" "provider2" "provider3")))
+  ;; Test autopopulation of list based on providers avaliable
+  (let ((webpaste-provider-priority nil)
+        (webpaste-providers-alist '(("provider1" . "lambda")
+                                    ("provider2" . "lambda")
+                                    ("provider3" . "lambda"))))
+    ;; Do test
+    (should (equal (webpaste/get-provider-priority)
+                   '("provider1" "provider2" "provider3"))))
 
   ;;; Test static population of provider priority
-  ;; Prepare variables
-  (setq-default webpaste-provider-priority
-                '("provider2" "provider1" "provider3"))
-  (setq-default webpaste-providers-alist '())
-
-  ;; Do test
-  (should (equal (webpaste/get-provider-priority)
-                 '("provider2" "provider1" "provider3"))))
+  (let ((webpaste-provider-priority '("provider2" "provider1" "provider3"))
+        (webpaste-providers-alist nil))
+    ;; Do test
+    (should (equal (webpaste/get-provider-priority)
+                   '("provider2" "provider1" "provider3")))))
 
 
 
@@ -145,10 +139,9 @@
   "This test just sends a message to a good provider that just works."
 
   ;; Temporal storage for result
-  (let ((returned-result nil))
-    ;; Reset all webpaste variables
-    (setq-default webpaste-tested-providers nil)
-    (setq-default webpaste-provider-priority nil)
+  (let ((returned-result nil)
+        (webpaste-tested-providers nil)
+        (webpaste-provider-priority nil))
 
     ;; Make a fake provider that just "returns" the paste result by setting a
     ;; variable and concatinate it with "Works: " so we can see it showing up
@@ -173,10 +166,9 @@ Then the bad provider pastes again like it should and we check that we got the
 result from the good provider only."
 
   ;; Temporal storage for result
-  (let ((returned-result nil))
-    ;; Reset all webpaste variables
-    (setq-default webpaste-tested-providers nil)
-    (setq-default webpaste-provider-priority nil)
+  (let ((returned-result nil)
+        (webpaste-tested-providers nil)
+        (webpaste-provider-priority nil))
 
     ;; Creates a "broken" provider that will call on the next provider due to a
     ;; faked failure and checks that the next provider is picked up correctly.
