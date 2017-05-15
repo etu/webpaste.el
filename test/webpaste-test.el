@@ -89,13 +89,28 @@
 (ert-deftest webpaste-test/return-url ()
   "Test returning of URL's to the user."
 
-  ;; Test to return a link and check that the message logged is the expected one
-  (should (equal
-           (webpaste-return-url "https://example.com/")
-           "Added \"https://example.com/\" to kill ring."))
+  ;; Override browse-url-generic to set a variable to t if triggered
+  (cl-letf (((symbol-function 'browse-url-generic)
+             (lambda (url) (setq webpaste-test/opened-in-browser t))))
 
-  ;; Check so the kill ring contain the correct contents
-  (should (equal (car kill-ring) "https://example.com/")))
+    ;; Test to return a link and check that the message logged is the one we expect
+    (let ((webpaste/open-in-browser nil)(webpaste-test/opened-in-browser nil))
+      (should (equal
+               (webpaste-return-url "https://example.com/")
+               "Added \"https://example.com/\" to kill ring."))
+
+      ;; Check so the kill ring contain the correct contents
+      (should (equal (car kill-ring) "https://example.com/"))
+
+      ;; Check so the link wasn't opened in a browser
+      (should (equal webpaste-test/opened-in-browser nil)))
+
+    ;; Test that we call browse-url-generic with the link if option to open in
+    ;; browser is set
+    (let ((webpaste/open-in-browser t)(webpaste-test/opened-in-browser nil))
+      (webpaste-return-url "https://example.com/")
+
+      (should (equal webpaste-test/opened-in-browser t)))))
 
 
 
