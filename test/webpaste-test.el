@@ -63,7 +63,26 @@
       ;; Test so webpaste-paste-region selects the same part of the buffer as to
       ;; be expected.
       (should (equal (webpaste-paste-region 10 100)
-                     (buffer-substring 10 100))))))
+                     (buffer-substring 10 100)))
+
+      ;; Test when wanting a paste confirmation
+      (let ((webpaste/paste-confirmation t))
+
+        ;; Override yes-or-no-p to immitate "yes" response
+        (cl-letf (((symbol-function 'yes-or-no-p) (lambda (text) t)))
+
+          (should (equal (webpaste-paste-buffer) (buffer-string)))
+
+          (should (equal (webpaste-paste-region 10 100)
+                         (buffer-substring 10 100))))
+
+        ;; Override yes-or-no-p to immitate "no" response
+        (cl-letf (((symbol-function 'yes-or-no-p) (lambda (text) nil)))
+
+          (should (not (equal (webpaste-paste-buffer) (buffer-string))))
+
+          (should (not (equal (webpaste-paste-region 10 100)
+                                 (buffer-substring 10 100)))))))))
 
 
 
