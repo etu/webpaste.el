@@ -110,7 +110,16 @@
     (let ((webpaste/open-in-browser t)(webpaste-test/opened-in-browser nil))
       (webpaste-return-url "https://example.com/")
 
-      (should (equal webpaste-test/opened-in-browser t)))))
+      (should (equal webpaste-test/opened-in-browser t))))
+
+  ;; Test appending of language to links when returning
+  (let ((webpaste/provider-separators
+         '(("https://example.com/" . "?lang=")))
+        (webpaste/provider-lang-alists
+         '(("https://example.com/" . ((fundamental-mode . "text"))))))
+
+    (should (equal (webpaste-return-url "https://example.com/")
+                   "Added \"https://example.com/?lang=text\" to kill ring."))))
 
 
 
