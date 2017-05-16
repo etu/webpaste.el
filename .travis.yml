@@ -1,27 +1,23 @@
 language: emacs-lisp
 sudo: false
 
-# Allow Emacs snapshot builds to fail and don’t wait for these as they can take a looooong time
+# Allow Emacs snapshot builds to fail
 matrix:
-  fast_finish: true
   allow_failures:
-    - env: EMACS_VERSION=snapshot
+    - env: EVM_EMACS=emacs-git-snapshot-travis
 
 env:
-  - EMACS_VERSION=24.4
-  - EMACS_VERSION=24.5
-  - EMACS_VERSION=25.1
-  - EMACS_VERSION=25.2
-  - EMACS_VERSION=snapshot
+  - EVM_EMACS=emacs-24.4-travis
+  - EVM_EMACS=emacs-24.5-travis
+  - EVM_EMACS=emacs-25.1-travis
+  - EVM_EMACS=emacs-25.2-travis
+  - EVM_EMACS=emacs-git-snapshot-travis
 
 before_install:
-  # Configure $PATH: Executables are installed to $HOME/bin
-  - export PATH="$HOME/bin:$PATH"
-  # Download the makefile to emacs-travis.mk
-  - wget 'https://raw.githubusercontent.com/flycheck/emacs-travis/master/emacs-travis.mk'
-  # Install Emacs (according to $EMACS_VERSION) and Cask
-  - make -f emacs-travis.mk install_emacs
-  - make -f emacs-travis.mk install_cask
+  # Get install script
+  - curl -fsSkL https://gist.github.com/rejeep/ebcd57c3af83b049833b/raw > travis.sh && source ./travis.sh
+  # Run evm
+  - evm install "$EVM_EMACS" --use --skip
 
 install:
   # Install your dependencies
