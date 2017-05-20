@@ -11,12 +11,10 @@ test:
 	${MAKE} clean
 
 unit:
-	${CASK} exec ert-runner
+	${CASK} exec buttercup -L .
 
 build:
 	${CASK} build
 
 clean:
 	${CASK} clean-elc
-
-.PHONY: test
