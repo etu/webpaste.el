@@ -65,6 +65,14 @@ default to all providers in order defined in ‘webpaste-providers’ list."
 This uses `browse-url-generic' to open URLs."
   :group 'webpaste)
 
+(defcustom webpaste/copy-to-clipboard nil
+  "Uses simpleclip to send the provider's returned URL to the clipboard"
+  :group 'webpaste)
+
+(defcustom webpaste/add-to-killring t
+  "Add the returned URL to the killring after paste"
+  :group 'webpaste)
+
 
 
 (defvar webpaste/tested-providers ()
@@ -393,11 +401,15 @@ return it to the user.")
   (when webpaste/open-in-browser
     (browse-url-generic returned-url))
 
-  ;; Add RETURNED-URL to killring for easy pasting
-  (kill-new returned-url)
+  ;; Send RETURNED-URL to the clipboard using simpleclip
+  (when webpaste/copy-to-clipboard
+    (simpleclip-set-contents returned-url)
+    (message "URL copied to clipboard. "))
 
-  ;; Notify user
-  (message "Added %S to kill ring." returned-url))
+  ;; Add RETURNED-URL to killring for easy pasting
+  (when webpaste/add-to-killring
+    (kill-new returned-url)
+    (message (format "Added %S to kill ring." returned-url))))
 
 
 
