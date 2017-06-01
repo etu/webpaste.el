@@ -409,7 +409,7 @@ return it to the user.")
   ;; Add RETURNED-URL to killring for easy pasting
   (when webpaste/add-to-killring
     (kill-new returned-url)
-    (message (format "Added %S to kill ring." returned-url))))
+    (message "Added %S to kill ring." returned-url)))
 
 
 
