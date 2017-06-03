@@ -16,24 +16,24 @@
          :uri "http://invalid-domain-name/"
          :post-field "data"
          :sync t
-         :success-lambda (cl-function
-                          (lambda (&key data &allow-other-keys)
-                            (setq used-lambda "success")))
-         :error-lambda (cl-function
-                        (lambda (&key error-thrown &allow-other-keys)
-                          (setq used-lambda "error")))))
+         :success-lambda (lambda () (cl-function
+                                (lambda (&key data &allow-other-keys)
+                                  (setq used-lambda "success"))))
+         :error-lambda (lambda (&rest rest) (cl-function
+                                        (lambda (&key error-thrown &allow-other-keys)
+                                          (setq used-lambda "error"))))))
 
   (setq working-provider
         (webpaste-provider
          :uri "https://httpbin.org/status/200"
          :post-field "data"
          :sync t
-         :success-lambda (cl-function
-                          (lambda (&key data &allow-other-keys)
-                            (setq used-lambda "success")))
-         :error-lambda (cl-function
-                        (lambda (&key error-thrown &allow-other-keys)
-                          (setq used-lambda "error"))))))
+         :success-lambda (lambda () (cl-function
+                                (lambda (&key data &allow-other-keys)
+                                  (setq used-lambda "success"))))
+         :error-lambda (lambda (&rest rest) (cl-function
+                                        (lambda (&key error-thrown &allow-other-keys)
+                                          (setq used-lambda "error")))))))
 
 
  (it
