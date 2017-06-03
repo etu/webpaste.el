@@ -14,6 +14,10 @@ test:
 unit:
 	${CASK} exec buttercup -L . tests/unit/
 
+# Run all tests in tests/integration/
+integration:
+	${CASK} exec buttercup -L . tests/integration/
+
 build:
 	${CASK} build
 
