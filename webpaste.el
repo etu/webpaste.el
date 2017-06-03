@@ -184,8 +184,7 @@ precalculated, and also available both for pre and post request access.")
                                   (lang-overrides '())
                                   (lang-uri-separator nil)
                                   (error-lambda 'webpaste/providers-error-lambda)
-                                  (post-field-lambda 'webpaste/providers-default-post-field-lambda)
-                                  (sync nil))
+                                  (post-field-lambda 'webpaste/providers-default-post-field-lambda))
   "Function to create the lambda function for a provider.
 
 Usage:
@@ -237,10 +236,7 @@ Optional params:
 
                    TEXT contains the data that should be sent.
                    POST-FIELD cointains the name of the field to be sent.
-                   POST-DATA contains predefined fields that the provider needs.
-
-:sync              Set to t to wait until request is done.  Defaults to nil.
-                   This should only be used for debugging purposes."
+                   POST-DATA contains predefined fields that the provider needs."
   ;; If we get a separator sent to the function, append it to the list of
   ;; separators for later use
   (when lang-uri-separator
@@ -250,23 +246,26 @@ Optional params:
   (cl-pushnew (cons uri (webpaste/get-lang-alist-with-overrides lang-overrides))
               webpaste/provider-lang-alists)
 
-  (lambda (text)
-    "Paste TEXT to provider"
+  (cl-function
+   (lambda (text
+       &key
+       (sync nil))
+     "Paste TEXT to provider. Force SYNC if needed for debugging."
 
-    (prog1 nil
-      ;; Do request
-      (request uri
-               :type type
-               :data (funcall (funcall post-field-lambda)
-                              :text text
-                              :provider-uri uri
-                              :post-field post-field
-                              :post-lang-field-name post-lang-field-name
-                              :post-data post-data)
-               :parser parser
-               :success (funcall success-lambda)
-               :sync sync
-               :error (funcall error-lambda :text text)))))
+     (prog1 nil
+       ;; Do request
+       (request uri
+                :type type
+                :data (funcall (funcall post-field-lambda)
+                               :text text
+                               :provider-uri uri
+                               :post-field post-field
+                               :post-lang-field-name post-lang-field-name
+                               :post-data post-data)
+                :parser parser
+                :success (funcall success-lambda)
+                :sync sync
+                :error (funcall error-lambda :text text))))))
 
 
 

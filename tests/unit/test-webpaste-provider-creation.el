@@ -15,7 +15,6 @@
         (webpaste-provider
          :uri "http://invalid-domain-name/"
          :post-field "data"
-         :sync t
          :success-lambda (lambda () (cl-function
                                 (lambda (&key data &allow-other-keys)
                                   (setq used-lambda "success"))))
@@ -27,7 +26,6 @@
         (webpaste-provider
          :uri "https://httpbin.org/status/200"
          :post-field "data"
-         :sync t
          :success-lambda (lambda () (cl-function
                                 (lambda (&key data &allow-other-keys)
                                   (setq used-lambda "success"))))
@@ -39,7 +37,7 @@
  (it
   "can trigger the error lambda of a provider"
   (let ((used-lambda nil))
-    (funcall broken-provider "my test text")
+    (funcall broken-provider "my test text" :sync t)
 
     (expect used-lambda :to-equal "error")))
 
@@ -47,7 +45,7 @@
  (it
   "can trigger the success lambda of a provider"
   (let ((used-lambda nil))
-    (funcall working-provider "my test text")
+    (funcall working-provider "my test text" :sync t)
 
     (expect used-lambda :to-equal "success")))
 
@@ -62,7 +60,6 @@
         (provider (webpaste-provider
                   :uri "http://invalid-domain-name/"
                   :post-field "data"
-                  :sync t
                   :success-lambda (cl-function
                                    (lambda (&key data &allow-other-keys)
                                      (setq used-lambda "success")))
@@ -70,7 +67,7 @@
                                  (lambda (&key error-thrown &allow-other-keys)
                                    (funcall working-provider "failover"))))))
 
-    (funcall provider "text")
+    (funcall provider "text" :sync t)
 
     (expect used-lambda :to-equal "success"))))
 
