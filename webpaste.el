@@ -140,7 +140,8 @@ precalculated, and also available both for pre and post request access.")
                    (webpaste-return-url data)))))
 
 
-(defvar webpaste/providers-default-post-field-lambda
+(cl-defun webpaste/providers-default-post-field-lambda ()
+  "Predefined lambda for building post fields."
   (cl-function (lambda (&key text
                         post-field
                         provider-uri
@@ -155,8 +156,7 @@ precalculated, and also available both for pre and post request access.")
                      (if (and post-lang-field-name language-name)
                        ;; Append language to the post-data
                        (cl-pushnew (cons post-lang-field-name language-name) post-data))))
-                 post-data))
-  "Predefined lambda for building post fields.")
+                 post-data)))
 
 
 
@@ -184,7 +184,7 @@ precalculated, and also available both for pre and post request access.")
                                   (lang-overrides '())
                                   (lang-uri-separator nil)
                                   (error-lambda 'webpaste/providers-error-lambda)
-                                  (post-field-lambda webpaste/providers-default-post-field-lambda)
+                                  (post-field-lambda 'webpaste/providers-default-post-field-lambda)
                                   (sync nil))
   "Function to create the lambda function for a provider.
 
@@ -257,7 +257,7 @@ Optional params:
       ;; Do request
       (request uri
                :type type
-               :data (funcall post-field-lambda
+               :data (funcall (funcall post-field-lambda)
                               :text text
                               :provider-uri uri
                               :post-field post-field
@@ -320,13 +320,13 @@ Optional params:
      ,(webpaste-provider
        :uri "https://api.github.com/gists"
        :post-field nil
-       :post-field-lambda (cl-function (lambda (&key text &allow-other-keys)
-                                         (let ((filename (or (file-name-nondirectory (buffer-file-name)) "file.txt")))
-                                           (json-encode `(("description" . "Pasted from Emacs with webpaste.el")
-                                                          ("public" . "false")
-                                                          ("files" .
-                                                           ((,filename .
-                                                             (("content" . ,text))))))))))
+       :post-field-lambda (lambda () (cl-function (lambda (&key text &allow-other-keys)
+                                               (let ((filename (or (file-name-nondirectory (buffer-file-name)) "file.txt")))
+                                                 (json-encode `(("description" . "Pasted from Emacs with webpaste.el")
+                                                                ("public" . "false")
+                                                                ("files" .
+                                                                 ((,filename .
+                                                                             (("content" . ,text)))))))))))
        :success-lambda (lambda () (cl-function (lambda (&key data &allow-other-keys)
                                             (when data
                                               (webpaste-return-url
