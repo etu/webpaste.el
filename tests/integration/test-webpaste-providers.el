@@ -1,0 +1,33 @@
+;;; test-webpaste-providers.el --- Tests for webpaste providers
+;;; Commentary:
+;;; Code:
+
+(load "tests/load-undercover.el")
+(require 'webpaste)
+
+
+(describe
+ "Test all providers with dummy data"
+
+ (before-each
+  ;; Block requests
+  (spy-on 'webpaste-paste-text)
+  (spy-on 'webpaste-return-url))
+
+ (it
+  "can paste with ptpb.pw"
+
+  (let ((provider (cadr (assoc "ptpb.pw" webpaste-providers-alist))))
+    (funcall provider ";; This is my test text" :sync t)
+
+    (expect (spy-calls-count 'webpaste-return-url) :to-equal 1)
+    (expect (spy-calls-count 'webpaste-paste-text) :to-equal 0)
+
+    (expect (spy-calls-most-recent 'webpaste-return-url)
+            :to-equal
+            (make-spy-context :current-buffer (current-buffer)
+                              :args '("https://ptpb.pw/Dj5w")
+                              :return-value nil)))))
+
+
+;;; test-webpaste-providers.el ends here
