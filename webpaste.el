@@ -114,30 +114,30 @@ precalculated, and also available both for pre and post request access.")
 
 
 ;;; Predefined success lambdas for providers
-(defvar webpaste/providers-success-location-header
+(cl-defun webpaste/providers-success-location-header ()
+  "Predefined success callback for providers returning a Location header."
   (cl-function (lambda (&key response &allow-other-keys)
                  (when response
                    (webpaste-return-url
-                    (request-response-header response "Location")))))
-  "Predefined success callback for providers returning a Location header.")
+                    (request-response-header response "Location"))))))
 
 
-(defvar webpaste/providers-success-response-url
+(cl-defun webpaste/providers-success-response-url ()
+  "Predefined success callback for providers that and up with an URL somehow."
   (cl-function (lambda (&key response &allow-other-keys)
                  (when response
                    (webpaste-return-url
-                    (request-response-url response)))))
-  "Predefined success callback for providers that and up with an URL somehow.")
+                    (request-response-url response))))))
 
 
-(defvar webpaste/providers-success-returned-string
+(cl-defun webpaste/providers-success-returned-string ()
+  "Predefined success callback for providers returning a string with URL."
   (cl-function (lambda (&key data &allow-other-keys)
                  (when data
                    (setq data (replace-regexp-in-string "\n$" "" data))
                    (setq data (replace-regexp-in-string "\"" "" data))
 
-                   (webpaste-return-url data))))
-  "Predefined success callback for providers returning a string with URL.")
+                   (webpaste-return-url data)))))
 
 
 (defvar webpaste/providers-default-post-field-lambda
@@ -264,7 +264,7 @@ Optional params:
                               :post-lang-field-name post-lang-field-name
                               :post-data post-data)
                :parser parser
-               :success success-lambda
+               :success (funcall success-lambda)
                :sync sync
                :error error-lambda))))
 
@@ -278,7 +278,7 @@ Optional params:
        :post-field "c"
        :lang-uri-separator "/"
        :lang-overrides '((emacs-lisp-mode . "elisp"))
-       :success-lambda webpaste/providers-success-location-header))
+       :success-lambda 'webpaste/providers-success-location-header))
 
     ("ix.io"
      ,(webpaste-provider
@@ -286,7 +286,7 @@ Optional params:
        :post-field "f:1"
        :lang-uri-separator "/"
        :lang-overrides '((emacs-lisp-mode . "elisp"))
-       :success-lambda webpaste/providers-success-returned-string))
+       :success-lambda 'webpaste/providers-success-returned-string))
 
     ("sprunge.us"
      ,(webpaste-provider
@@ -294,7 +294,7 @@ Optional params:
        :post-field "sprunge"
        :lang-uri-separator "?"
        :lang-overrides '((emacs-lisp-mode . "elisp"))
-       :success-lambda webpaste/providers-success-returned-string))
+       :success-lambda 'webpaste/providers-success-returned-string))
 
     ("dpaste.com"
      ,(webpaste-provider
@@ -305,7 +305,7 @@ Optional params:
        :post-field "content"
        :post-lang-field-name "syntax"
        :lang-overrides '((emacs-lisp-mode . "clojure"))
-       :success-lambda webpaste/providers-success-location-header))
+       :success-lambda 'webpaste/providers-success-location-header))
 
     ("dpaste.de"
      ,(webpaste-provider
@@ -314,7 +314,7 @@ Optional params:
        :post-field "content"
        :post-lang-field-name "lexer"
        :lang-overrides '((emacs-lisp-mode . "clojure"))
-       :success-lambda webpaste/providers-success-returned-string))
+       :success-lambda 'webpaste/providers-success-returned-string))
 
     ("gist.github.com"
      ,(webpaste-provider
@@ -327,10 +327,10 @@ Optional params:
                                                           ("files" .
                                                            ((,filename .
                                                              (("content" . ,text))))))))))
-       :success-lambda (cl-function (lambda (&key data &allow-other-keys)
-                                      (when data
-                                        (webpaste-return-url
-                                         (cdr (assoc 'html_url (json-read-from-string data)))))))))
+       :success-lambda (lambda () (cl-function (lambda (&key data &allow-other-keys)
+                                            (when data
+                                              (webpaste-return-url
+                                               (cdr (assoc 'html_url (json-read-from-string data))))))))))
 
     ("paste.pound-python.org"
      ,(webpaste-provider
@@ -339,7 +339,7 @@ Optional params:
        :post-field "code"
        :post-lang-field-name "language"
        :lang-overrides '((emacs-lisp-mode . "clojure"))
-       :success-lambda webpaste/providers-success-response-url)))
+       :success-lambda 'webpaste/providers-success-response-url)))
 
   "Define all webpaste.el providers.
 Consists of provider name and lambda function to do the actuall call to the
