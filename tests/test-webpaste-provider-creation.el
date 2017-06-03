@@ -47,9 +47,9 @@
  (it
   "can trigger the success lambda of a provider"
   (let ((used-lambda nil))
-    (funcall broken-provider "my test text")
+    (funcall working-provider "my test text")
 
-    (expect used-lambda :to-equal "error")))
+    (expect used-lambda :to-equal "success")))
 
 
  (xit
