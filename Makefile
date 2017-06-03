@@ -10,8 +10,9 @@ test:
 	${MAKE} unit
 	${MAKE} clean
 
+# Run all tests in tests/unit/
 unit:
-	${CASK} exec buttercup -L .
+	${CASK} exec buttercup -L . tests/unit/
 
 build:
 	${CASK} build
