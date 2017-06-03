@@ -24,6 +24,8 @@ install:
   - cask install
 
 script:
+  # Print travis event type (might be cron or something else)
+  - echo $TRAVIS_EVENT_TYPE
   - emacs --version
   # Run tests
   - make test
