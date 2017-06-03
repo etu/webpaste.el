@@ -68,7 +68,26 @@ Example:
 Can also be put in the =:config= section of =use-package= the same way as the
 provider definitions above.
 
-*** Open recently created pastes in browser
+*** View recently created pastes
+Webpaste gives you several options to view your succesful paste.
+
+**** Send the returned URL to the killring
+This is webpaste's default behavior. After a succesfull paste, the returned URL
+from the provider will be sent to the killring. You can disable this with
+
+#+BEGIN_SRC emacs-lisp
+(setq webpaste/add-to-killring nil)
+#+END_SRC
+
+**** Copy URL to the clipboard
+If you have [[https://github.com/rolandwalker/simpleclip][simpleclip]] installed, you can copy the returned URL to the 
+clipboard. You can enable this with
+
+#+BEGIN_SRC emacs-lisp
+(setq webpaste/copy-to-clipboard t)
+#+END_SRC
+
+**** Open the recently created paste in the browser
 To enable opening of recently created pastes in an external browser, you can
 enable the option =webpaste/open-in-browser= by setting this value to a
 non-nil value.
