@@ -152,13 +152,9 @@ precalculated, and also available both for pre and post request access.")
                  (let ((provider-lang-alist (cdr (assoc provider-uri webpaste/provider-lang-alists))))
                    ;; Fetch language name for this major mode for this provider
                    (let ((language-name (cdr (assoc major-mode provider-lang-alist))))
-                     ;; If not set correctly, get the fundamental-mode one which should be plaintext
-                     (unless language-name
-                       (setq language-name (cdr (assoc 'fundamental-mode provider-lang-alist))))
-
-                     ;; Append language to the post-data
-                     (cl-pushnew (cons post-lang-field-name language-name) post-data)))
-
+                     (if (and post-lang-field-name language-name)
+                       ;; Append language to the post-data
+                       (cl-pushnew (cons post-lang-field-name language-name) post-data))))
                  post-data))
   "Predefined lambda for building post fields.")
 
