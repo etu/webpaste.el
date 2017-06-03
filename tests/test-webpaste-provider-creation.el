@@ -19,9 +19,9 @@
          :success-lambda (lambda () (cl-function
                                 (lambda (&key data &allow-other-keys)
                                   (setq used-lambda "success"))))
-         :error-lambda (cl-function
-                        (lambda (&key error-thrown &allow-other-keys)
-                          (setq used-lambda "error")))))
+         :error-lambda (lambda (&rest rest) (cl-function
+                                        (lambda (&key error-thrown &allow-other-keys)
+                                          (setq used-lambda "error"))))))
 
   (setq working-provider
         (webpaste-provider
@@ -31,9 +31,9 @@
          :success-lambda (lambda () (cl-function
                                 (lambda (&key data &allow-other-keys)
                                   (setq used-lambda "success"))))
-         :error-lambda (cl-function
-                        (lambda (&key error-thrown &allow-other-keys)
-                          (setq used-lambda "error"))))))
+         :error-lambda (lambda (&rest rest) (cl-function
+                                        (lambda (&key error-thrown &allow-other-keys)
+                                          (setq used-lambda "error")))))))
 
 
  (it

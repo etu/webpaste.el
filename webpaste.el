@@ -100,17 +100,17 @@ precalculated, and also available both for pre and post request access.")
 
 
 ;;; Predefined error lambda for providers
-(defvar webpaste/providers-error-lambda
+(cl-defun webpaste/providers-error-lambda (&key text)
+  "Predefined error callback for providers that always does failover."
   (cl-function (lambda (&key error-thrown &allow-other-keys)
                  (message "Got error: %S" error-thrown)
-                 (webpaste-paste-text text)))
-  "Predefined error callback for providers that always does failover.")
+                 (webpaste-paste-text text))))
 
 
-(defvar webpaste/providers-error-lambda-no-failover
+(cl-defun webpaste/providers-error-lambda-no-failover (&key text)
+  "Predefined error callback for providers that shouldn't do failover."
   (cl-function (lambda (&key error-thrown &allow-other-keys)
-                 (message "Got error: %S" error-thrown)))
-  "Predefined error callback for providers that shouldn't do failover.")
+                 (message "Got error: %S" error-thrown))))
 
 
 ;;; Predefined success lambdas for providers
@@ -183,7 +183,7 @@ precalculated, and also available both for pre and post request access.")
                                   (parser 'buffer-string)
                                   (lang-overrides '())
                                   (lang-uri-separator nil)
-                                  (error-lambda webpaste/providers-error-lambda)
+                                  (error-lambda 'webpaste/providers-error-lambda)
                                   (post-field-lambda webpaste/providers-default-post-field-lambda)
                                   (sync nil))
   "Function to create the lambda function for a provider.
@@ -266,7 +266,7 @@ Optional params:
                :parser parser
                :success (funcall success-lambda)
                :sync sync
-               :error error-lambda))))
+               :error (funcall error-lambda :text text)))))
 
 
 
