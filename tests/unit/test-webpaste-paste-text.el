@@ -8,11 +8,11 @@
 
 (describe
  "Paste text to provider"
- :var (webpaste/tested-providers)
+ :var (webpaste-tested-providers)
 
  (before-each
   ;; Override which fake providers exists
-  (spy-on 'webpaste/get-provider-priority
+  (spy-on 'webpaste-get-provider-priority
           :and-return-value
           '("provider1" "provider2"))
 
@@ -20,7 +20,7 @@
   (spy-on 'webpaste-paste-text-to-provider)
 
   ;; And let tested list be resetted for each test
-  (setq webpaste/tested-providers nil))
+  (setq webpaste-tested-providers nil))
 
 
  (it
@@ -45,7 +45,7 @@
           "provider2")
 
   ;; Check that the tested list is empty so another run would restart
-  (expect webpaste/tested-providers :to-equal nil)))
+  (expect webpaste-tested-providers :to-equal nil)))
 
 
 (describe

@@ -57,12 +57,12 @@ This can be added to the =:config= section of use-package:
 *** Confirm pasting with a yes/no confirmation before pasting
 To enable a confirmation dialog to always pop up and require you to confirm
 pasting before text is actually sent to a paste-provider you just need to set
-the variable =webpaste/paste-confirmation= to a value that is non-nil.
+the variable =webpaste-paste-confirmation= to a value that is non-nil.
 
 Example:
 #+begin_src emacs-lisp :tangle yes
   ;; Require confirmation before doing paste
-  (setq webpaste/paste-confirmation t)
+  (setq webpaste-paste-confirmation t)
 #+end_src
 
 Can also be put in the =:config= section of =use-package= the same way as the
@@ -76,26 +76,26 @@ This is webpaste's default behavior. After a succesfull paste, the returned URL
 from the provider will be sent to the killring. You can disable this with
 
 #+BEGIN_SRC emacs-lisp
-(setq webpaste/add-to-killring nil)
+(setq webpaste-add-to-killring nil)
 #+END_SRC
 
 **** Copy URL to the clipboard
-If you have [[https://github.com/rolandwalker/simpleclip][simpleclip]] installed, you can copy the returned URL to the 
+If you have [[https://github.com/rolandwalker/simpleclip][simpleclip]] installed, you can copy the returned URL to the
 clipboard. You can enable this with
 
 #+BEGIN_SRC emacs-lisp
-(setq webpaste/copy-to-clipboard t)
+(setq webpaste-copy-to-clipboard t)
 #+END_SRC
 
 **** Open the recently created paste in the browser
 To enable opening of recently created pastes in an external browser, you can
-enable the option =webpaste/open-in-browser= by setting this value to a
+enable the option =webpaste-open-in-browser= by setting this value to a
 non-nil value.
 
 Example:
 #+begin_src emacs-lisp :tangle yes
   ;; Open recently created pastes in an external browser
-  (setq webpaste/open-in-browser t)
+  (setq webpaste-open-in-browser t)
 #+end_src
 
 Can also be put in the =:config= section of =use-package= the same way as the

@@ -33,7 +33,7 @@
  (it
   "can open an external browser with the url"
 
-  (let ((webpaste/open-in-browser t))
+  (let ((webpaste-open-in-browser t))
     (webpaste-return-url "https://example.com/")
 
     (expect 'browse-url-generic
@@ -43,9 +43,9 @@
  (it
   "can append language on return"
 
-  (let ((webpaste/provider-separators
+  (let ((webpaste-provider-separators
          '(("https://example.com/" . "?lang=")))
-        (webpaste/provider-lang-alists
+        (webpaste-provider-lang-alists
          '(("https://example.com/" . ((lisp-interaction-mode . "lisp"))))))
 
     (spy-calls-reset 'kill-new)
@@ -58,8 +58,8 @@
 
  (it
   "can put contents in clipboard using simpleclip"
-  (let ((webpaste/copy-to-clipboard t)
-        (webpaste/webpaste/add-to-killring nil))
+  (let ((webpaste-copy-to-clipboard t)
+        (webpaste-add-to-killring nil))
 
     (webpaste-return-url "https://example.com/")
 

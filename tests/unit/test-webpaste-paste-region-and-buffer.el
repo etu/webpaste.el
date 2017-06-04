@@ -12,10 +12,10 @@
  (before-each
   (spy-on 'webpaste-paste-text)
   (spy-on 'yes-or-no-p :and-return-value nil)
-  (setq webpaste/paste-confirmation t))
+  (setq webpaste-paste-confirmation t))
 
  (after-each
-  (setq webpaste/paste-confirmation nil))
+  (setq webpaste-paste-confirmation nil))
 
  (it
   "can't paste because of answer to question is no"
@@ -35,10 +35,10 @@
  (before-each
   (spy-on 'webpaste-paste-text)
   (spy-on 'yes-or-no-p :and-return-value t)
-  (setq webpaste/paste-confirmation t))
+  (setq webpaste-paste-confirmation t))
 
  (after-each
-  (setq webpaste/paste-confirmation nil))
+  (setq webpaste-paste-confirmation nil))
 
  (it
   "can paste because of answer to question is yes"
