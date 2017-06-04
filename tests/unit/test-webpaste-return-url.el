@@ -12,7 +12,8 @@
  (before-each
   (spy-on 'message)
   (spy-on 'kill-new)
-  (spy-on 'browse-url-generic))
+  (spy-on 'browse-url-generic)
+  (spy-on 'simpleclip-set-contents))
 
  (it
   "can put in kill-ring and message the user"
@@ -53,7 +54,23 @@
 
     (expect 'kill-new
             :to-have-been-called-with
-            "https://example.com/?lang=lisp"))))
+            "https://example.com/?lang=lisp")))
+
+ (it
+  "can put contents in clipboard using simpleclip"
+  (let ((webpaste/copy-to-clipboard t)
+        (webpaste/webpaste/add-to-killring nil))
+
+    (webpaste-return-url "https://example.com/")
+
+    (expect 'simpleclip-set-contents
+            :to-have-been-called-with
+            "https://example.com/")
+
+    (expect 'message
+            :to-have-been-called-with
+            "URL copied to clipboard."))))
+
 
 
 ;;; test-webpaste-return-url.el ends here
