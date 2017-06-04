@@ -1,0 +1,48 @@
+* Contributing to webpaste.el
+All contributions are welcome!
+
+The following things are probably always needed:
+
+** Reporting bugs
+Please try to be constructive, if you have a bug. Try to detail how to
+reproduce the error so we can try to fix it. Also try to run the latest
+version of webpaste alone without alot of other packages.
+
+Just start emacs like this: =emacs -Q=. Then paste the example below to set
+up webpaste (also eval the buffer =M-x eval-buffer RET=).
+
+
+#+begin_src emacs-lisp :tangle yes
+  (require 'package)
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+  (package-initialize)
+  (package-refresh-contents)
+  (package-install 'webpaste)
+
+  (require 'webpaste)
+  (global-set-key (kbd "C-c C-p C-b") 'webpaste-paste-buffer)
+  (global-set-key (kbd "C-c C-p C-r") 'webpaste-paste-region)
+#+end_src
+
+After that you do the settings you need to reproduce it (like providers and
+other stuff).
+
+** Contributing code
+Plase run [[http://www.flycheck.org/][flycheck]] in your editor to get hints and highlights of errors. Only
+one error is allowed in each file.
+
+In webpaste.el this allowed error is:
+#+begin_src
+Cannot open load file: No such file or directory, request
+#+end_src
+
+This is due to the =(require 'request)= at the beginning of the file. This is
+ok that it fails. All other errors must be fixed. For example documentation
+and other hints.
+
+
+And for the tests it's okay with another error which is:
+#+begin_src
+Cannot open load file: No such file or directory, webpaste
+#+end_src
+This is due to the same reasons as above.
