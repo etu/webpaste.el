@@ -18,7 +18,10 @@
   "can paste with ptpb.pw"
 
   (let ((provider (cadr (assoc "ptpb.pw" webpaste-providers-alist))))
-    (funcall provider ";; This is my test text" :sync t)
+    (funcall
+     provider
+     ";; This is a build artifact made from an integration test for https://github.com/etu/webpaste.el"
+     :sync t)
 
     (expect (spy-calls-count 'webpaste-return-url) :to-equal 1)
     (expect (spy-calls-count 'webpaste-paste-text) :to-equal 0)
@@ -26,7 +29,7 @@
     (expect (spy-calls-most-recent 'webpaste-return-url)
             :to-equal
             (make-spy-context :current-buffer (current-buffer)
-                              :args '("https://ptpb.pw/Dj5w")
+                              :args '("https://ptpb.pw/gLC6")
                               :return-value nil)))))
 
 
