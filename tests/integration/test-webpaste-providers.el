@@ -75,6 +75,19 @@
      :sync t)
 
     (expect (spy-calls-count 'webpaste-return-url) :to-equal 1)
+    (expect (spy-calls-count 'webpaste-paste-text) :to-equal 0)))
+
+
+ (it
+  "can paste with dpaste.de"
+
+  (let ((provider (cadr (assoc "dpaste.de" webpaste-providers-alist))))
+    (funcall
+     provider
+     ";; This is a build artifact made from an integration test for https://github.com/etu/webpaste.el"
+     :sync t)
+
+    (expect (spy-calls-count 'webpaste-return-url) :to-equal 1)
     (expect (spy-calls-count 'webpaste-paste-text) :to-equal 0))))
 
 
