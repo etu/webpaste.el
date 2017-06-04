@@ -25,7 +25,7 @@
             "https://example.com/")))
 
 
- (it
+ (xit
   "when using some request.el response thingy"
   (let ((success-lambda (webpaste/providers-success-response-url)))
     (funcall success-lambda :response "my fake response")
