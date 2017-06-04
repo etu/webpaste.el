@@ -7,7 +7,7 @@
 ;; Package-Version: 1.4.0
 ;; Version: 1.4.0
 ;; Keywords: convenience, comm, paste
-;; Package-Requires: ((emacs "24.4") (request "0.2.0") (cl-lib "0.5") (json "1.4"))
+;; Package-Requires: ((emacs "24.4") (request "0.2.0") (cl-lib "0.5"))
 
 ;;; Commentary:
 

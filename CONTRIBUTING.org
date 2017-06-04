@@ -28,8 +28,11 @@ After that you do the settings you need to reproduce it (like providers and
 other stuff).
 
 ** Contributing code
-Plase run [[http://www.flycheck.org/][flycheck]] in your editor to get hints and highlights of errors. Only
-one error is allowed in each file.
+Never leave trailing spaces on a line in any file. And end all files with
+exactly one newline. Not more or less than that.
+
+Plase run [[http://www.flycheck.org/][flycheck]] with [[https://github.com/purcell/flycheck-package][flycheck-package]] in your editor to get hints and
+highlights of errors. Only one error is allowed in each file.
 
 In webpaste.el this allowed error is:
 #+begin_src
