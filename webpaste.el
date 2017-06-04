@@ -56,22 +56,26 @@ default to all providers in order defined in ‘webpaste-providers’ list."
 
 (defcustom webpaste/paste-confirmation nil
   "Prompt for a yes/no confirmation before attempting to paste a region or buffer."
-  :group 'webpaste)
+  :group 'webpaste
+  :type 'boolean)
 
 
 (defcustom webpaste/open-in-browser nil
   "Open recently created pastes in a browser.
-
 This uses `browse-url-generic' to open URLs."
-  :group 'webpaste)
+  :group 'webpaste
+  :type 'boolean)
 
 (defcustom webpaste/copy-to-clipboard nil
-  "Uses simpleclip to send the provider's returned URL to the clipboard"
-  :group 'webpaste)
+  "Uses simpleclip to send the provider's returned URL to the clipboard.
+This uses `simpleclip-set-contents' to copy to clipboard."
+  :group 'webpaste
+  :type 'boolean)
 
 (defcustom webpaste/add-to-killring t
-  "Add the returned URL to the killring after paste"
-  :group 'webpaste)
+  "Add the returned URL to the killring after paste."
+  :group 'webpaste
+  :type 'boolean)
 
 
 
@@ -399,7 +403,7 @@ return it to the user.")
   ;; Send RETURNED-URL to the clipboard using simpleclip
   (when webpaste/copy-to-clipboard
     (simpleclip-set-contents returned-url)
-    (message "URL copied to clipboard. "))
+    (message "URL copied to clipboard."))
 
   ;; Add RETURNED-URL to killring for easy pasting
   (when webpaste/add-to-killring
