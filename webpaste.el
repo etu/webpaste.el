@@ -79,6 +79,11 @@ This uses `simpleclip-set-contents' to copy to clipboard."
   :group 'webpaste
   :type 'boolean)
 
+(defcustom webpaste-return-url-hook nil
+  "Hook executed with the returned url as parameter."
+  :group 'webpaste
+  :type 'hook)
+
 
 
 (defvar webpaste-tested-providers ()
@@ -410,7 +415,14 @@ return it to the user.")
   ;; Add RETURNED-URL to killring for easy pasting
   (when webpaste-add-to-killring
     (kill-new returned-url)
-    (message "Added %S to kill ring." returned-url)))
+    (message "Added %S to kill ring." returned-url))
+
+  ;; Run user defined hooks
+  (dolist (hook webpaste-return-url-hook)
+    (funcall hook returned-url))
+
+  ;; Return URL instead of nil
+  returned-url)
 
 
 
