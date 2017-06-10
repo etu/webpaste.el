@@ -29,7 +29,7 @@ To select which providers to use in which order you need to set the variable
 providers names.
 
 Examples:
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp
   ;; Choosing githup gist only
   (setq webpaste-provider-priority '("gist.github.com"))
 
@@ -60,7 +60,7 @@ pasting before text is actually sent to a paste-provider you just need to set
 the variable =webpaste-paste-confirmation= to a value that is non-nil.
 
 Example:
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp
   ;; Require confirmation before doing paste
   (setq webpaste-paste-confirmation t)
 #+end_src
@@ -93,7 +93,7 @@ enable the option =webpaste-open-in-browser= by setting this value to a
 non-nil value.
 
 Example:
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp
   ;; Open recently created pastes in an external browser
   (setq webpaste-open-in-browser t)
 #+end_src
