@@ -79,6 +79,7 @@ This uses `simpleclip-set-contents' to copy to clipboard."
   :group 'webpaste
   :type 'boolean)
 
+
 (defcustom webpaste-return-url-hook nil
   "Hook executed with the returned url as parameter."
   :group 'webpaste

@@ -10,6 +10,7 @@
  "Returning URLs to the user"
 
  (before-each
+  (setq webpaste-return-url-hook nil)
   (spy-on 'message)
   (spy-on 'kill-new)
   (spy-on 'browse-url-generic)
@@ -69,8 +70,29 @@
 
     (expect 'message
             :to-have-been-called-with
-            "URL copied to clipboard."))))
+            "URL copied to clipboard.")))
 
+ (it
+  "can run user defined hooks"
+  (add-hook 'webpaste-return-url-hook 'message)
+  (add-hook 'webpaste-return-url-hook 'browse-url-generic)
+  (add-hook 'webpaste-return-url-hook 'simpleclip-set-contents)
+  (let ((webpaste-copy-to-clipboard nil)
+        (webpaste-add-to-killring nil)
+        (webpaste-open-in-browser nil))
+    (webpaste-return-url "https://example.com/")
+
+    (expect 'simpleclip-set-contents
+            :to-have-been-called-with
+            "https://example.com/")
+
+    (expect 'message
+            :to-have-been-called-with
+            "https://example.com/")
+
+    (expect 'browse-url-generic
+            :to-have-been-called-with
+            "https://example.com/"))))
 
 
 ;;; test-webpaste-return-url.el ends here
