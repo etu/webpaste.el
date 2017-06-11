@@ -12,7 +12,7 @@
 
  (before-each
   (setq broken-provider
-        (webpaste-provider
+        (webpaste--provider
          :uri "http://invalid-domain-name/"
          :post-field "data"
          :success-lambda (lambda () (cl-function
@@ -23,7 +23,7 @@
                                           (setq used-lambda "error"))))))
 
   (setq working-provider
-        (webpaste-provider
+        (webpaste--provider
          :uri "https://httpbin.org/status/200"
          :post-field "data"
          :success-lambda (lambda () (cl-function
@@ -57,7 +57,7 @@
   (spy-on 'error)
 
   (let ((used-lambda nil)
-        (provider (webpaste-provider
+        (provider (webpaste--provider
                   :uri "http://invalid-domain-name/"
                   :post-field "data"
                   :success-lambda (cl-function

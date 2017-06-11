@@ -12,7 +12,7 @@
  (before-each
   ;; Block requests
   (spy-on 'webpaste-paste-text)
-  (spy-on 'webpaste-return-url))
+  (spy-on 'webpaste--return-url))
 
  (it
   "can paste with ptpb.pw"
@@ -23,10 +23,10 @@
      ";; This is a build artifact made from an integration test for https://github.com/etu/webpaste.el"
      :sync t)
 
-    (expect (spy-calls-count 'webpaste-return-url) :to-equal 1)
+    (expect (spy-calls-count 'webpaste--return-url) :to-equal 1)
     (expect (spy-calls-count 'webpaste-paste-text) :to-equal 0)
 
-    (expect (spy-calls-most-recent 'webpaste-return-url)
+    (expect (spy-calls-most-recent 'webpaste--return-url)
             :to-equal
             (make-spy-context :current-buffer (current-buffer)
                               :args '("https://ptpb.pw/gLC6")
@@ -42,10 +42,10 @@
      ";; This is a build artifact made from an integration test for https://github.com/etu/webpaste.el"
      :sync t)
 
-    (expect (spy-calls-count 'webpaste-return-url) :to-equal 1)
+    (expect (spy-calls-count 'webpaste--return-url) :to-equal 1)
     (expect (spy-calls-count 'webpaste-paste-text) :to-equal 0)
 
-    (expect (spy-calls-most-recent 'webpaste-return-url)
+    (expect (spy-calls-most-recent 'webpaste--return-url)
             :to-equal
             (make-spy-context :current-buffer (current-buffer)
                               :args '("http://ix.io/whJ")
@@ -61,7 +61,7 @@
      ";; This is a build artifact made from an integration test for https://github.com/etu/webpaste.el"
      :sync t)
 
-    (expect (spy-calls-count 'webpaste-return-url) :to-equal 1)
+    (expect (spy-calls-count 'webpaste--return-url) :to-equal 1)
     (expect (spy-calls-count 'webpaste-paste-text) :to-equal 0)))
 
 
@@ -74,7 +74,7 @@
      ";; This is a build artifact made from an integration test for https://github.com/etu/webpaste.el"
      :sync t)
 
-    (expect (spy-calls-count 'webpaste-return-url) :to-equal 1)
+    (expect (spy-calls-count 'webpaste--return-url) :to-equal 1)
     (expect (spy-calls-count 'webpaste-paste-text) :to-equal 0)))
 
 
@@ -87,7 +87,7 @@
      ";; This is a build artifact made from an integration test for https://github.com/etu/webpaste.el"
      :sync t)
 
-    (expect (spy-calls-count 'webpaste-return-url) :to-equal 1)
+    (expect (spy-calls-count 'webpaste--return-url) :to-equal 1)
     (expect (spy-calls-count 'webpaste-paste-text) :to-equal 0)))
 
 
@@ -103,7 +103,7 @@
      ";; This is a build artifact made from an integration test for https://github.com/etu/webpaste.el"
      :sync t)
 
-    (expect (spy-calls-count 'webpaste-return-url) :to-equal 1)
+    (expect (spy-calls-count 'webpaste--return-url) :to-equal 1)
     (expect (spy-calls-count 'webpaste-paste-text) :to-equal 0)))
 
 
@@ -116,7 +116,7 @@
      ";; This is a build artifact made from an integration test for https://github.com/etu/webpaste.el"
      :sync t)
 
-    (expect (spy-calls-count 'webpaste-return-url) :to-equal 1)
+    (expect (spy-calls-count 'webpaste--return-url) :to-equal 1)
     (expect (spy-calls-count 'webpaste-paste-text) :to-equal 0))))
 
 

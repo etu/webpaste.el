@@ -19,7 +19,7 @@
  (it
   "can put in kill-ring and message the user"
 
-  (webpaste-return-url "https://example.com/")
+  (webpaste--return-url "https://example.com/")
 
   (expect 'browse-url-generic :not :to-have-been-called)
 
@@ -35,7 +35,7 @@
   "can open an external browser with the url"
 
   (let ((webpaste-open-in-browser t))
-    (webpaste-return-url "https://example.com/")
+    (webpaste--return-url "https://example.com/")
 
     (expect 'browse-url-generic
             :to-have-been-called-with
@@ -44,14 +44,14 @@
  (it
   "can append language on return"
 
-  (let ((webpaste-provider-separators
+  (let ((webpaste--provider-separators
          '(("https://example.com/" . "?lang=")))
-        (webpaste-provider-lang-alists
+        (webpaste--provider-lang-alists
          '(("https://example.com/" . ((lisp-interaction-mode . "lisp"))))))
 
     (spy-calls-reset 'kill-new)
 
-    (webpaste-return-url "https://example.com/")
+    (webpaste--return-url "https://example.com/")
 
     (expect 'kill-new
             :to-have-been-called-with
@@ -62,7 +62,7 @@
   (let ((webpaste-copy-to-clipboard t)
         (webpaste-add-to-killring nil))
 
-    (webpaste-return-url "https://example.com/")
+    (webpaste--return-url "https://example.com/")
 
     (expect 'simpleclip-set-contents
             :to-have-been-called-with
@@ -80,7 +80,7 @@
   (let ((webpaste-copy-to-clipboard nil)
         (webpaste-add-to-killring nil)
         (webpaste-open-in-browser nil))
-    (webpaste-return-url "https://example.com/")
+    (webpaste--return-url "https://example.com/")
 
     (expect 'simpleclip-set-contents
             :to-have-been-called-with

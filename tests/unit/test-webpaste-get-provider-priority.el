@@ -16,7 +16,7 @@
                                     ("provider3" . "lambda"))))
 
     ;; Do test
-    (expect (webpaste-get-provider-priority)
+    (expect (webpaste--get-provider-priority)
             :to-equal
             '("provider1" "provider2" "provider3"))))
 
@@ -27,7 +27,7 @@
   (let ((webpaste-provider-priority '("provider2" "provider1" "provider3")))
 
     ;; Do test
-    (expect (webpaste-get-provider-priority)
+    (expect (webpaste--get-provider-priority)
             :to-equal
             '("provider2" "provider1" "provider3")))))
 

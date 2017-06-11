@@ -49,7 +49,7 @@ provider priority for which order which provider should be tried when used."
 (defcustom webpaste-provider-priority ()
   "Define provider priority of which providers to try in which order.
 This variable should be a list of strings and if it isn't defined it will
-default to all providers in order defined in ‘webpaste-providers’ list."
+default to all providers in order defined in ‘webpaste--provider’ list."
   :group 'webpaste
   :type '(repeat string))
 
@@ -138,7 +138,7 @@ This uses `simpleclip-set-contents' to copy to clipboard."
                                                                            (("content" . ,text)))))))))))
      :success-lambda (lambda () (cl-function (lambda (&key data &allow-other-keys)
                                           (when data
-                                            (webpaste-return-url
+                                            (webpaste--return-url
                                              (cdr (assoc 'html_url (json-read-from-string data)))))))))
 
     ("paste.pound-python.org"
@@ -150,34 +150,34 @@ This uses `simpleclip-set-contents' to copy to clipboard."
      :success-lambda webpaste-providers-success-response-url))
 
   "Define all webpaste.el providers.
-Consists of provider name and arguments to be sent to `webpaste-provider' when
+Consists of provider name and arguments to be sent to `webpaste--provider' when
 the provider is created.  So to create a custom provider you should read up on
-the docs for `webpaste-provider'."
+the docs for `webpaste--provider'."
   :group 'webpaste
   :type 'alist)
 
 
 
-(defvar webpaste-tested-providers ()
+(defvar webpaste--tested-providers ()
   "Variable for storing which providers to try in which order while running.
 This list will be re-populated each run based on ‘webpaste-provider-priority’ or
-if that variable is nil, it will use the list of names from ‘webpaste-providers’
+if that variable is nil, it will use the list of names from ‘webpaste--provider’
 each run.")
 
 
-(defvar webpaste-provider-separators ()
+(defvar webpaste--provider-separators ()
   "Variable for storing separators for providers that doesn't post language.
 Some providers accepts a post parameter with which language the code is.  But
 some providers want to append the language to the resulting URL.")
 
 
-(defvar webpaste-provider-lang-alists ()
+(defvar webpaste--provider-lang-alists ()
   "Variable for storing alists with languages for highlighting for providers.
 This list will be populated when you add providers to have the languages
 precalculated, and also available both for pre and post request access.")
 
 
-(defvar webpaste-default-lang-alist
+(defvar webpaste--default-lang-alist
   '((css-mode . "css")
     (fundamental-mode . "text")
     (html-mode . "html")
@@ -189,6 +189,7 @@ precalculated, and also available both for pre and post request access.")
     (yaml-mode . "yaml"))
   "Alist that maps `major-mode' names to language names.")
 
+
 
 ;;; Predefined error lambda for providers
 (cl-defun webpaste-providers-error-lambda (&key text)
@@ -209,7 +210,7 @@ precalculated, and also available both for pre and post request access.")
   "Predefined success callback for providers returning a Location header."
   (cl-function (lambda (&key response &allow-other-keys)
                  (when response
-                   (webpaste-return-url
+                   (webpaste--return-url
                     (request-response-header response "Location"))))))
 
 
@@ -217,7 +218,7 @@ precalculated, and also available both for pre and post request access.")
   "Predefined success callback for providers that and up with an URL somehow."
   (cl-function (lambda (&key response &allow-other-keys)
                  (when response
-                   (webpaste-return-url
+                   (webpaste--return-url
                     (request-response-url response))))))
 
 
@@ -228,7 +229,7 @@ precalculated, and also available both for pre and post request access.")
                    (setq data (replace-regexp-in-string "\n$" "" data))
                    (setq data (replace-regexp-in-string "\"" "" data))
 
-                   (webpaste-return-url data)))))
+                   (webpaste--return-url data)))))
 
 
 (cl-defun webpaste-providers-default-post-field-lambda ()
@@ -241,7 +242,7 @@ precalculated, and also available both for pre and post request access.")
                  (cl-pushnew (cons post-field text) post-data)
 
                  ;; Fetch alist of languages for this provider
-                 (let ((provider-lang-alist (cdr (assoc provider-uri webpaste-provider-lang-alists))))
+                 (let ((provider-lang-alist (cdr (assoc provider-uri webpaste--provider-lang-alists))))
                    ;; Fetch language name for this major mode for this provider
                    (let ((language-name (cdr (assoc major-mode provider-lang-alist))))
                      (if (and post-lang-field-name language-name)
@@ -251,11 +252,11 @@ precalculated, and also available both for pre and post request access.")
 
 
 
-(defun webpaste-get-lang-alist-with-overrides (overrides)
+(cl-defun webpaste--get-lang-alist-with-overrides (overrides)
   "Fetches lang-alist with OVERRIDES applied."
 
   ;; Copy original list to temporary list
-  (let ((lang-alist webpaste-default-lang-alist))
+  (let ((lang-alist webpaste--default-lang-alist))
     ;; Go through list of overrides and append them to the temporary list
     (dolist (override-element overrides)
       (cl-pushnew override-element lang-alist))
@@ -263,9 +264,8 @@ precalculated, and also available both for pre and post request access.")
     ;; Return temporary list
     lang-alist))
 
-
 
-(cl-defun webpaste-provider (&key uri
+(cl-defun webpaste--provider (&key uri
                                   post-field
                                   success-lambda
                                   (type "POST")
@@ -279,7 +279,7 @@ precalculated, and also available both for pre and post request access.")
   "Function to create the lambda function for a provider.
 
 Usage:
-  (webpaste-provider
+  (webpaste--provider
     [:keyword [option]]...)
 
 Required params:
@@ -323,7 +323,7 @@ Optional params:
                    the names TEXT, POST-FIELD and POST-DATA.  POST-DATA should
                    default to `nil' or empty list.  It also takes the option
                    LANG-OVERRIDES which is a list that enables overiding of
-                   `webpaste-default-lang-alist'.
+                   `webpaste--default-lang-alist'.
 
                    TEXT contains the data that should be sent.
                    POST-FIELD cointains the name of the field to be sent.
@@ -331,11 +331,11 @@ Optional params:
   ;; If we get a separator sent to the function, append it to the list of
   ;; separators for later use
   (when lang-uri-separator
-    (cl-pushnew (cons uri lang-uri-separator) webpaste-provider-separators))
+    (cl-pushnew (cons uri lang-uri-separator) webpaste--provider-separators))
 
   ;; Add pre-calculated list of webpaste lang alists
-  (cl-pushnew (cons uri (webpaste-get-lang-alist-with-overrides lang-overrides))
-              webpaste-provider-lang-alists)
+  (cl-pushnew (cons uri (webpaste--get-lang-alist-with-overrides lang-overrides))
+              webpaste--provider-lang-alists)
 
   (cl-function
    (lambda (text
@@ -358,17 +358,15 @@ Optional params:
                 :sync sync
                 :error (funcall error-lambda :text text))))))
 
-
 
 (cl-defun webpaste--get-provider-by-name (provider-name)
   "Get provider by PROVIDER-NAME."
 
-  (apply 'webpaste-provider
+  (apply 'webpaste--provider
          (cdr (assoc provider-name webpaste-providers-alist))))
 
-
 
-(defun webpaste-get-provider-priority ()
+(cl-defun webpaste--get-provider-priority ()
   "Return provider priority."
 
   ;; Populate webpaste-provider-priority if needed
@@ -383,18 +381,16 @@ Optional params:
 
   webpaste-provider-priority)
 
-
 
-;;;###autoload
-(defun webpaste-return-url (returned-url)
+(cl-defun webpaste--return-url (returned-url)
   "Return RETURNED-URL to user from the result of the paste service."
 
   ;; Loop providers separators
-  (dolist (provider-separator webpaste-provider-separators)
+  (dolist (provider-separator webpaste--provider-separators)
     ;; Match if the separator is for this URI
     (when (string-match-p (regexp-quote (car provider-separator)) returned-url)
       ;; Get alist of languages for this provider
-      (let ((provider-lang-alist (cdr (assoc (car provider-separator) webpaste-provider-lang-alists))))
+      (let ((provider-lang-alist (cdr (assoc (car provider-separator) webpaste--provider-lang-alists))))
         ;; Get language name from list of languages
         (let ((language-name (cdr (assoc major-mode provider-lang-alist))))
           ;; If we get a language name
@@ -403,7 +399,7 @@ Optional params:
             (setq returned-url (concat returned-url (cdr provider-separator) language-name)))))))
 
   ;; Reset tested providers after successful paste
-  (setq webpaste-tested-providers nil)
+  (setq webpaste--tested-providers nil)
 
   ;; If the user want to open the link in an external browser, do so.
   (when webpaste-open-in-browser
@@ -429,7 +425,7 @@ Optional params:
 
 
 ;;;###autoload
-(defun webpaste-paste-text-to-provider (text provider-name)
+(cl-defun webpaste-paste-text-to-provider (text provider-name)
   "Paste TEXT to specific PROVIDER-NAME.
 This function sends a paste to a spacific provider.  This function is created to
 make `webpaste-paste-text' do less magic things all at once."
@@ -437,37 +433,37 @@ make `webpaste-paste-text' do less magic things all at once."
 
 
 ;;;###autoload
-(defun webpaste-paste-text (text)
+(cl-defun webpaste-paste-text (text)
   "Paste TEXT to some paste service.
 If ‘webpaste-provider-priority’ isn't populated, it will populate it with the
 default providers.
 
-Then if ‘webpaste-tested-providers’ isn't populated it will be populated by
+Then if ‘webpaste--tested-providers’ isn't populated it will be populated by
 ‘webpaste-provider-priority’.
 
-Then it extracts the first element of ‘webpaste-tested-providers’ and drops
+Then it extracts the first element of ‘webpaste--tested-providers’ and drops
 the first element from that list and gets the lambda for the provider and
 runs the lambda to paste TEXT to the paste service.  The paste-service in turn
 might call this function again with TEXT as param to retry if it failed.
 
 When we run out of providers to try, it will restart since
-‘webpaste-tested-providers’ will be empty and then populated again."
+‘webpaste--tested-providers’ will be empty and then populated again."
 
   ;; Populate tested providers for this request if needed
-  (unless webpaste-tested-providers
-    (setq webpaste-tested-providers (webpaste-get-provider-priority)))
+  (unless webpaste--tested-providers
+    (setq webpaste--tested-providers (webpaste--get-provider-priority)))
 
   ;; Get name of provider at the top of the list
-  (let ((provider-name (car webpaste-tested-providers)))
+  (let ((provider-name (car webpaste--tested-providers)))
     ;; Drop the name at the top of the list
-    (setq webpaste-tested-providers (cdr webpaste-tested-providers))
+    (setq webpaste--tested-providers (cdr webpaste--tested-providers))
 
     ;; Run pasting function
     (webpaste-paste-text-to-provider text provider-name)))
 
 
 ;;;###autoload
-(defun webpaste-paste-region (point mark)
+(cl-defun webpaste-paste-region (point mark)
   "Paste selected region to some paste service.
 Argument POINT Current point.
 Argument MARK Current mark."
@@ -481,7 +477,7 @@ Argument MARK Current mark."
 
 
 ;;;###autoload
-(defun webpaste-paste-buffer ()
+(cl-defun webpaste-paste-buffer ()
   "Paste current buffer to some paste service."
   (interactive)
 

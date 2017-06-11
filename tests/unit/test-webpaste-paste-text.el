@@ -12,7 +12,7 @@
 
  (before-each
   ;; Override which fake providers exists
-  (spy-on 'webpaste-get-provider-priority
+  (spy-on 'webpaste--get-provider-priority
           :and-return-value
           '("provider1" "provider2"))
 
