@@ -17,7 +17,7 @@
  (it
   "can paste with ptpb.pw"
 
-  (let ((provider (cadr (assoc "ptpb.pw" webpaste-providers-alist))))
+  (let ((provider (webpaste--get-provider-by-name "ptpb.pw")))
     (funcall
      provider
      ";; This is a build artifact made from an integration test for https://github.com/etu/webpaste.el"
@@ -36,7 +36,7 @@
  (it
   "can paste with ix.io"
 
-  (let ((provider (cadr (assoc "ix.io" webpaste-providers-alist))))
+  (let ((provider (webpaste--get-provider-by-name "ix.io")))
     (funcall
      provider
      ";; This is a build artifact made from an integration test for https://github.com/etu/webpaste.el"
@@ -55,7 +55,7 @@
  (it
   "can paste with sprunge.us"
 
-  (let ((provider (cadr (assoc "sprunge.us" webpaste-providers-alist))))
+  (let ((provider (webpaste--get-provider-by-name "sprunge.us")))
     (funcall
      provider
      ";; This is a build artifact made from an integration test for https://github.com/etu/webpaste.el"
@@ -68,7 +68,7 @@
  (it
   "can paste with dpaste.com"
 
-  (let ((provider (cadr (assoc "dpaste.com" webpaste-providers-alist))))
+  (let ((provider (webpaste--get-provider-by-name "dpaste.com")))
     (funcall
      provider
      ";; This is a build artifact made from an integration test for https://github.com/etu/webpaste.el"
@@ -81,7 +81,7 @@
  (it
   "can paste with dpaste.de"
 
-  (let ((provider (cadr (assoc "dpaste.de" webpaste-providers-alist))))
+  (let ((provider (webpaste--get-provider-by-name "dpaste.de")))
     (funcall
      provider
      ";; This is a build artifact made from an integration test for https://github.com/etu/webpaste.el"
@@ -97,7 +97,7 @@
   ;; Override function to extract filename from a filepath, otherwise it breaks during integration tests
   (spy-on 'file-name-nondirectory :and-return-value "file.txt")
 
-  (let ((provider (cadr (assoc "gist.github.com" webpaste-providers-alist))))
+  (let ((provider (webpaste--get-provider-by-name "gist.github.com")))
     (funcall
      provider
      ";; This is a build artifact made from an integration test for https://github.com/etu/webpaste.el"
@@ -110,7 +110,7 @@
  (it
   "can paste with paste.pound-python.org"
 
-  (let ((provider (cadr (assoc "paste.pound-python.org" webpaste-providers-alist))))
+  (let ((provider (webpaste--get-provider-by-name "paste.pound-python.org")))
     (funcall
      provider
      ";; This is a build artifact made from an integration test for https://github.com/etu/webpaste.el"

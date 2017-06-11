@@ -48,7 +48,7 @@
   (expect webpaste-tested-providers :to-equal nil)))
 
 
-(describe
+(xdescribe
  "Run provider lambda to paste text"
 
  (before-each

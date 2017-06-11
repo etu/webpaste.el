@@ -85,6 +85,77 @@ This uses `simpleclip-set-contents' to copy to clipboard."
   :group 'webpaste
   :type 'hook)
 
+
+(defcustom webpaste-providers-alist
+  '(("ptpb.pw"
+     :uri "https://ptpb.pw/"
+     :post-field "c"
+     :lang-uri-separator "/"
+     :lang-overrides ((emacs-lisp-mode . "elisp"))
+     :success-lambda webpaste-providers-success-location-header)
+
+    ("ix.io"
+     :uri "http://ix.io/"
+     :post-field "f:1"
+     :lang-uri-separator "/"
+     :lang-overrides ((emacs-lisp-mode . "elisp"))
+     :success-lambda webpaste-providers-success-returned-string)
+
+    ("sprunge.us"
+     :uri "http://sprunge.us/"
+     :post-field "sprunge"
+     :lang-uri-separator "?"
+     :lang-overrides ((emacs-lisp-mode . "elisp"))
+     :success-lambda webpaste-providers-success-returned-string)
+
+    ("dpaste.com"
+     :uri "http://dpaste.com/api/v2/"
+     :post-data (("title" . "")
+                 ("poster" . "")
+                 ("expiry_days" . 1))
+     :post-field "content"
+     :post-lang-field-name "syntax"
+     :lang-overrides ((emacs-lisp-mode . "clojure"))
+     :success-lambda webpaste-providers-success-location-header)
+
+    ("dpaste.de"
+     :uri "https://dpaste.de/api/"
+     :post-data (("expires" . 86400))
+     :post-field "content"
+     :post-lang-field-name "lexer"
+     :lang-overrides ((emacs-lisp-mode . "clojure"))
+     :success-lambda webpaste-providers-success-returned-string)
+
+    ("gist.github.com"
+     :uri "https://api.github.com/gists"
+     :post-field nil
+     :post-field-lambda (lambda () (cl-function (lambda (&key text &allow-other-keys)
+                                             (let ((filename (or (file-name-nondirectory (buffer-file-name)) "file.txt")))
+                                               (json-encode `(("description" . "Pasted from Emacs with webpaste.el")
+                                                              ("public" . "false")
+                                                              ("files" .
+                                                               ((,filename .
+                                                                           (("content" . ,text)))))))))))
+     :success-lambda (lambda () (cl-function (lambda (&key data &allow-other-keys)
+                                          (when data
+                                            (webpaste-return-url
+                                             (cdr (assoc 'html_url (json-read-from-string data)))))))))
+
+    ("paste.pound-python.org"
+     :uri "https://paste.pound-python.org/"
+     :post-data (("webpage" . ""))
+     :post-field "code"
+     :post-lang-field-name "language"
+     :lang-overrides ((emacs-lisp-mode . "clojure"))
+     :success-lambda webpaste-providers-success-response-url))
+
+  "Define all webpaste.el providers.
+Consists of provider name and arguments to be sent to `webpaste-provider' when
+the provider is created.  So to create a custom provider you should read up on
+the docs for `webpaste-provider'."
+  :group 'webpaste
+  :type 'alist)
+
 
 
 (defvar webpaste-tested-providers ()
@@ -289,81 +360,11 @@ Optional params:
 
 
 
-;;; Define providers
-(defvar webpaste-providers-alist
-  `(("ptpb.pw"
-     ,(webpaste-provider
-       :uri "https://ptpb.pw/"
-       :post-field "c"
-       :lang-uri-separator "/"
-       :lang-overrides '((emacs-lisp-mode . "elisp"))
-       :success-lambda 'webpaste-providers-success-location-header))
+(cl-defun webpaste--get-provider-by-name (provider-name)
+  "Get provider by PROVIDER-NAME."
 
-    ("ix.io"
-     ,(webpaste-provider
-       :uri "http://ix.io/"
-       :post-field "f:1"
-       :lang-uri-separator "/"
-       :lang-overrides '((emacs-lisp-mode . "elisp"))
-       :success-lambda 'webpaste-providers-success-returned-string))
-
-    ("sprunge.us"
-     ,(webpaste-provider
-       :uri "http://sprunge.us/"
-       :post-field "sprunge"
-       :lang-uri-separator "?"
-       :lang-overrides '((emacs-lisp-mode . "elisp"))
-       :success-lambda 'webpaste-providers-success-returned-string))
-
-    ("dpaste.com"
-     ,(webpaste-provider
-       :uri "http://dpaste.com/api/v2/"
-       :post-data '(("title" . "")
-                    ("poster" . "")
-                    ("expiry_days" . 1))
-       :post-field "content"
-       :post-lang-field-name "syntax"
-       :lang-overrides '((emacs-lisp-mode . "clojure"))
-       :success-lambda 'webpaste-providers-success-location-header))
-
-    ("dpaste.de"
-     ,(webpaste-provider
-       :uri "https://dpaste.de/api/"
-       :post-data '(("expires" . 86400))
-       :post-field "content"
-       :post-lang-field-name "lexer"
-       :lang-overrides '((emacs-lisp-mode . "clojure"))
-       :success-lambda 'webpaste-providers-success-returned-string))
-
-    ("gist.github.com"
-     ,(webpaste-provider
-       :uri "https://api.github.com/gists"
-       :post-field nil
-       :post-field-lambda (lambda () (cl-function (lambda (&key text &allow-other-keys)
-                                               (let ((filename (or (file-name-nondirectory (buffer-file-name)) "file.txt")))
-                                                 (json-encode `(("description" . "Pasted from Emacs with webpaste.el")
-                                                                ("public" . "false")
-                                                                ("files" .
-                                                                 ((,filename .
-                                                                             (("content" . ,text)))))))))))
-       :success-lambda (lambda () (cl-function (lambda (&key data &allow-other-keys)
-                                            (when data
-                                              (webpaste-return-url
-                                               (cdr (assoc 'html_url (json-read-from-string data))))))))))
-
-    ("paste.pound-python.org"
-     ,(webpaste-provider
-       :uri "https://paste.pound-python.org/"
-       :post-data '(("webpage" . ""))
-       :post-field "code"
-       :post-lang-field-name "language"
-       :lang-overrides '((emacs-lisp-mode . "clojure"))
-       :success-lambda 'webpaste-providers-success-response-url)))
-
-  "Define all webpaste.el providers.
-Consists of provider name and lambda function to do the actuall call to the
-provider.  The lamda should call ‘webpaste-return-url’ with resulting url to
-return it to the user.")
+  (apply 'webpaste-provider
+         (cdr (assoc provider-name webpaste-providers-alist))))
 
 
 
@@ -432,7 +433,7 @@ return it to the user.")
   "Paste TEXT to specific PROVIDER-NAME.
 This function sends a paste to a spacific provider.  This function is created to
 make `webpaste-paste-text' do less magic things all at once."
-  (funcall (cadr (assoc provider-name webpaste-providers-alist)) text))
+  (funcall (webpaste--get-provider-by-name provider-name) text))
 
 
 ;;;###autoload
