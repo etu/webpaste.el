@@ -105,7 +105,7 @@ This uses `simpleclip-set-contents' to copy to clipboard."
      :uri "http://sprunge.us/"
      :post-field "sprunge"
      :lang-uri-separator "?"
-     :lang-overrides ((emacs-lisp-mode . "elisp"))
+     :lang-overrides ((emacs-lisp-mode . "clojure"))
      :success-lambda webpaste-providers-success-returned-string)
 
     ("dpaste.com"
