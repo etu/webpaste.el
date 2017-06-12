@@ -10,7 +10,7 @@
  "Create lambdas to use on failures, "
 
  (before-each
-  (spy-on 'webpaste-paste-text)
+  (spy-on 'webpaste--paste-text)
   (spy-on 'message))
 
  (it
@@ -24,7 +24,7 @@
             "Got error: %S"
             "my error")
 
-    (expect 'webpaste-paste-text
+    (expect 'webpaste--paste-text
             :to-have-been-called-with
             "my text")))
 
@@ -38,7 +38,7 @@
             "Got error: %S"
             "my error")
 
-    (expect 'webpaste-paste-text
+    (expect 'webpaste--paste-text
             :not :to-have-been-called))))
 
 

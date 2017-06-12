@@ -17,7 +17,7 @@
           '("provider1" "provider2"))
 
   ;; Don't allow it to try to paste, just fake it
-  (spy-on 'webpaste-paste-text-to-provider)
+  (spy-on 'webpaste--paste-text-to-provider)
 
   ;; And let tested list be resetted for each test
   (setq webpaste-tested-providers nil))
@@ -27,19 +27,19 @@
   "can paste text to provider and try second provider if called again"
 
   ;; Let's paste to first provider
-  (webpaste-paste-text "my test text")
+  (webpaste--paste-text "my test text")
 
   ;; And check it was to first provider
-  (expect 'webpaste-paste-text-to-provider
+  (expect 'webpaste--paste-text-to-provider
           :to-have-been-called-with
           "my test text"
           "provider1")
 
   ;; Let's paste to second provider
-  (webpaste-paste-text "my test text")
+  (webpaste--paste-text "my test text")
 
   ;; And check it was to second provider
-  (expect 'webpaste-paste-text-to-provider
+  (expect 'webpaste--paste-text-to-provider
           :to-have-been-called-with
           "my test text"
           "provider2")
@@ -59,7 +59,7 @@
  (it
   "can get the lambda for the specified provider and run it"
 
-  (expect (webpaste-paste-text-to-provider "my test text" "provider2")
+  (expect (webpaste--paste-text-to-provider "my test text" "provider2")
           :to-equal
           "my test text")))
 

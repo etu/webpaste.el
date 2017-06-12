@@ -10,7 +10,7 @@
  "Don't to paste region or buffer because of wrong answer to question"
 
  (before-each
-  (spy-on 'webpaste-paste-text)
+  (spy-on 'webpaste--paste-text)
   (spy-on 'yes-or-no-p :and-return-value nil)
   (setq webpaste-paste-confirmation t))
 
@@ -22,18 +22,18 @@
 
   ;; Paste buffer
   (webpaste-paste-buffer)
-  (expect 'webpaste-paste-text :not :to-have-been-called)
+  (expect 'webpaste--paste-text :not :to-have-been-called)
 
   ;; Paste region
   (webpaste-paste-region 10 100)
-  (expect 'webpaste-paste-text :not :to-have-been-called)))
+  (expect 'webpaste--paste-text :not :to-have-been-called)))
 
 
 (describe
  "Paste region or buffer because of correct answer to question"
 
  (before-each
-  (spy-on 'webpaste-paste-text)
+  (spy-on 'webpaste--paste-text)
   (spy-on 'yes-or-no-p :and-return-value t)
   (setq webpaste-paste-confirmation t))
 
@@ -49,11 +49,11 @@
 
     ;; Paste buffer
     (webpaste-paste-buffer)
-    (expect 'webpaste-paste-text :to-have-been-called-with (buffer-string))
+    (expect 'webpaste--paste-text :to-have-been-called-with (buffer-string))
 
     ;; Paste region
     (webpaste-paste-region 10 100)
-    (expect 'webpaste-paste-text
+    (expect 'webpaste--paste-text
             :to-have-been-called-with
             (buffer-substring 10 100)))))
 
@@ -62,7 +62,7 @@
  "Paste region and buffer without question being asked"
 
  (before-each
-  (spy-on 'webpaste-paste-text))
+  (spy-on 'webpaste--paste-text))
 
  (it
   "can paste entire buffers or regions"
@@ -72,11 +72,11 @@
 
     ;; Paste buffer
     (webpaste-paste-buffer)
-    (expect 'webpaste-paste-text :to-have-been-called-with (buffer-string))
+    (expect 'webpaste--paste-text :to-have-been-called-with (buffer-string))
 
     ;; Paste region
     (webpaste-paste-region 10 100)
-    (expect 'webpaste-paste-text
+    (expect 'webpaste--paste-text
             :to-have-been-called-with
             (buffer-substring 10 100)))))
 

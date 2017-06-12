@@ -196,7 +196,7 @@ precalculated, and also available both for pre and post request access.")
   "Predefined error callback for providers that always does failover."
   (cl-function (lambda (&key error-thrown &allow-other-keys)
                  (message "Got error: %S" error-thrown)
-                 (webpaste-paste-text text))))
+                 (webpaste--paste-text text))))
 
 
 (cl-defun webpaste-providers-error-lambda-no-failover (&key text)
@@ -422,18 +422,15 @@ Optional params:
   ;; Return URL instead of nil
   returned-url)
 
-
 
-;;;###autoload
-(cl-defun webpaste-paste-text-to-provider (text provider-name)
+(cl-defun webpaste--paste-text-to-provider (text provider-name)
   "Paste TEXT to specific PROVIDER-NAME.
 This function sends a paste to a spacific provider.  This function is created to
-make `webpaste-paste-text' do less magic things all at once."
+make `webpaste--paste-text' do less magic things all at once."
   (funcall (webpaste--get-provider-by-name provider-name) text))
 
 
-;;;###autoload
-(cl-defun webpaste-paste-text (text)
+(cl-defun webpaste--paste-text (text)
   "Paste TEXT to some paste service.
 If ‘webpaste-provider-priority’ isn't populated, it will populate it with the
 default providers.
@@ -459,8 +456,9 @@ When we run out of providers to try, it will restart since
     (setq webpaste--tested-providers (cdr webpaste--tested-providers))
 
     ;; Run pasting function
-    (webpaste-paste-text-to-provider text provider-name)))
+    (webpaste--paste-text-to-provider text provider-name)))
 
+
 
 ;;;###autoload
 (cl-defun webpaste-paste-region (point mark)
@@ -473,7 +471,7 @@ Argument MARK Current mark."
   (unless (and webpaste-paste-confirmation
                (not (yes-or-no-p "paste entire region?")))
     ;; Extract the buffer contents with buffer-substring and paste it
-    (webpaste-paste-text (buffer-substring point mark))))
+    (webpaste--paste-text (buffer-substring point mark))))
 
 
 ;;;###autoload
@@ -485,7 +483,7 @@ Argument MARK Current mark."
   (unless (and webpaste-paste-confirmation
                (not (yes-or-no-p "paste entire buffer?")))
     ;; Extract the buffer contents with buffer-substring and paste it
-    (webpaste-paste-text (buffer-substring (point-min) (point-max)))))
+    (webpaste--paste-text (buffer-substring (point-min) (point-max)))))
 
 
 
