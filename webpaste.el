@@ -40,6 +40,7 @@
 
 
 
+;;;###autoload
 (defgroup webpaste nil
   "Configuration options for webpaste.el where you can define paste providers,
 provider priority for which order which provider should be tried when used."
