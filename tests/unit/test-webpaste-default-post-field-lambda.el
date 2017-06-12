@@ -10,7 +10,7 @@
  (it
   "can add language and text as post data"
 
-  (let ((post-lambda (webpaste-providers-default-post-field-lambda))
+  (let ((post-lambda (webpaste--providers-default-post-field-lambda))
         (major-mode 'fundamental-mode)
         (webpaste--provider-lang-alists '(("https://example.com/" . ((fundamental-mode . "text"))))))
     (let ((post-data (funcall post-lambda

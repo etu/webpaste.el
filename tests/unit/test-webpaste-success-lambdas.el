@@ -17,7 +17,7 @@
  (it
   "using a response header"
 
-  (let ((success-lambda (webpaste-providers-success-location-header)))
+  (let ((success-lambda (webpaste--providers-success-location-header)))
     (funcall success-lambda :response "my fake response")
 
     (expect 'webpaste--return-url
@@ -27,7 +27,7 @@
 
  (xit
   "when using some request.el response thingy"
-  (let ((success-lambda (webpaste-providers-success-response-url)))
+  (let ((success-lambda (webpaste--providers-success-response-url)))
     (funcall success-lambda :response "my fake response")
 
     (expect 'webpaste--return-url
@@ -38,7 +38,7 @@
  (it
   "when returning a string with an url"
 
-  (let ((success-lambda (webpaste-providers-success-returned-string)))
+  (let ((success-lambda (webpaste--providers-success-returned-string)))
     (funcall success-lambda :data "\"https://example.com/\"
 ")
 

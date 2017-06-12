@@ -16,7 +16,7 @@
  (it
   "with fallback"
 
-  (let ((error-lambda (webpaste-providers-error-lambda :text "my text")))
+  (let ((error-lambda (webpaste--providers-error-lambda :text "my text")))
     (funcall error-lambda :error-thrown "my error")
 
     (expect 'message
@@ -30,7 +30,7 @@
 
  (it
   "without fallback"
-  (let ((error-lambda (webpaste-providers-error-lambda-no-failover :text "my text")))
+  (let ((error-lambda (webpaste--providers-error-lambda-no-failover :text "my text")))
     (funcall error-lambda :error-thrown "my error")
 
     (expect 'message
