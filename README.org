@@ -117,6 +117,26 @@ can have several hooks as well if you want it to do several custom things.
             (lambda (url) (browse-url-generic url)))
 #+end_src
 
+*** Custom providers
+The example of one of the simplest providers possible to write:
+#+begin_src emacs-lisp
+  (require 'webpaste)
+  (add-to-list
+   'webpaste-providers-alist
+   '("example.com"
+     :uri "https://example.com/"
+     :post-field "content"
+     :success-lambda webpaste-providers-success-location-header))
+#+end_src
+
+Options available are the options used in webpaste--provider. These docs are
+available within emacs documentation. To read this you need to require
+webpaste first and then just read the documentation by running this:
+#+begin_src emacs-lisp
+  (require 'webpaste)
+  (describe-function 'webpaste--provider)
+#+end_src
+
 ** TODO Providers to implement [7/10]
  - [X] ptpb.pw
  - [X] ix.io
