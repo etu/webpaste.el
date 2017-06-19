@@ -8,9 +8,12 @@
 
 (describe
  "Test provider with dummy data so it"
+ :var (paste-message)
 
  (before-each
   ;; Block requests
+  (setq paste-message ";; This is a build artifact created by an integration test for https://github.com/etu/webpaste.el")
+
   (spy-on 'webpaste--paste-text)
   (spy-on 'webpaste--return-url))
 
@@ -20,7 +23,7 @@
   (let ((provider (webpaste--get-provider-by-name "ptpb.pw")))
     (funcall
      provider
-     ";; This is a build artifact made from an integration test for https://github.com/etu/webpaste.el"
+     paste-message
      :sync t)
 
     (expect (spy-calls-count 'webpaste--return-url) :to-equal 1)
@@ -29,7 +32,7 @@
     (expect (spy-calls-most-recent 'webpaste--return-url)
             :to-equal
             (make-spy-context :current-buffer (current-buffer)
-                              :args '("https://ptpb.pw/gLC6")
+                              :args '("https://ptpb.pw/h54Z")
                               :return-value nil))))
 
 
@@ -39,7 +42,7 @@
   (let ((provider (webpaste--get-provider-by-name "ix.io")))
     (funcall
      provider
-     ";; This is a build artifact made from an integration test for https://github.com/etu/webpaste.el"
+     paste-message
      :sync t)
 
     (expect (spy-calls-count 'webpaste--return-url) :to-equal 1)
@@ -48,7 +51,7 @@
     (expect (spy-calls-most-recent 'webpaste--return-url)
             :to-equal
             (make-spy-context :current-buffer (current-buffer)
-                              :args '("http://ix.io/whJ")
+                              :args '("http://ix.io/xFF")
                               :return-value nil))))
 
 
@@ -58,7 +61,7 @@
   (let ((provider (webpaste--get-provider-by-name "sprunge.us")))
     (funcall
      provider
-     ";; This is a build artifact made from an integration test for https://github.com/etu/webpaste.el"
+     paste-message
      :sync t)
 
     (expect (spy-calls-count 'webpaste--return-url) :to-equal 1)
@@ -71,7 +74,7 @@
   (let ((provider (webpaste--get-provider-by-name "dpaste.com")))
     (funcall
      provider
-     ";; This is a build artifact made from an integration test for https://github.com/etu/webpaste.el"
+     paste-message
      :sync t)
 
     (expect (spy-calls-count 'webpaste--return-url) :to-equal 1)
@@ -84,7 +87,7 @@
   (let ((provider (webpaste--get-provider-by-name "dpaste.de")))
     (funcall
      provider
-     ";; This is a build artifact made from an integration test for https://github.com/etu/webpaste.el"
+     paste-message
      :sync t)
 
     (expect (spy-calls-count 'webpaste--return-url) :to-equal 1)
@@ -100,7 +103,7 @@
   (let ((provider (webpaste--get-provider-by-name "gist.github.com")))
     (funcall
      provider
-     ";; This is a build artifact made from an integration test for https://github.com/etu/webpaste.el"
+     paste-message
      :sync t)
 
     (expect (spy-calls-count 'webpaste--return-url) :to-equal 1)
@@ -113,7 +116,7 @@
   (let ((provider (webpaste--get-provider-by-name "paste.pound-python.org")))
     (funcall
      provider
-     ";; This is a build artifact made from an integration test for https://github.com/etu/webpaste.el"
+     paste-message
      :sync t)
 
     (expect (spy-calls-count 'webpaste--return-url) :to-equal 1)
