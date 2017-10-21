@@ -16,16 +16,21 @@ env:
 before_install:
   # Get install script
   - curl -fsSkL https://gist.github.com/rejeep/ebcd57c3af83b049833b/raw > travis.sh && source ./travis.sh
-  # Run evm
-  - evm install "$EVM_EMACS" --use --skip
+
+  # Install the emacs version that cask needs to have installed
+  - evm install emacs-24.4-travis --use --skip
 
 install:
+  # Install the emacs version that we're testing today
+  - evm install $EVM_EMACS --use --skip
+
   # Install your dependencies
-  - cask install
+  - EMACS="/home/travis/.evm/bin/emacs" cask install
 
 script:
   # Print travis event type (might be cron or something else)
   - echo $TRAVIS_EVENT_TYPE
   - emacs --version
+
   # Run tests
-  - make test
+  - env CASK='EMACS=/home/travis/.evm/bin/emacs cask' make test
