@@ -1,4 +1,3 @@
-TRAVIS_EVENT_TYPE ?= push
 EMACS ?= emacs
 CASK ?= cask
 
@@ -14,10 +13,6 @@ test:
 # Run all tests in tests/unit/
 unit:
 	${CASK} exec buttercup -L . tests/unit/
-
-	@if [ "$(TRAVIS_EVENT_TYPE)" = "cron" ]; then \
-		${MAKE} integration;                      \
-	fi
 
 # Run all tests in tests/integration/
 integration:

@@ -5,6 +5,7 @@ sudo: false
 matrix:
   allow_failures:
     - env: EVM_EMACS=emacs-git-snapshot-travis
+    - env: INTEGRATION=yes
 
 env:
   - EVM_EMACS=emacs-24.3-travis
@@ -14,6 +15,7 @@ env:
   - EVM_EMACS=emacs-25.2-travis
   - EVM_EMACS=emacs-25.3-travis
   - EVM_EMACS=emacs-git-snapshot-travis
+  - INTEGRATION=yes
 
 before_install:
   # Get install script
@@ -23,16 +25,16 @@ before_install:
   - evm install emacs-24.4-travis --use --skip
 
 install:
-  # Install the emacs version that we're testing today
-  - evm install $EVM_EMACS --use --skip
+  # If we're running unit-tests, install the emacs version that we're testing today. Otherwise go with 25.3 for integration tests
+  - test -n "$EVM_EMACS" && evm install $EVM_EMACS --use --skip || evm install emacs-25.3-travis --use --skip
 
   # Install your dependencies
   - EMACS="/home/travis/.evm/bin/emacs" cask install
 
 script:
   # Print travis event type (might be cron or something else)
-  - echo $TRAVIS_EVENT_TYPE
   - emacs --version
 
   # Run tests
-  - env CASK='EMACS=/home/travis/.evm/bin/emacs cask' make test
+  - test -n "$EVM_EMACS"     && env CASK='EMACS=/home/travis/.evm/bin/emacs cask' make test            || true
+  - test -n "$INTEGRATION"   && env CASK='EMACS=/home/travis/.evm/bin/emacs cask' make integration     || true
