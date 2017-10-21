@@ -1,5 +1,10 @@
+TRAVIS ?= false
 EMACS ?= emacs
 CASK ?= cask
+
+ifeq ($(TRAVIS),true)
+	PATTERN=--pattern 'can paste with \([^g]\|g[^i]\|gi[^s]\)'
+endif
 
 all: test
 
@@ -16,7 +21,7 @@ unit:
 
 # Run all tests in tests/integration/
 integration:
-	${CASK} exec buttercup -L . tests/integration/
+	${CASK} exec buttercup -L . tests/integration/ ${PATTERN}
 
 build:
 	${CASK} build
