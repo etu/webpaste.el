@@ -19,21 +19,18 @@ env:
 before_install:
   # Get install script
   - curl -fsSkL https://gist.github.com/rejeep/ebcd57c3af83b049833b/raw > travis.sh && source ./travis.sh
-
-  # Install the emacs version that cask needs to have installed
-  - evm install emacs-24.4-travis --use --skip
+  # Fix cask (See https://github.com/cask/cask/issues/399#issuecomment-331640427)
+  - perl -ibak -lape 's{#!/usr/bin/env python}{#!/usr/bin/python}' "$(which cask)"
+  - emacs --version
 
 install:
   # If we're running unit-tests, install the emacs version that we're testing today. Otherwise go with 25.3 for integration tests
   - test -n "$EVM_EMACS" && evm install $EVM_EMACS --use --skip || evm install emacs-25.3-travis --use --skip
 
   # Install your dependencies
-  - EMACS="/home/travis/.evm/bin/emacs" cask install
+  - cask install
 
 script:
-  # Print travis event type (might be cron or something else)
-  - emacs --version
-
   # Run tests
-  - test -n "$EVM_EMACS"     && env CASK='EMACS=/home/travis/.evm/bin/emacs cask' make test            || true
-  - test -n "$INTEGRATION"   && env CASK='EMACS=/home/travis/.evm/bin/emacs cask' make integration     || true
+  - test -n "$EVM_EMACS"     && make test            || true
+  - test -n "$INTEGRATION"   && make integration     || true
