@@ -129,7 +129,9 @@ can have several hooks as well if you want it to do several custom things.
 
   ;; To build your own send-to-browser hook, you could do like this:
   (add-hook 'webpaste-return-url-hook
-            (lambda (url) (browse-url-generic url)))
+            (lambda (url)
+              (message "Opened URL in browser: %S" url)
+              (browse-url-generic url)))
 #+end_src
 
 ** Custom providers
