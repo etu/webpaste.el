@@ -32,5 +32,5 @@ install:
 
 script:
   # Run tests
-  - test -n "$EVM_EMACS"     && make test            || true
-  - test -n "$INTEGRATION"   && make integration     || true
+  - if test -n "$EVM_EMACS";   then make test;        fi
+  - if test -n "$INTEGRATION"; then make integration; fi
