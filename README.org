@@ -1,17 +1,32 @@
-* Webpaste.el -- Paste text to pastebin-like services
 [[https://www.gnu.org/licenses/gpl-3.0.txt][https://img.shields.io/badge/license-GPL_3-green.svg]]
 [[https://melpa.org/#/webpaste][https://melpa.org/packages/webpaste-badge.svg]]
 [[https://stable.melpa.org/#/webpaste][https://stable.melpa.org/packages/webpaste-badge.svg]]
 [[https://travis-ci.org/etu/webpaste.el][https://travis-ci.org/etu/webpaste.el.svg?branch=master]]
 [[https://coveralls.io/github/etu/webpaste.el?branch=master][https://coveralls.io/repos/github/etu/webpaste.el/badge.svg?branch=master]]
 
+* Webpaste.el -- Paste text to pastebin-like services
 This mode allows to paste whole buffers or parts of buffers to
 pastebin-like services. It supports more than one service and will
 failover if one service fails. More services can easily be added
 over time and prefered services can easily be configured.
 
-** Installation
-*** The lazy way (Using [[https://github.com/jwiegley/use-package][use-package]])
+* Table of Contents                                                :TOC_3_gh:
+ - [[#webpasteel----paste-text-to-pastebin-like-services][Webpaste.el -- Paste text to pastebin-like services]]
+ - [[#installation][Installation]]
+   - [[#the-lazy-way-using-use-package][The lazy way (Using use-package)]]
+ - [[#configuration][Configuration]]
+   - [[#choosing-providers--provider-priority][Choosing providers / provider priority]]
+   - [[#confirm-pasting-with-a-yesno-confirmation-before-pasting][Confirm pasting with a yes/no confirmation before pasting]]
+   - [[#view-recently-created-pastes][View recently created pastes]]
+     - [[#send-the-returned-url-to-the-killring][Send the returned URL to the killring]]
+     - [[#copy-url-to-the-clipboard][Copy URL to the clipboard]]
+     - [[#open-the-recently-created-paste-in-the-browser][Open the recently created paste in the browser]]
+     - [[#use-a-custom-hook][Use a custom hook]]
+   - [[#custom-providers][Custom providers]]
+ - [[#providers-to-implement-710][Providers to implement]]
+
+* Installation
+** The lazy way (Using [[https://github.com/jwiegley/use-package][use-package]])
 This requires that you have [[https://github.com/jwiegley/use-package][use-package]] set up. But it's in my opinion the
 easiest way to install and configure packages.
 
@@ -22,8 +37,8 @@ easiest way to install and configure packages.
            ("C-c C-p C-r" . webpaste-paste-region)))
 #+END_SRC
 
-** Configuration
-*** Choosing providers / provider priority
+* Configuration
+** Choosing providers / provider priority
 To select which providers to use in which order you need to set the variable
 =webpaste-provider-priority= which is a list of strings containing the
 providers names.
@@ -54,7 +69,7 @@ This can be added to the =:config= section of use-package:
       (setq webpaste-provider-priority '("ptpb.pw" "dpaste.de"))))
 #+END_SRC
 
-*** Confirm pasting with a yes/no confirmation before pasting
+** Confirm pasting with a yes/no confirmation before pasting
 To enable a confirmation dialog to always pop up and require you to confirm
 pasting before text is actually sent to a paste-provider you just need to set
 the variable =webpaste-paste-confirmation= to a value that is non-nil.
@@ -68,10 +83,10 @@ Example:
 Can also be put in the =:config= section of =use-package= the same way as the
 provider definitions above.
 
-*** View recently created pastes
+** View recently created pastes
 Webpaste gives you several options to view your succesful paste.
 
-**** Send the returned URL to the killring
+*** Send the returned URL to the killring
 This is webpaste's default behavior. After a succesfull paste, the returned URL
 from the provider will be sent to the killring. You can disable this with
 
@@ -79,7 +94,7 @@ from the provider will be sent to the killring. You can disable this with
 (setq webpaste-add-to-killring nil)
 #+END_SRC
 
-**** Copy URL to the clipboard
+*** Copy URL to the clipboard
 If you have [[https://github.com/rolandwalker/simpleclip][simpleclip]] installed, you can copy the returned URL to the
 clipboard. You can enable this with
 
@@ -87,7 +102,7 @@ clipboard. You can enable this with
 (setq webpaste-copy-to-clipboard t)
 #+END_SRC
 
-**** Open the recently created paste in the browser
+*** Open the recently created paste in the browser
 To enable opening of recently created pastes in an external browser, you can
 enable the option =webpaste-open-in-browser= by setting this value to a
 non-nil value.
@@ -101,7 +116,7 @@ Example:
 Can also be put in the =:config= section of =use-package= the same way as the
 provider definitions above.
 
-**** Use a custom hook
+*** Use a custom hook
 You can define a custom hook to send your URL's to when returning them from
 the paste provider. This is just like regular hooks for major modes etc. You
 can have several hooks as well if you want it to do several custom things.
@@ -117,7 +132,7 @@ can have several hooks as well if you want it to do several custom things.
             (lambda (url) (browse-url-generic url)))
 #+end_src
 
-*** Custom providers
+** Custom providers
 The example of one of the simplest providers possible to write:
 #+begin_src emacs-lisp
   (require 'webpaste)
@@ -137,7 +152,7 @@ webpaste first and then just read the documentation by running this:
   (describe-function 'webpaste--provider)
 #+end_src
 
-** TODO Providers to implement [7/10]
+* TODO Providers to implement [7/10]
  - [X] ptpb.pw
  - [X] ix.io
  - [X] dpaste.com
