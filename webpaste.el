@@ -1,6 +1,6 @@
 ;;; webpaste.el --- Paste to pastebin-like services  -*- lexical-binding: t; -*-
 
-;; Copyright (c) 2016-2017 Elis Hirwing
+;; Copyright (c) 2016-2018 Elis Hirwing
 
 ;; Author: Elis "etu" Hirwing
 ;; URL: https://github.com/etu/webpaste.el
