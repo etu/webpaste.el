@@ -161,15 +161,13 @@ the docs for `webpaste--provider'."
 
 ;; modified from https://emacs.stackexchange.com/a/33893/12534
 (defun webpaste--alist-set (key val alist)
-  "Set property KEY to VAL in ALIST. Return new alist.
-This creates the association if it is missing, and otherwise sets
-the cdr of the first matching association in the list. It does
-not create duplicate associations. Key comparison is done with
-`equal'.
+  "Set property KEY to VAL in ALIST.
+Return new alist.  This creates the association if it is missing, and otherwise
+sets the cdr of the first matching association in the list.  It does not create
+duplicate associations.  Key comparison is done with `equal'.
 
-This method may mutate the original alist, but you still need to
-use the return value of this method instead of the original
-alist, to ensure correct results."
+This method may mutate the original alist, but you still need to use the return
+value of this method instead of the original alist, to ensure correct results."
   (let ((pair (assoc key alist)))
     (if pair
         (setcdr pair val)
