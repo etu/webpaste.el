@@ -102,6 +102,9 @@ clipboard. You can enable this with
 (setq webpaste-copy-to-clipboard t)
 #+END_SRC
 
+Warning: This option is deprecated and will be dropped in the future. Please
+use a custom hook instead.
+
 *** Open the recently created paste in the browser
 To enable opening of recently created pastes in an external browser, you can
 enable the option =webpaste-open-in-browser= by setting this value to a
@@ -132,6 +135,9 @@ can have several hooks as well if you want it to do several custom things.
             (lambda (url)
               (message "Opened URL in browser: %S" url)
               (browse-url-generic url)))
+
+  ;; Simple hook to replicate the `webpaste-copy-to-clipboard' option
+  (add-hook 'webpaste-return-url-hook 'simpleclip-set-contents)
 #+end_src
 
 ** Custom providers

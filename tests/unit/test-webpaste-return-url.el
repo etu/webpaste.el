@@ -13,8 +13,7 @@
   (setq webpaste-return-url-hook nil)
   (spy-on 'message)
   (spy-on 'kill-new)
-  (spy-on 'browse-url-generic)
-  (spy-on 'simpleclip-set-contents))
+  (spy-on 'browse-url-generic))
 
  (it
   "can put in kill-ring and message the user"
@@ -58,33 +57,13 @@
             "https://example.com/?lang=lisp")))
 
  (it
-  "can put contents in clipboard using simpleclip"
-  (let ((webpaste-copy-to-clipboard t)
-        (webpaste-add-to-killring nil))
-
-    (webpaste--return-url "https://example.com/")
-
-    (expect 'simpleclip-set-contents
-            :to-have-been-called-with
-            "https://example.com/")
-
-    (expect 'message
-            :to-have-been-called-with
-            "URL copied to clipboard.")))
-
- (it
   "can run user defined hooks"
   (add-hook 'webpaste-return-url-hook 'message)
   (add-hook 'webpaste-return-url-hook 'browse-url-generic)
-  (add-hook 'webpaste-return-url-hook 'simpleclip-set-contents)
   (let ((webpaste-copy-to-clipboard nil)
         (webpaste-add-to-killring nil)
         (webpaste-open-in-browser nil))
     (webpaste--return-url "https://example.com/")
-
-    (expect 'simpleclip-set-contents
-            :to-have-been-called-with
-            "https://example.com/")
 
     (expect 'message
             :to-have-been-called-with

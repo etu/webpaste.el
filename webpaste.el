@@ -70,7 +70,10 @@ This uses `browse-url-generic' to open URLs."
 
 (defcustom webpaste-copy-to-clipboard nil
   "Uses simpleclip to send the provider's returned URL to the clipboard.
-This uses `simpleclip-set-contents' to copy to clipboard."
+This uses `simpleclip-set-contents' to copy to clipboard.
+
+Warning: This option is deprecated and will be dropped in the future.  Please
+use a hook with `webpaste-return-url-hook' in the future."
   :group 'webpaste
   :type 'boolean)
 
@@ -431,7 +434,7 @@ Optional params:
   ;; Send RETURNED-URL to the clipboard using simpleclip
   (when webpaste-copy-to-clipboard
     (simpleclip-set-contents returned-url)
-    (message "URL copied to clipboard."))
+    (message "URL copied to clipboard. -- Warning: This option is deprecated, please use a hook instead."))
 
   ;; Add RETURNED-URL to killring for easy pasting
   (when webpaste-add-to-killring
