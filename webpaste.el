@@ -74,6 +74,12 @@ This uses `browse-url-generic' to open URLs."
   :type 'boolean)
 
 
+(defcustom webpaste-paste-raw-text nil
+  "Enable this to disable language detection to only make raw pastes."
+  :group 'webpaste
+  :type 'boolean)
+
+
 (defcustom webpaste-return-url-hook nil
   "Hook executed with the returned url as parameter."
   :group 'webpaste
