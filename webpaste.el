@@ -74,6 +74,12 @@ This uses `browse-url-generic' to open URLs."
   :type 'boolean)
 
 
+(defcustom webpaste-paste-raw-text nil
+  "Enable this to disable language detection to only make raw pastes."
+  :group 'webpaste
+  :type 'boolean)
+
+
 (defcustom webpaste-return-url-hook nil
   "Hook executed with the returned url as parameter."
   :group 'webpaste
@@ -403,9 +409,10 @@ Optional params:
 This also depends on which provider it is since different providers might have
 different opinions of how the input for their fields should look like."
 
-  (let ((provider-lang-alist (cdr (assoc provider webpaste--provider-lang-alists))))
-    (let ((language-name (cdr (assoc major-mode provider-lang-alist))))
-      language-name)))
+  (unless webpaste-paste-raw-text
+    (let ((provider-lang-alist (cdr (assoc provider webpaste--provider-lang-alists))))
+      (let ((language-name (cdr (assoc major-mode provider-lang-alist))))
+        language-name))))
 
 
 (cl-defun webpaste--return-url (returned-url)

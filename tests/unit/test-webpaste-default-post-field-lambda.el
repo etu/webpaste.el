@@ -21,7 +21,22 @@
                               :post-data '(("duration" . "1 day")))))
       (expect post-data
               :to-equal
-              '(("lang" . "text") ("content" . "my text") ("duration" . "1 day")))))))
+              '(("lang" . "text") ("content" . "my text") ("duration" . "1 day"))))))
 
+ (it
+  "can paste raw pastes"
+  (let ((post-lambda (webpaste--providers-default-post-field-lambda))
+        (major-mode 'fundamental-mode)
+        (webpaste-paste-raw-text t)
+        (webpaste--provider-lang-alists '(("https://example.com/" . ((fundamental-mode . "text"))))))
+    (let ((post-data (funcall post-lambda
+                              :text "my text"
+                              :post-field "content"
+                              :provider-uri "https://example.com/"
+                              :post-lang-field-name "lang"
+                              :post-data '(("duration" . "1 day")))))
+      (expect post-data
+              :to-equal
+              '(("content" . "my text") ("duration" . "1 day")))))))
 
 ;;; test-webpaste-default-post-field-lambda.el ends here

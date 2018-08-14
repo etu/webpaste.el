@@ -69,6 +69,17 @@ This can be added to the =:config= section of use-package:
       (setq webpaste-provider-priority '("ptpb.pw" "dpaste.de"))))
 #+END_SRC
 
+** Only paste plaintext pastes
+If you don't want language detection you can define the following parameter
+that will tell the language detection to not check what language it is and
+not return anything to make it fallback to plaintext.
+
+Example:
+#+begin_src emacs-lisp
+  ;; Only paste raw pastes
+  (setq webpaste-paste-raw-text t)
+#+end_src
+
 ** Confirm pasting with a yes/no confirmation before pasting
 To enable a confirmation dialog to always pop up and require you to confirm
 pasting before text is actually sent to a paste-provider you just need to set
