@@ -252,13 +252,12 @@ precalculated, and also available both for pre and post request access.")
                         (post-data '()))
                  (cl-pushnew (cons post-field text) post-data)
 
-                 ;; Fetch alist of languages for this provider
-                 (let ((provider-lang-alist (cdr (assoc provider-uri webpaste--provider-lang-alists))))
-                   ;; Fetch language name for this major mode for this provider
-                   (let ((language-name (cdr (assoc major-mode provider-lang-alist))))
-                     (if (and post-lang-field-name language-name)
+                 ;; Fetch language name for this provider
+                 (let ((language-name (webpaste--get-buffer-language provider-uri)))
+                   (if (and post-lang-field-name language-name)
                        ;; Append language to the post-data
-                       (cl-pushnew (cons post-lang-field-name language-name) post-data))))
+                       (cl-pushnew (cons post-lang-field-name language-name) post-data)))
+
                  post-data)))
 
 
@@ -398,6 +397,17 @@ Optional params:
   webpaste-provider-priority)
 
 
+(cl-defun webpaste--get-buffer-language (provider)
+  "Return language of the buffer that should be sent to the PROVIDER.
+
+This also depends on which provider it is since different providers might have
+different opinions of how the input for their fields should look like."
+
+  (let ((provider-lang-alist (cdr (assoc provider webpaste--provider-lang-alists))))
+    (let ((language-name (cdr (assoc major-mode provider-lang-alist))))
+      language-name)))
+
+
 (cl-defun webpaste--return-url (returned-url)
   "Return RETURNED-URL to user from the result of the paste service."
 
@@ -405,14 +415,11 @@ Optional params:
   (dolist (provider-separator webpaste--provider-separators)
     ;; Match if the separator is for this URI
     (when (string-match-p (regexp-quote (car provider-separator)) returned-url)
-      ;; Get alist of languages for this provider
-      (let ((provider-lang-alist (cdr (assoc (car provider-separator) webpaste--provider-lang-alists))))
-        ;; Get language name from list of languages
-        (let ((language-name (cdr (assoc major-mode provider-lang-alist))))
-          ;; If we get a language name
-          (when language-name
-            ;; Override link with link where we appended the language
-            (setq returned-url (concat returned-url (cdr provider-separator) language-name)))))))
+      ;; Look up the language of the buffer for this provider
+      (let ((language-name (webpaste--get-buffer-language (car provider-separator))))
+        ;; Append the language to the link if it existed
+        (when language-name
+          (setq returned-url (concat returned-url (cdr provider-separator) language-name))))))
 
   ;; Reset tested providers after successful paste
   (setq webpaste--tested-providers nil)
