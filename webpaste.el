@@ -93,7 +93,13 @@ This uses `browse-url-generic' to open URLs."
      :lang-uri-separator "/"
      :lang-overrides ((emacs-lisp-mode . "elisp")
                       (nix-mode . "nix")
-                      (conf-toml-mode . "toml"))
+                      (conf-toml-mode . "toml")
+                      (bash-mode . "bash")
+                      (sh-mode . "sh")
+                      (csh-mode . "csh")
+                      (tcsh-mode . "tcsh")
+                      (python3-mode . "python3")
+                      (nim-mode . "nim"))
      :success-lambda webpaste--providers-success-location-header)
 
     ("ix.io"
@@ -399,6 +405,32 @@ Optional params:
   webpaste-provider-priority)
 
 
+(cl-defun webpaste--get-shebang-lang-mode ()
+  "Return language of the buffer set using a shebang as a mode symbol.
+
+Return nil if no shebang found.
+
+Example: For \"#!/usr/bin/env bash\", 'bash-mode is returned.
+         For \"#!/bin/python\", 'python-mode is returned."
+
+  (let* ((end-of-first-line (save-excursion
+                              (save-restriction
+	                        (widen)
+                                (goto-char (point-min))
+                                (end-of-line 1)
+                                (point))))
+         (first-line (save-restriction
+                       (widen)
+                       (buffer-substring-no-properties
+                        (point-min) end-of-first-line))))
+    (when (string-match "\\`#!\\(?1:\\(?:[^ ]+/\\)\\(?2:[^ /]+\\)\\)\\(?: +\\(?3:[^ ]+\\)\\)*" first-line)
+      (let ((lang (if (string= "/usr/bin/env" (match-string-no-properties 1 first-line))
+                      (match-string-no-properties 3 first-line)
+                    (match-string-no-properties 2 first-line))))
+        (when lang
+          (intern (format "%s-mode" lang)))))))
+
+
 (cl-defun webpaste--get-buffer-language (provider)
   "Return language of the buffer that should be sent to the PROVIDER.
 
@@ -406,9 +438,10 @@ This also depends on which provider it is since different providers might have
 different opinions of how the input for their fields should look like."
 
   (unless webpaste-paste-raw-text
-    (let ((provider-lang-alist (cdr (assoc provider webpaste--provider-lang-alists))))
-      (let ((language-name (cdr (assoc major-mode provider-lang-alist))))
-        language-name))))
+    (let* ((provider-lang-alist (cdr (assoc provider webpaste--provider-lang-alists)))
+           (detected-mode (or (webpaste--get-shebang-lang-mode) major-mode))
+           (language-name (cdr (assoc detected-mode provider-lang-alist))))
+      language-name)))
 
 
 (cl-defun webpaste--return-url (returned-url)
