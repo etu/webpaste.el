@@ -99,11 +99,12 @@ If you have [[https://github.com/rolandwalker/simpleclip][simpleclip]] installed
 clipboard. You can enable this with
 
 #+BEGIN_SRC emacs-lisp
-(setq webpaste-copy-to-clipboard t)
+  ;; To build your own hook to use simpleclip, you could do like this:
+  (add-hook 'webpaste-return-url-hook
+            (lambda (url)
+              (message "Copied URL to clipboard: %S" url)
+              (simpleclip-set-contents url)))
 #+END_SRC
-
-Warning: This option is deprecated and will be dropped in the future. Please
-use a custom hook instead.
 
 *** Open the recently created paste in the browser
 To enable opening of recently created pastes in an external browser, you can
