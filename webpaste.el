@@ -409,9 +409,10 @@ Optional params:
 This also depends on which provider it is since different providers might have
 different opinions of how the input for their fields should look like."
 
-  (let ((provider-lang-alist (cdr (assoc provider webpaste--provider-lang-alists))))
-    (let ((language-name (cdr (assoc major-mode provider-lang-alist))))
-      language-name)))
+  (unless webpaste-paste-raw-text
+    (let ((provider-lang-alist (cdr (assoc provider webpaste--provider-lang-alists))))
+      (let ((language-name (cdr (assoc major-mode provider-lang-alist))))
+        language-name))))
 
 
 (cl-defun webpaste--return-url (returned-url)
