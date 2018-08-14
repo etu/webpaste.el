@@ -92,7 +92,8 @@ This uses `browse-url-generic' to open URLs."
      :post-field "c"
      :lang-uri-separator "/"
      :lang-overrides ((emacs-lisp-mode . "elisp")
-                      (nix-mode . "nix"))
+                      (nix-mode . "nix")
+                      (conf-toml-mode . "toml"))
      :success-lambda webpaste--providers-success-location-header)
 
     ("ix.io"
