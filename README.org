@@ -173,14 +173,14 @@ webpaste first and then just read the documentation by running this:
   (describe-function 'webpaste--provider)
 #+end_src
 
-* TODO Providers to implement [7/10]
+* TODO Providers to implement [6/10]
  - [X] ptpb.pw
  - [X] ix.io
  - [X] dpaste.com
- - [X] sprunge.us
  - [X] dpaste.de
  - [X] gist.github.com
  - [X] paste.pound-python.org
  - [ ] paste.debian.net
  - [ ] bpaste.net
  - [ ] eval.in
+ - [ ] sprunge.us (removed due to [[https://github.com/rupa/sprunge/issues/45][sprunge#45]] that yields 500s)

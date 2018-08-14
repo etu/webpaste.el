@@ -103,13 +103,6 @@ This uses `browse-url-generic' to open URLs."
                       (nix-mode . "nix"))
      :success-lambda webpaste--providers-success-returned-string)
 
-    ("sprunge.us"
-     :uri "http://sprunge.us/"
-     :post-field "sprunge"
-     :lang-uri-separator "?"
-     :lang-overrides ((emacs-lisp-mode . "clojure"))
-     :success-lambda webpaste--providers-success-returned-string)
-
     ("dpaste.com"
      :uri "http://dpaste.com/api/v2/"
      :post-data (("title" . "")

@@ -37,15 +37,6 @@
 
 
  (it
-  "local: can paste with sprunge.us"
-
-  (funcall (webpaste--get-provider-by-name "sprunge.us") paste-message :sync t)
-
-  (expect (spy-calls-count 'webpaste--return-url) :to-equal 1)
-  (expect (spy-calls-count 'webpaste--paste-text) :to-equal 0))
-
-
- (it
   "ci: can paste with dpaste.com"
 
   (funcall (webpaste--get-provider-by-name "dpaste.com") paste-message :sync t)
