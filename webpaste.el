@@ -91,14 +91,16 @@ This uses `browse-url-generic' to open URLs."
      :uri "https://ptpb.pw/"
      :post-field "c"
      :lang-uri-separator "/"
-     :lang-overrides ((emacs-lisp-mode . "elisp"))
+     :lang-overrides ((emacs-lisp-mode . "elisp")
+                      (nix-mode . "nix"))
      :success-lambda webpaste--providers-success-location-header)
 
     ("ix.io"
      :uri "http://ix.io/"
      :post-field "f:1"
      :lang-uri-separator "/"
-     :lang-overrides ((emacs-lisp-mode . "elisp"))
+     :lang-overrides ((emacs-lisp-mode . "elisp")
+                      (nix-mode . "nix"))
      :success-lambda webpaste--providers-success-returned-string)
 
     ("sprunge.us"
