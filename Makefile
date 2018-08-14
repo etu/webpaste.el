@@ -3,7 +3,7 @@ EMACS ?= emacs
 CASK ?= cask
 
 ifeq ($(TRAVIS),true)
-	PATTERN=--pattern 'can paste with \([^g]\|g[^i]\|gi[^s]\)'
+	PATTERN=--pattern 'ci: can paste with'
 endif
 
 all: test
