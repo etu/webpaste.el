@@ -16,6 +16,7 @@ over time and prefered services can easily be configured.
    - [[#the-lazy-way-using-use-package][The lazy way (Using use-package)]]
  - [[#configuration][Configuration]]
    - [[#choosing-providers--provider-priority][Choosing providers / provider priority]]
+   - [[#only-paste-plaintext-pastes][Only paste plaintext pastes]]
    - [[#confirm-pasting-with-a-yesno-confirmation-before-pasting][Confirm pasting with a yes/no confirmation before pasting]]
    - [[#view-recently-created-pastes][View recently created pastes]]
      - [[#send-the-returned-url-to-the-killring][Send the returned URL to the killring]]
