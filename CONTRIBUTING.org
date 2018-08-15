@@ -28,9 +28,19 @@ After that you do the settings you need to reproduce it (like providers and
 other stuff).
 
 ** Contributing code
+[[https://github.com/melpa/melpa/blob/master/CONTRIBUTING.org#making-your-package-ready-for-inclusion][MELPA has a good section about code style]]. And since this package is in
+MELPA, we should aim to follow their guidelines even though the package is
+already included.
+
 *** Code style
 Never leave trailing spaces on a line in any file. And end all files with
 exactly one newline. Not more or less than that.
+
+All lines should be indented with spaces only. Tabs aren't allowed.
+
+*** Checkdoc
+If you do changes to comments anywhere, run =M-x checkdoc= in that buffer to
+check the documentation style guidelines.
 
 *** Flycheck
 Plase run [[http://www.flycheck.org/][flycheck]] with [[https://github.com/purcell/flycheck-package][flycheck-package]] in your editor to get hints and
