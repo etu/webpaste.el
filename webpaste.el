@@ -132,16 +132,16 @@ This uses `browse-url-generic' to open URLs."
      :uri "https://api.github.com/gists"
      :post-field nil
      :post-field-lambda (lambda () (cl-function (lambda (&key text &allow-other-keys)
-                                             (let ((filename (or (file-name-nondirectory (buffer-file-name)) "file.txt")))
-                                               (json-encode `(("description" . "Pasted from Emacs with webpaste.el")
-                                                              ("public" . "false")
-                                                              ("files" .
-                                                               ((,filename .
-                                                                           (("content" . ,text)))))))))))
+                                                  (let ((filename (or (file-name-nondirectory (buffer-file-name)) "file.txt")))
+                                                    (json-encode `(("description" . "Pasted from Emacs with webpaste.el")
+                                                                   ("public" . "false")
+                                                                   ("files" .
+                                                                    ((,filename .
+                                                                                (("content" . ,text)))))))))))
      :success-lambda (lambda () (cl-function (lambda (&key data &allow-other-keys)
-                                          (when data
-                                            (webpaste--return-url
-                                             (cdr (assoc 'html_url (json-read-from-string data)))))))))
+                                               (when data
+                                                 (webpaste--return-url
+                                                  (cdr (assoc 'html_url (json-read-from-string data)))))))))
 
     ("paste.pound-python.org"
      :uri "https://paste.pound-python.org/"
@@ -254,10 +254,10 @@ precalculated, and also available both for pre and post request access.")
 (cl-defun webpaste--providers-default-post-field-lambda ()
   "Predefined lambda for building post fields."
   (cl-function (lambda (&key text
-                        post-field
-                        provider-uri
-                        (post-lang-field-name nil)
-                        (post-data '()))
+                             post-field
+                             provider-uri
+                             (post-lang-field-name nil)
+                             (post-data '()))
                  (cl-pushnew (cons post-field text) post-data)
 
                  ;; Fetch language name for this provider
@@ -283,17 +283,18 @@ precalculated, and also available both for pre and post request access.")
     lang-alist))
 
 
-(cl-defun webpaste--provider (&key uri
-                                  post-field
-                                  success-lambda
-                                  (type "POST")
-                                  (post-data '())
-                                  (post-lang-field-name nil)
-                                  (parser 'buffer-string)
-                                  (lang-overrides '())
-                                  (lang-uri-separator nil)
-                                  (error-lambda 'webpaste--providers-error-lambda)
-                                  (post-field-lambda 'webpaste--providers-default-post-field-lambda))
+(cl-defun webpaste--provider
+    (&key uri
+          post-field
+          success-lambda
+          (type "POST")
+          (post-data '())
+          (post-lang-field-name nil)
+          (parser 'buffer-string)
+          (lang-overrides '())
+          (lang-uri-separator nil)
+          (error-lambda 'webpaste--providers-error-lambda)
+          (post-field-lambda 'webpaste--providers-default-post-field-lambda))
   "Function to create the lambda function for a provider.
 
 Usage:
@@ -362,8 +363,8 @@ Optional params:
 
   (cl-function
    (lambda (text
-       &key
-       (sync nil))
+            &key
+            (sync nil))
      "Paste TEXT to provider. Force SYNC if needed for debugging."
 
      (prog1 nil
@@ -415,7 +416,7 @@ Example: For \"#!/usr/bin/env bash\", 'bash-mode is returned.
 
   (let* ((end-of-first-line (save-excursion
                               (save-restriction
-	                        (widen)
+                                (widen)
                                 (goto-char (point-min))
                                 (end-of-line 1)
                                 (point))))
