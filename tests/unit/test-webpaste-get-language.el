@@ -27,6 +27,19 @@
     ;; contains a bash shebang.
     (expect (webpaste--get-shebang-lang-mode)
             :to-equal
-            'bash-mode))))
+            'bash-mode)))
+
+ (it
+  "will use shebangs before major-mode"
+
+  ;; Setup.
+  (let ((major-mode 'fundamental-mode)
+        (webpaste--provider-lang-alists '(("https://example.com/" .
+                                           ((fundamental-mode . "text")
+                                            (bash-mode . "bash"))))))
+
+    (expect (webpaste--get-buffer-language "https://example.com/")
+            :to-equal
+            "bash"))))
 
 ;;; test-webpaste-get-language.el ends here
