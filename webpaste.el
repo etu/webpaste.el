@@ -205,7 +205,7 @@ precalculated, and also available both for pre and post request access.")
                  (webpaste--paste-text text))))
 
 
-(cl-defun webpaste--providers-error-lambda-no-failover (&rest)
+(cl-defun webpaste--providers-error-lambda-no-failover (&rest _)
   "Predefined error callback for providers that shouldn't do failover."
   (cl-function (lambda (&key error-thrown &allow-other-keys)
                  (message "Got error: %S" error-thrown))))
