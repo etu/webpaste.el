@@ -19,7 +19,7 @@
 
 
  (it
-  "ci: can paste with ix.io"
+  "can paste with ix.io [ci]"
 
   (funcall (webpaste--get-provider-by-name "ix.io") paste-message :sync t)
 
@@ -28,7 +28,7 @@
 
 
  (it
-  "ci: can paste with dpaste.com"
+  "can paste with dpaste.com [ci]"
 
   (funcall (webpaste--get-provider-by-name "dpaste.com") paste-message :sync t)
 
@@ -37,7 +37,7 @@
 
 
  (it
-  "ci: can paste with dpaste.de"
+  "can paste with dpaste.de [ci]"
 
   (funcall (webpaste--get-provider-by-name "dpaste.de") paste-message :sync t)
 
@@ -46,7 +46,7 @@
 
 
  (it
-  "local: can paste with gist.github.com"
+  "can paste with gist.github.com [local]"
 
   ;; Override function to extract filename from a filepath, otherwise it breaks
   ;; during integration tests
@@ -59,7 +59,7 @@
 
 
  (it
-  "ci: can paste with paste.pound-python.org"
+  "can paste with paste.pound-python.org [ci]"
 
   (funcall (webpaste--get-provider-by-name "paste.pound-python.org") paste-message :sync t)
 
