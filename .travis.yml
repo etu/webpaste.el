@@ -25,7 +25,7 @@ before_install:
 
 install:
   # If we're running unit-tests, install the emacs version that we're testing today. Otherwise go with 25.3 for integration tests
-  - test -n "$EVM_EMACS" && evm install $EVM_EMACS --use --skip || evm install emacs-25.3-travis --use --skip
+  - test -n "$EVM_EMACS" && evm install $EVM_EMACS --use --skip || evm install emacs-26.1-travis --use --skip
   - emacs --version
 
   # Install your dependencies
