@@ -49,11 +49,11 @@ Examples:
   ;; Choosing githup gist only
   (setq webpaste-provider-priority '("gist.github.com"))
 
-  ;; Choosing ptpb.pw as first provider and dpaste.de as second
-  (setq webpaste-provider-priority '("ptpb.pw" "dpaste.de"))
+  ;; Choosing ix.io as first provider and dpaste.de as second
+  (setq webpaste-provider-priority '("ix.io" "dpaste.de"))
 
-  ;; Choosing 1) ptpb.pw, 2) dpaste.de, 3) ix.io
-  (setq webpaste-provider-priority '("ptpb.pw" "dpaste.de" "ix.io"))
+  ;; Choosing 1) ix.io, 2) dpaste.de, 3) dpaste.com
+  (setq webpaste-provider-priority '("ix.io" "dpaste.de" "dpaste.com"))
 
   ;; You can always append this list as much as you like, and which providers
   ;; that exists is documented below in the readme.
@@ -67,7 +67,7 @@ This can be added to the =:config= section of use-package:
            ("C-c C-p C-r" . webpaste-paste-region))
     :config
     (progn
-      (setq webpaste-provider-priority '("ptpb.pw" "dpaste.de"))))
+      (setq webpaste-provider-priority '("ix.io" "dpaste.de"))))
 #+END_SRC
 
 ** Only paste plaintext pastes
@@ -173,8 +173,7 @@ webpaste first and then just read the documentation by running this:
   (describe-function 'webpaste--provider)
 #+end_src
 
-* TODO Providers to implement [6/10]
- - [X] ptpb.pw
+* TODO Providers to implement [5/10]
  - [X] ix.io
  - [X] dpaste.com
  - [X] dpaste.de
@@ -183,4 +182,5 @@ webpaste first and then just read the documentation by running this:
  - [ ] paste.debian.net
  - [ ] bpaste.net
  - [ ] eval.in
+ - [ ] ptpb.pw (RIP due to [[https://github.com/ptpb/pb/issues/245][ptpb/pb#245]] & [[https://github.com/ptpb/pb/issues/240][ptpb/pb#240]])
  - [ ] sprunge.us (removed due to [[https://github.com/rupa/sprunge/issues/45][sprunge#45]] that yields 500s)

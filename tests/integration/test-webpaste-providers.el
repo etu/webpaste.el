@@ -19,15 +19,6 @@
 
 
  (it
-  "ci: can paste with ptpb.pw"
-
-  (funcall (webpaste--get-provider-by-name "ptpb.pw") paste-message :sync t)
-
-  (expect (spy-calls-count 'webpaste--return-url) :to-equal 1)
-  (expect (spy-calls-count 'webpaste--paste-text) :to-equal 0))
-
-
- (it
   "ci: can paste with ix.io"
 
   (funcall (webpaste--get-provider-by-name "ix.io") paste-message :sync t)

@@ -87,22 +87,7 @@ This uses `browse-url-generic' to open URLs."
 
 
 (defcustom webpaste-providers-alist
-  '(("ptpb.pw"
-     :uri "https://ptpb.pw/"
-     :post-field "c"
-     :lang-uri-separator "/"
-     :lang-overrides ((emacs-lisp-mode . "elisp")
-                      (nix-mode . "nix")
-                      (conf-toml-mode . "toml")
-                      (bash-mode . "bash")
-                      (sh-mode . "sh")
-                      (csh-mode . "csh")
-                      (tcsh-mode . "tcsh")
-                      (python3-mode . "python3")
-                      (nim-mode . "nim"))
-     :success-lambda webpaste--providers-success-location-header)
-
-    ("ix.io"
+  '(("ix.io"
      :uri "http://ix.io/"
      :post-field "f:1"
      :lang-uri-separator "/"
