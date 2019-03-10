@@ -132,8 +132,8 @@ This uses `browse-url-generic' to open URLs."
      :uri "https://api.github.com/gists"
      :post-field nil
      :post-field-lambda (lambda () (cl-function (lambda (&key text &allow-other-keys)
-                                                  (let ((filename (if (buffer-file-name) 
-                                                                      (file-name-nondirectory (buffer-file-name)) 
+                                                  (let ((filename (if (buffer-file-name)
+                                                                      (file-name-nondirectory (buffer-file-name))
                                                                     "file.txt")))
                                                     (json-encode `(("description" . "Pasted from Emacs with webpaste.el")
                                                                    ("public" . "false")
