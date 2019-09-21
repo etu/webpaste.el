@@ -1,37 +1,39 @@
-language: emacs-lisp
-sudo: false
+language: nix
+os:
+  - linux
 
-# Allow Emacs snapshot builds to fail
+# Allow Emacs snapshot and integration builds to fail
 matrix:
   allow_failures:
-    - env: EVM_EMACS=emacs-git-snapshot-travis
-    - env: INTEGRATION=yes
+    - env: EMACS_CI=emacs-snapshot
+    - env: EMACS_CI=emacs-26-3 INTEGRATION=yes
 
 env:
-  - EVM_EMACS=emacs-24.4-travis
-  - EVM_EMACS=emacs-24.5-travis
-  - EVM_EMACS=emacs-25.1-travis
-  - EVM_EMACS=emacs-25.2-travis
-  - EVM_EMACS=emacs-25.3-travis
-  - EVM_EMACS=emacs-26.1-travis
-  - EVM_EMACS=emacs-git-snapshot-travis
-  - INTEGRATION=yes
-
-before_install:
-  # Get install script
-  - curl -fsSkL https://gist.github.com/rejeep/ebcd57c3af83b049833b/raw > travis.sh && source ./travis.sh
-  # Fix cask (See https://github.com/cask/cask/issues/399#issuecomment-331640427)
-  - perl -ibak -lape 's{#!/usr/bin/env python}{#!/usr/bin/python}' "$(which cask)"
+  - EMACS_CI=emacs-24-3
+  - EMACS_CI=emacs-24-4
+  - EMACS_CI=emacs-24-5
+  - EMACS_CI=emacs-25-1
+  - EMACS_CI=emacs-25-2
+  - EMACS_CI=emacs-25-3
+  - EMACS_CI=emacs-26-1
+  - EMACS_CI=emacs-26-2
+  - EMACS_CI=emacs-26-3
+  - EMACS_CI=emacs-snapshot
+  - EMACS_CI=emacs-26-3 INTEGRATION=yes
 
 install:
-  # If we're running unit-tests, install the emacs version that we're testing today. Otherwise go with 25.3 for integration tests
-  - test -n "$EVM_EMACS" && evm install $EVM_EMACS --use --skip || evm install emacs-26.1-travis --use --skip
-  - emacs --version
+  # Install nix-emacs-ci
+  - bash <(curl https://raw.githubusercontent.com/purcell/nix-emacs-ci/master/travis-install)
+
+  # Install cask
+  - nix-env -iA nixpkgs.cask
 
   # Install your dependencies
   - cask install
 
 script:
-  # Run tests
-  - if test -n "$EVM_EMACS";   then make test;        fi
+  # Run the tests if we shouldn't trigger the integrations
+  - if test -z "$INTEGRATION"; then make test;        fi
+
+  # Otherwise we run the integration tests
   - if test -n "$INTEGRATION"; then make integration; fi
