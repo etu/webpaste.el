@@ -3,8 +3,13 @@ with (import <nixpkgs> {});
 mkShell {
   buildInputs = [
     # Tooling
-    emacs
-    emacsPackages.cask
+    (emacsWithPackages (epkgs: (with epkgs; [
+      cask
+      request
+      buttercup
+      undercover
+    ])))
+    cask
     gnumake
   ];
 }
