@@ -3,7 +3,7 @@ EMACS ?= emacs
 CASK ?= cask
 
 ifeq ($(TRAVIS),true)
-	PATTERN=--pattern 'ci: can paste with'
+	PATTERN=--pattern '\[ci\]'
 endif
 
 all: test
