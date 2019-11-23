@@ -9,12 +9,6 @@ matrix:
     - env: EMACS_CI=emacs-26-3 INTEGRATION=yes
 
 env:
-  - EMACS_CI=emacs-24-3
-  - EMACS_CI=emacs-24-4
-  - EMACS_CI=emacs-24-5
-  - EMACS_CI=emacs-25-1
-  - EMACS_CI=emacs-25-2
-  - EMACS_CI=emacs-25-3
   - EMACS_CI=emacs-26-1
   - EMACS_CI=emacs-26-2
   - EMACS_CI=emacs-26-3
