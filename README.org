@@ -8,7 +8,7 @@
 This mode allows to paste whole buffers or parts of buffers to
 pastebin-like services. It supports more than one service and will
 failover if one service fails. More services can easily be added
-over time and prefered services can easily be configured.
+over time and preferred services can easily be configured.
 
 * Table of Contents                                                :TOC_3_gh:
  - [[#webpasteel----paste-text-to-pastebin-like-services][Webpaste.el -- Paste text to pastebin-like services]]
@@ -96,10 +96,10 @@ Can also be put in the =:config= section of =use-package= the same way as the
 provider definitions above.
 
 ** View recently created pastes
-Webpaste gives you several options to view your succesful paste.
+Webpaste gives you several options to view your successful paste.
 
 *** Send the returned URL to the killring
-This is webpaste's default behavior. After a succesfull paste, the returned URL
+This is webpaste's default behavior. After a successful paste, the returned URL
 from the provider will be sent to the killring. You can disable this with
 
 #+BEGIN_SRC emacs-lisp

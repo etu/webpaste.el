@@ -19,7 +19,7 @@
   ;; Don't allow it to try to paste, just fake it
   (spy-on 'webpaste--paste-text-to-provider)
 
-  ;; And let tested list be resetted for each test
+  ;; And let tested list be reset for each test
   (setq webpaste-tested-providers nil))
 
 
