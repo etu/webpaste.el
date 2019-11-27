@@ -14,7 +14,7 @@
 ;; This mode allows to paste whole buffers or parts of buffers to
 ;; pastebin-like services.  It supports more than one service and will
 ;; failover if one service fails.  More services can easily be added
-;; over time and prefered services can easily be configured.
+;; over time and preferred services can easily be configured.
 
 ;;; License:
 
@@ -307,7 +307,7 @@ Optional params:
 :post-lang-field-name   Fieldname for defining which language your paste should
                         use to the provider.
 
-:lang-overrides    Alist defining overides for languages for this provider. If
+:lang-overrides    Alist defining overrides for languages for this provider. If
                    a mode is set to nil, it will use fundamental-mode's value as
                    fallback. Fundamental-mode's value can also be overridden.
 
@@ -328,11 +328,11 @@ Optional params:
                    sent to the provider.  It should accept named parameters by
                    the names TEXT, POST-FIELD and POST-DATA.  POST-DATA should
                    default to `nil' or empty list.  It also takes the option
-                   LANG-OVERRIDES which is a list that enables overiding of
+                   LANG-OVERRIDES which is a list that enables overriding of
                    `webpaste--default-lang-alist'.
 
                    TEXT contains the data that should be sent.
-                   POST-FIELD cointains the name of the field to be sent.
+                   POST-FIELD contains the name of the field to be sent.
                    POST-DATA contains predefined fields that the provider needs."
   ;; If we get a separator sent to the function, append it to the list of
   ;; separators for later use
@@ -467,7 +467,7 @@ different opinions of how the input for their fields should look like."
 
 (cl-defun webpaste--paste-text-to-provider (text provider-name)
   "Paste TEXT to specific PROVIDER-NAME.
-This function sends a paste to a spacific provider.  This function is created to
+This function sends a paste to a specific provider.  This function is created to
 make `webpaste--paste-text' do less magic things all at once."
   (funcall (webpaste--get-provider-by-name provider-name) text))
 
