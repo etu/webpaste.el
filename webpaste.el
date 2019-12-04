@@ -280,7 +280,7 @@ precalculated, and also available both for pre and post request access.")
           (parser 'buffer-string)
           (lang-overrides '())
           (lang-uri-separator nil)
-          (error-lambda 'webpaste--providers-error-lambda)
+          (error-lambda 'webpaste--providers-error-lambda-no-failover)
           (post-field-lambda 'webpaste--providers-default-post-field-lambda))
   "Function to create the lambda function for a provider.
 
