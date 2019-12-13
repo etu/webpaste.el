@@ -105,8 +105,8 @@ This uses `browse-url-generic' to open URLs."
      :lang-overrides ((emacs-lisp-mode . "clojure"))
      :success-lambda webpaste--providers-success-location-header)
 
-    ("dpaste.de"
-     :uri "https://dpaste.de/api/"
+    ("dpaste.org"
+     :uri "https://dpaste.org/api/"
      :post-data (("expires" . 86400))
      :post-field "content"
      :post-lang-field-name "lexer"
