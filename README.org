@@ -49,11 +49,11 @@ Examples:
   ;; Choosing githup gist only
   (setq webpaste-provider-priority '("gist.github.com"))
 
-  ;; Choosing ix.io as first provider and dpaste.de as second
-  (setq webpaste-provider-priority '("ix.io" "dpaste.de"))
+  ;; Choosing ix.io as first provider and dpaste.org as second
+  (setq webpaste-provider-priority '("ix.io" "dpaste.org"))
 
-  ;; Choosing 1) ix.io, 2) dpaste.de, 3) dpaste.com
-  (setq webpaste-provider-priority '("ix.io" "dpaste.de" "dpaste.com"))
+  ;; Choosing 1) ix.io, 2) dpaste.org, 3) dpaste.com
+  (setq webpaste-provider-priority '("ix.io" "dpaste.org" "dpaste.com"))
 
   ;; You can always append this list as much as you like, and which providers
   ;; that exists is documented below in the readme.
@@ -67,7 +67,7 @@ This can be added to the =:config= section of use-package:
            ("C-c C-p C-r" . webpaste-paste-region))
     :config
     (progn
-      (setq webpaste-provider-priority '("ix.io" "dpaste.de"))))
+      (setq webpaste-provider-priority '("ix.io" "dpaste.org"))))
 #+END_SRC
 
 ** Only paste plaintext pastes
@@ -178,7 +178,7 @@ webpaste first and then just read the documentation by running this:
  - [ ] 0x0.st
  - [X] ix.io
  - [X] dpaste.com
- - [X] dpaste.de
+ - [X] dpaste.org
  - [X] gist.github.com
  - [X] paste.pound-python.org
  - [ ] paste.debian.net

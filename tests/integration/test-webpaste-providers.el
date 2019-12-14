@@ -37,9 +37,9 @@
 
 
  (it
-  "can paste with dpaste.de [ci]"
+  "can paste with dpaste.org [ci]"
 
-  (funcall (webpaste--get-provider-by-name "dpaste.de") paste-message :sync t)
+  (funcall (webpaste--get-provider-by-name "dpaste.org") paste-message :sync t)
 
   (expect (spy-calls-count 'webpaste--return-url) :to-equal 1)
   (expect (spy-calls-count 'webpaste--paste-text) :to-equal 0))
