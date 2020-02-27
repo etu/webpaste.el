@@ -44,6 +44,14 @@
   (expect (spy-calls-count 'webpaste--return-url) :to-equal 1)
   (expect (spy-calls-count 'webpaste--paste-text) :to-equal 0))
 
+ (it
+  "can paste with paste.mozilla.org [ci]"
+
+  (funcall (webpaste--get-provider-by-name "paste.mozilla.org") paste-message :sync t)
+
+  (expect (spy-calls-count 'webpaste--return-url) :to-equal 1)
+  (expect (spy-calls-count 'webpaste--paste-text) :to-equal 0))
+
 
  (it
   "can paste with gist.github.com [local]"
