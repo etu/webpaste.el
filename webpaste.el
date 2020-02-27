@@ -113,7 +113,7 @@ This uses `browse-url-generic' to open URLs."
      :lang-overrides ((emacs-lisp-mode . "clojure"))
      :success-lambda webpaste--providers-success-returned-string)
 
-    '("paste.mozilla.org"
+    ("paste.mozilla.org"
       :uri "https://paste.mozilla.org/api/"
       :post-data (("expires" . 86400))
       :post-field "content"
