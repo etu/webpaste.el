@@ -113,6 +113,14 @@ This uses `browse-url-generic' to open URLs."
      :lang-overrides ((emacs-lisp-mode . "clojure"))
      :success-lambda webpaste--providers-success-returned-string)
 
+    '("paste.mozilla.org"
+      :uri "https://paste.mozilla.org/api/"
+      :post-data (("expires" . 86400))
+      :post-field "content"
+      :post-lang-field-name "lexer"
+      :lang-overrides ((emacs-lisp-mode . "clojure"))
+      :success-lambda webpaste--providers-success-returned-string)
+
     ("gist.github.com"
      :uri "https://api.github.com/gists"
      :post-field nil
@@ -184,14 +192,27 @@ precalculated, and also available both for pre and post request access.")
 
 
 (defvar webpaste--default-lang-alist
-  '((css-mode . "css")
+  '((c-mode . "c")
+    (c++-mode . "cpp")
+    (cmake-mode . "cmake")
+    (css-mode . "css")
+    (diff-mode . "diff")
     (fundamental-mode . "text")
+    (haskell-mode . "haskell")
     (html-mode . "html")
+    (makefile-mode . "make")
     (java-mode . "java")
     (js-mode . "js")
     (go-mode . "go")
+    (perl-mode . "perl")
     (php-mode . "php")
     (python-mode . "python")
+    (ruby-mode . "rb")
+    (rust-mode . "rust")
+    (sh-mode . "bash")
+    (sql-mode . "sql")
+    (tex-mode . "tex")
+    (xml-mode . "xml")
     (yaml-mode . "yaml"))
   "Alist that maps `major-mode' names to language names.")
 

@@ -181,6 +181,7 @@ webpaste first and then just read the documentation by running this:
  - [X] dpaste.org
  - [X] gist.github.com
  - [X] paste.pound-python.org
+ - [X] paste.mozilla.org
  - [ ] paste.debian.net
  - [ ] bpaste.net
  - [ ] eval.in
