@@ -35,7 +35,8 @@ easiest way to install and configure packages.
   (use-package webpaste
     :ensure t
     :bind (("C-c C-p C-b" . webpaste-paste-buffer)
-           ("C-c C-p C-r" . webpaste-paste-region)))
+           ("C-c C-p C-r" . webpaste-paste-region)
+           ("C-c C-p C-p" . webpaste-paste-buffer-or-region)))
 #+END_SRC
 
 * Configuration
@@ -64,7 +65,8 @@ This can be added to the =:config= section of use-package:
   (use-package webpaste
     :ensure t
     :bind (("C-c C-p C-b" . webpaste-paste-buffer)
-           ("C-c C-p C-r" . webpaste-paste-region))
+           ("C-c C-p C-r" . webpaste-paste-region)
+           ("C-c C-p C-p" . webpaste-paste-buffer-or-region))
     :config
     (progn
       (setq webpaste-provider-priority '("ix.io" "dpaste.org"))))
