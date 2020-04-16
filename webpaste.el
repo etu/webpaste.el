@@ -548,6 +548,19 @@ Argument MARK Current mark."
     ;; Extract the buffer contents with buffer-substring and paste it
     (webpaste--paste-text (buffer-substring (point-min) (point-max)))))
 
+
+;;;###autoload
+(cl-defun webpaste-paste-buffer-or-region (&optional point mark)
+  "Paste current buffer or selected region to some paste service"
+  (interactive "r")
+
+  ;; if region is selected
+  (if (region-active-p)
+      ;; Paste selected region
+      (webpaste-paste-region point mark)
+    ;; Else, Paste buffer
+    (webpaste-paste-buffer)))
+
 
 
 (provide 'webpaste)
