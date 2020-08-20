@@ -4,8 +4,8 @@
 
 ;; Author: Elis "etu" Hirwing
 ;; URL: https://github.com/etu/webpaste.el
-;; Package-Version: 3.1.1
-;; Version: 3.1.1
+;; Package-Version: 3.1.2
+;; Version: 3.1.2
 ;; Keywords: convenience, comm, paste
 ;; Package-Requires: ((emacs "24.4") (request "0.2.0") (cl-lib "0.5"))
 
@@ -552,7 +552,7 @@ Argument MARK Current mark."
 ;;;###autoload
 (cl-defun webpaste-paste-buffer-or-region (&optional point mark)
   "Paste current buffer or selected region to some paste service"
-  (interactive "p")
+  (interactive "r")
 
   ;; if region is selected
   (if (region-active-p)
