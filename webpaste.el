@@ -86,6 +86,12 @@ This uses `browse-url-generic' to open URLs."
   :type 'hook)
 
 
+(defcustom webpaste-max-retries 10
+  "Max retries before we give up on pasting, say if network is down or so."
+  :group 'webpaste
+  :type 'number)
+
+
 (defcustom webpaste-providers-alist
   '(("ix.io"
      :uri "http://ix.io/"
@@ -189,6 +195,12 @@ some providers want to append the language to the resulting URL.")
   "Variable for storing alists with languages for highlighting for providers.
 This list will be populated when you add providers to have the languages
 precalculated, and also available both for pre and post request access.")
+
+
+(defvar webpaste--current-retries 0
+  "Variable for storing the current amount of retries.
+This shouldn't go biffer than `webpaste-max-retries' to avoid infinite
+loops.  This variable is reset on each new paste.")
 
 
 (defvar webpaste--default-lang-alist
@@ -513,6 +525,12 @@ When we run out of providers to try, it will restart since
   (unless webpaste--tested-providers
     (setq webpaste--tested-providers (webpaste--get-provider-priority)))
 
+  ;; If we have too many retries, empty the provider list.
+  (if (>= webpaste--current-retries webpaste-max-retries)
+      (setq webpaste--tested-providers nil)
+    ;; Otherwise increment the retry counter.
+    (setq webpaste--current-retries (+ 1 webpaste--current-retries)))
+
   ;; Get name of provider at the top of the list
   (let ((provider-name (car webpaste--tested-providers)))
     ;; Drop the name at the top of the list
@@ -530,6 +548,9 @@ Argument POINT Current point.
 Argument MARK Current mark."
   (interactive "r")
 
+  ;; Set retry counter to zero before we start.
+  (setq webpaste--current-retries 0)
+
   ;; unless we wanted a paste confirmation and declined
   (unless (and webpaste-paste-confirmation
                (not (yes-or-no-p "paste entire region?")))
@@ -541,6 +562,9 @@ Argument MARK Current mark."
 (cl-defun webpaste-paste-buffer ()
   "Paste current buffer to some paste service."
   (interactive)
+
+  ;; Set retry counter to zero before we start.
+  (setq webpaste--current-retries 0)
 
   ;; unless we wanted a paste confirmation and declined
   (unless (and webpaste-paste-confirmation
