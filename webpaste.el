@@ -232,7 +232,8 @@ loops.  This variable is reset on each new paste.")
 
 ;;; Predefined error lambda for providers
 (cl-defun webpaste--providers-error-lambda (&key text)
-  "Predefined error callback for providers that always does failover."
+  "Predefined error that pastes TEXT to next provider.
+This is the default failover hook that we use for most providers."
   (cl-function (lambda (&key error-thrown &allow-other-keys)
                  (message "Got error: %S" error-thrown)
                  (webpaste--paste-text text))))
@@ -333,23 +334,23 @@ Required params:
                    custom one used for the gist.github.com provider.
 
 Optional params:
-:type              HTTP Request type, defaults to POST.
+:type              HTTP Request TYPE, defaults to POST.
 
-:post-data         Default post fields sent to service. Defaults to nil.
+:post-data         Default post fields sent to service.  Defaults to nil.
 
 :post-lang-field-name   Fieldname for defining which language your paste should
                         use to the provider.
 
-:lang-overrides    Alist defining overrides for languages for this provider. If
+:lang-overrides    Alist defining overrides for languages for this provider.  If
                    a mode is set to nil, it will use fundamental-mode's value as
-                   fallback. Fundamental-mode's value can also be overridden.
+                   fallback.  Fundamental-mode's value can also be overridden.
 
 :lang-uri-separator   Lang URI separator.  This is used for providers that
                       appends the language to the end of the resulting URI and
                       needs a separator between language and link.
 
-:parser            Defines how request.el parses the result. Look up :parser for
-                   `request'. This defaults to 'buffer-string.
+:parser            Defines how request.el parses the result.  Look up :parser for
+                   `request'.  This defaults to 'buffer-string.
 
 :error-lambda      Callback sent to `request', look up how to write these in the
                    documentation for `request'.  The default value for this is
@@ -360,13 +361,14 @@ Optional params:
 :post-field-lambda Function that builds and returns the post data that should be
                    sent to the provider.  It should accept named parameters by
                    the names TEXT, POST-FIELD and POST-DATA.  POST-DATA should
-                   default to `nil' or empty list.  It also takes the option
+                   default to 'nil' or empty list.  It also takes the option
                    LANG-OVERRIDES which is a list that enables overriding of
                    `webpaste--default-lang-alist'.
 
                    TEXT contains the data that should be sent.
                    POST-FIELD contains the name of the field to be sent.
-                   POST-DATA contains predefined fields that the provider needs."
+                   POST-DATA contains predefined fields that the provider needs.
+                   SUCCESS-LAMBDA contains the function to run on an successful paste."
   ;; If we get a separator sent to the function, append it to the list of
   ;; separators for later use
   (when lang-uri-separator
@@ -575,7 +577,8 @@ Argument MARK Current mark."
 
 ;;;###autoload
 (cl-defun webpaste-paste-buffer-or-region (&optional point mark)
-  "Paste current buffer or selected region to some paste service"
+  "Paste current buffer or selected region to some paste service.
+Takes optional POINT and MARK to paste a region."
   (interactive "r")
 
   ;; if region is selected
