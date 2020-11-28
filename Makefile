@@ -1,8 +1,8 @@
-TRAVIS ?= false
+GITHUB_ACTIONS ?= false
 EMACS ?= emacs
 CASK ?= cask
 
-ifeq ($(TRAVIS),true)
+ifeq ($(GITHUB_ACTIONS),true)
 	PATTERN=--pattern '\[ci\]'
 endif
 
