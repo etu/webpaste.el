@@ -1,0 +1,44 @@
+name: "Unit tests"
+
+on:
+  pull_request:
+  push:
+    paths-ignore:
+      - '**.org'
+      - '.dir-locals.el'
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, macos-latest ]
+        emacs_version: [ 26.1, 26.2, 26.3, 27.1, snapshot ]
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: purcell/setup-emacs@master
+        with:
+          version: ${{ matrix.emacs_version }}
+
+      - name: Install cask
+        run: nix-env -f '<nixpkgs>' -iA cask
+        # Cask was marked to only be supported on Linux and not macOS in nix.
+        env:
+          NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM: 1
+
+      - name: Check emacs version
+        run: emacs --version
+
+      - name: Cask install
+        run: cask install
+
+      - name: Run tests
+        run: make test
+        # Undercover currently don't recognize GitHub Actions as a CI
+        # environment. So we'll set this flag to force it.
+        env:
+          UNDERCOVER_FORCE: true
+        continue-on-error: ${{ matrix.emacs_version == 'snapshot' }}
