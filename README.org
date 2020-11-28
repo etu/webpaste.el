@@ -1,7 +1,6 @@
 [[https://www.gnu.org/licenses/gpl-3.0.txt][https://img.shields.io/badge/license-GPL_3-green.svg]]
 [[https://melpa.org/#/webpaste][https://melpa.org/packages/webpaste-badge.svg]]
 [[https://stable.melpa.org/#/webpaste][https://stable.melpa.org/packages/webpaste-badge.svg]]
-[[https://travis-ci.org/etu/webpaste.el][https://travis-ci.org/etu/webpaste.el.svg?branch=master]]
 [[https://coveralls.io/github/etu/webpaste.el?branch=master][https://coveralls.io/repos/github/etu/webpaste.el/badge.svg?branch=master]]
 
 * Webpaste.el -- Paste text to pastebin-like services

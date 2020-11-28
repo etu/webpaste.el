@@ -1,0 +1,44 @@
+name: "Integration tests"
+
+on:
+  pull_request:
+  push:
+    paths-ignore:
+      - '**.org'
+      - '.dir-locals.el'
+    branches:
+      - master
+  # Run this job set on schedule every Saturday
+  schedule:
+    - cron: '0 12 * * 6'
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+        emacs_version: [ 27.1 ]
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: purcell/setup-emacs@master
+        with:
+          version: ${{ matrix.emacs_version }}
+
+      - name: Install cask
+        run: nix-env -f '<nixpkgs>' -iA cask
+
+      - name: Check emacs version
+        run: emacs --version
+
+      - name: Cask install
+        run: cask install
+
+      - name: Run tests
+        run: make integration
+        # Undercover currently don't recognize GitHub Actions as a CI
+        # environment. So we'll set this flag to force it.
+        env:
+          UNDERCOVER_FORCE: true
+        continue-on-error: ${{ true }}
