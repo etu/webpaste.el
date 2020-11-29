@@ -26,6 +26,13 @@
   (expect (spy-calls-count 'webpaste--return-url) :to-equal 1)
   (expect (spy-calls-count 'webpaste--paste-text) :to-equal 0))
 
+ (it
+  "can paste with paste.rs [ci]"
+
+  (funcall (webpaste--get-provider-by-name "paste.rs") paste-message :sync t)
+
+  (expect (spy-calls-count 'webpaste--return-url) :to-equal 1)
+  (expect (spy-calls-count 'webpaste--paste-text) :to-equal 0))
 
  (it
   "can paste with dpaste.com [ci]"
