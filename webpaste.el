@@ -101,6 +101,11 @@ This uses `browse-url-generic' to open URLs."
                       (nix-mode . "nix"))
      :success-lambda webpaste--providers-success-returned-string)
 
+    ("paste.rs"
+     :uri "https://paste.rs"
+     :post-field nil
+     :success-lambda webpaste--providers-success-returned-string)
+
     ("dpaste.com"
      :uri "http://dpaste.com/api/v2/"
      :post-data (("title" . "")
@@ -287,7 +292,13 @@ This is the default failover hook that we use for most providers."
                        ;; Append language to the post-data
                        (cl-pushnew (cons post-lang-field-name language-name) post-data)))
 
-                 post-data)))
+                 ;; If there's no defined field
+                 (if (equal post-field nil)
+                     ;; Just return the plain data
+                     text
+
+                   ;; Otherwise we return the formatted post data
+                   post-data))))
 
 
 
