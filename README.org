@@ -198,9 +198,9 @@ webpaste first and then just read the documentation by running this:
  - [X] gist.github.com
  - [X] paste.pound-python.org
  - [X] paste.mozilla.org
+ - [X] bpa.st
  - [ ] paste.debian.net
  - [ ] bpaste.net
  - [ ] eval.in
- - [X] bpa.st
  - [ ] ptpb.pw (RIP due to [[https://github.com/ptpb/pb/issues/245][ptpb/pb#245]] & [[https://github.com/ptpb/pb/issues/240][ptpb/pb#240]])
  - [ ] sprunge.us (removed due to [[https://github.com/rupa/sprunge/issues/45][sprunge#45]] that yields 500s)

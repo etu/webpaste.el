@@ -160,9 +160,9 @@ This uses `browse-url-generic' to open URLs."
     ("bpa.st"
      :uri "https://bpa.st/api/v1/paste"
      :post-data (("expiry" . "1day"))
-     :post-field-lambda (lambda () #'webpaste--providers-pinnwand-request)
+     :post-field-lambda webpaste--providers-pinnwand-request
      :lang-overrides ((emacs-lisp-mode . "emacs"))
-     :success-lambda (lambda () #'webpaste--providers-pinnwand-success)))
+     :success-lambda webpaste--providers-pinnwand-success))
 
   "Define all webpaste.el providers.
 Consists of provider name and arguments to be sent to `webpaste--provider' when
@@ -307,20 +307,25 @@ This is the default failover hook that we use for most providers."
                    ;; Otherwise we return the formatted post data
                    post-data))))
 
-(cl-defun webpaste--providers-pinnwand-request (&key text post-data provider-uri
-                                                  &allow-other-keys)
+(cl-defun webpaste--providers-pinnwand-request ()
   "Build request for pinnwand pastebins."
-  (let* ((lexer (or (webpaste--get-buffer-language provider-uri) "text"))
-         (file `(("lexer" . ,lexer) ("content" . ,text)))
-         (file-name (buffer-file-name)))
-    (when file-name
-      (push (cons "name" (file-name-nondirectory file-name)) file))
-    (json-encode `((expiry . ,(or (cdr (assoc "expiry" post-data)) "1day"))
-                   (files . ,(vector file))))))
+  (cl-function (lambda (&key text post-data provider-uri &allow-other-keys)
+                 "Build request for pinnwand pastebins."
+                 (let* ((lexer (or (webpaste--get-buffer-language provider-uri) "text"))
+                        (file `(("lexer" . ,lexer) ("content" . ,text)))
+                        (file-name (buffer-file-name)))
+                   (when file-name
+                     (push (cons "name"
+                                 (file-name-nondirectory file-name))
+                           file))
+                   (json-encode `((expiry . ,(or (cdr (assoc "expiry" post-data)) "1day"))
+                                  (files . ,(vector file))))))))
 
-(cl-defun webpaste--providers-pinnwand-success (&key data &allow-other-keys)
+
+(cl-defun webpaste--providers-pinnwand-success ()
   "Parse JSON response from pinnwand pastebins in DATA."
-  (webpaste--return-url (cdr (assq 'link (json-read-from-string data)))))
+  (cl-function (lambda (&key data &allow-other-keys)
+                 (webpaste--return-url (cdr (assq 'link (json-read-from-string data)))))))
 
 
 
