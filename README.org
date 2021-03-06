@@ -188,7 +188,7 @@ webpaste first and then just read the documentation by running this:
   (describe-function 'webpaste--provider)
 #+end_src
 
-* TODO Providers to implement [7/14]
+* TODO Providers to implement [8/15]
  - [ ] clbin.com
  - [ ] 0x0.st
  - [X] ix.io
