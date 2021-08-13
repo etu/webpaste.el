@@ -149,14 +149,6 @@ This uses `browse-url-generic' to open URLs."
                                                  (webpaste--return-url
                                                   (cdr (assoc 'html_url (json-read-from-string data)))))))))
 
-    ("paste.pound-python.org"
-     :uri "https://paste.pound-python.org/"
-     :post-data (("webpage" . ""))
-     :post-field "code"
-     :post-lang-field-name "language"
-     :lang-overrides ((emacs-lisp-mode . "clojure"))
-     :success-lambda webpaste--providers-success-response-url)
-
     ("bpa.st"
      :uri "https://bpa.st/api/v1/paste"
      :post-data (("expiry" . "1day"))

@@ -74,15 +74,6 @@
   (expect (spy-calls-count 'webpaste--paste-text) :to-equal 0))
 
 
- (it
-  "can paste with paste.pound-python.org [ci]"
-
-  (funcall (webpaste--get-provider-by-name "paste.pound-python.org") paste-message :sync t)
-
-  (expect (spy-calls-count 'webpaste--return-url) :to-equal 1)
-  (expect (spy-calls-count 'webpaste--paste-text) :to-equal 0))
-
-
   (it
    "can paste with bpa.st [ci]"
 
