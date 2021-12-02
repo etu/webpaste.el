@@ -1,0 +1,7 @@
+.envrc
+.github/
+.gitignore
+Cask
+Makefile
+shell.nix
+tests/
