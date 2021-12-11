@@ -2,7 +2,8 @@
 
 ;; Copyright (c) 2016 Elis Hirwing
 
-;; Author: Elis "etu" Hirwing
+;; Author: Elis "etu" Hirwing <elis@hirwing.se>
+;; Maintainer: Elis "etu" Hirwing <elis@hirwing.se>
 ;; URL: https://github.com/etu/webpaste.el
 ;; Package-Version: 3.2.1
 ;; Version: 3.2.1
