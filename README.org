@@ -1,4 +1,5 @@
 [[https://www.gnu.org/licenses/gpl-3.0.txt][https://img.shields.io/badge/license-GPL_3-green.svg]]
+[[https://elpa.nongnu.org/nongnu/webpaste.html][https://elpa.nongnu.org/nongnu/webpaste.svg]]
 [[https://melpa.org/#/webpaste][https://melpa.org/packages/webpaste-badge.svg]]
 [[https://stable.melpa.org/#/webpaste][https://stable.melpa.org/packages/webpaste-badge.svg]]
 [[https://github.com/etu/webpaste.el/actions?query=workflow%3A%22Unit+tests%22][https://github.com/etu/webpaste.el/workflows/Unit%20tests/badge.svg]]
