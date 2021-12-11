@@ -11,7 +11,7 @@ pastebin-like services. It supports more than one service and will
 failover if one service fails. More services can easily be added
 over time and preferred services can easily be configured.
 
-* Table of Contents                                                :TOC_3_gh:
+* Table of Contents
  - [[#webpasteel----paste-text-to-pastebin-like-services][Webpaste.el -- Paste text to pastebin-like services]]
  - [[#installation][Installation]]
    - [[#the-lazy-way-using-use-package][The lazy way (Using use-package)]]
