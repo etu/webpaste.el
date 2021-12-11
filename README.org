@@ -15,7 +15,8 @@ over time and preferred services can easily be configured.
 * Table of Contents
  - [[#webpasteel----paste-text-to-pastebin-like-services][Webpaste.el -- Paste text to pastebin-like services]]
  - [[#installation][Installation]]
-   - [[#the-lazy-way-using-use-package][The lazy way (Using use-package)]]
+   - [[#the-interactive-way][The interactive way]]
+   - [[#a-declarative-way-using-use-package][A declarative way (Using use-package)]]
  - [[#configuration][Configuration]]
    - [[#choosing-providers--provider-priority][Choosing providers / provider priority]]
    - [[#only-paste-plaintext-pastes][Only paste plaintext pastes]]
@@ -30,7 +31,18 @@ over time and preferred services can easily be configured.
  - [[#providers-to-implement-710][Providers to implement]]
 
 * Installation
-** The lazy way (Using [[https://github.com/jwiegley/use-package][use-package]])
+The package is available on [[https://elpa.nongnu.org/][NonGNU ELPA]], which is part of the default set of
+repositories starting in Emacs 28. For information on how to add this
+repository if you're on an older Emacs, check the [[https://elpa.nongnu.org/][NonGNU ELPA]] instructions.
+
+** The interactive way
+You can install ~webpaste~ using the interactive ~package-install~ command
+like the following:
+#+BEGIN_CODE
+M-x package-install RET webpaste RET
+#+END_CODE
+
+** A declarative way (Using [[https://github.com/jwiegley/use-package][use-package]])
 This requires that you have [[https://github.com/jwiegley/use-package][use-package]] set up. But it's in my opinion the
 easiest way to install and configure packages.
 
