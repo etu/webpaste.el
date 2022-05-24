@@ -210,6 +210,7 @@ webpaste first and then just read the documentation by running this:
  - [X] dpaste.org
  - [X] gist.github.com
  - [X] paste.mozilla.org
+ - [X] paste.ubuntu.com
  - [X] bpa.st
  - [ ] paste.debian.net
  - [ ] bpaste.net

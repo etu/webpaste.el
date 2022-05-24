@@ -133,6 +133,14 @@ This uses `browse-url-generic' to open URLs."
       :lang-overrides ((emacs-lisp-mode . "clojure"))
       :success-lambda webpaste--providers-success-returned-string)
 
+    ("paste.ubuntu.com"
+     :uri "https://paste.ubuntu.com/"
+     :post-data (("poster" . "webpaste"))  ;; the poster is required
+     :post-field "content"
+     :post-lang-field-name "syntax"
+     :lang-overrides ((emacs-lisp-mode . "emacs"))
+     :success-lambda webpaste--providers-success-response-url)
+
     ("gist.github.com"
      :uri "https://api.github.com/gists"
      :post-field nil
