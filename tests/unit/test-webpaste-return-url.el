@@ -1,4 +1,4 @@
-;;; test-webpaste-return-url.el --- Tests for webpaste
+;;; test-webpaste-return-url.el --- Tests for webpaste -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
 

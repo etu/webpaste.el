@@ -1,4 +1,4 @@
-;;; test-webpaste-success-lambdas.el --- Tests for success lambdas
+;;; test-webpaste-success-lambdas.el --- Tests for success lambdas -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
 

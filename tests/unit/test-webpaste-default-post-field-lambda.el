@@ -1,4 +1,4 @@
-;;; test-webpaste-default-post-field-lambda.el --- Tests for webpaste
+;;; test-webpaste-default-post-field-lambda.el --- Tests for webpaste -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
 

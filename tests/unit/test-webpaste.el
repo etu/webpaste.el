@@ -1,4 +1,4 @@
-;;; test-webpaste.el --- Tests for webpaste
+;;; test-webpaste.el --- Tests for webpaste -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
 
