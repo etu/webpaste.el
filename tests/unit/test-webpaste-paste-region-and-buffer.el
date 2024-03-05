@@ -1,4 +1,4 @@
-;;; test-webpaste-paste-region-and-buffer.el --- Tests for webpaste
+;;; test-webpaste-paste-region-and-buffer.el --- Tests for webpaste -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
 

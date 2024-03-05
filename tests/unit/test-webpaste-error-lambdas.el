@@ -1,4 +1,4 @@
-;;; test-webpaste-error-lambdas.el --- Tests for error lambdas
+;;; test-webpaste-error-lambdas.el --- Tests for error lambdas -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
 

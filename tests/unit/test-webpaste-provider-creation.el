@@ -1,4 +1,4 @@
-;;; test-webpaste-provider-creation.el --- Tests for webpaste
+;;; test-webpaste-provider-creation.el --- Tests for webpaste -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
 
