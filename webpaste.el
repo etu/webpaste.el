@@ -143,6 +143,7 @@ This uses `browse-url-generic' to open URLs."
 
     ("gist.github.com"
      :uri "https://api.github.com/gists"
+     :headers-lambda webpaste--provider-gist-headers
      :post-field nil
      :post-field-lambda (lambda () (cl-function (lambda (&key text &allow-other-keys)
                                                   (let ((filename (if (buffer-file-name)
@@ -329,6 +330,25 @@ This is the default failover hook that we use for most providers."
                  (webpaste--return-url (cdr (assq 'link (json-read-from-string data)))))))
 
 
+(cl-defun webpaste--provider-gist-headers ()
+  "Provide headers for gist API authentication.
+
+This expects your authinfo to contain authorization for using gist API.
+You can generate your token at https://github.com/settings/tokens
+Only gist scope is necessary.
+
+Then save the token in your authinfo as:
+machine api.github.com/gists login webpaste password <token>"
+  (cl-function (lambda ()
+                 (cons `("Authorization"
+                         .
+                         ,(concat "token "
+                             (auth-source-pick-first-password
+                                 :host "api.github.com/gists"
+                                 :login "webpaste")))
+                       nil))))
+
+
 
 
 (cl-defun webpaste--get-lang-alist-with-overrides (overrides)
@@ -352,6 +372,7 @@ This is the default failover hook that we use for most providers."
           (post-data '())
           (post-lang-field-name nil)
           (parser 'buffer-string)
+          (headers-lambda nil)
           (lang-overrides '())
           (lang-uri-separator nil)
           (error-lambda 'webpaste--providers-error-lambda)
@@ -399,6 +420,10 @@ Optional params:
                    `webpaste--providers-error-lambda-no-failover' available if
                    you need a provider that isn\\='t allowed to failover.
 
+:headers-lambda    Function that builds and returns headers that should be sent
+                   to the provider. This can be useful to add authentication
+                   for example.
+
 :post-field-lambda Function that builds and returns the post data that should be
                    sent to the provider.  It should accept named parameters by
                    the names TEXT, POST-FIELD and POST-DATA.  POST-DATA should
@@ -442,6 +467,7 @@ Optional params:
                                :post-lang-field-name post-lang-field-name
                                :post-data post-data)
                 :parser parser
+                :headers (when headers-lambda (funcall (funcall headers-lambda)))
                 :success (funcall success-lambda)
                 :sync sync
                 :error (funcall error-lambda :text text))))))
