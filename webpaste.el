@@ -162,7 +162,7 @@ This uses `browse-url-generic' to open URLs."
      :uri "https://bpa.st/api/v1/paste"
      :post-data (("expiry" . "1day"))
      :post-field-lambda webpaste--providers-pinnwand-request
-     :lang-overrides ((emacs-lisp-mode . "emacs"))
+     :lang-overrides ((emacs-lisp-mode . "emacs-lisp"))
      :success-lambda webpaste--providers-pinnwand-success))
 
   "Define all webpaste.el providers.
