@@ -619,15 +619,14 @@ Argument MARK Current mark."
 
 
 ;;;###autoload
-(cl-defun webpaste-paste-buffer-or-region (&optional point mark)
-  "Paste current buffer or selected region to some paste service.
-Takes optional POINT and MARK to paste a region."
-  (interactive "r")
+(cl-defun webpaste-paste-buffer-or-region ()
+  "Paste current buffer or selected region to some paste service."
+  (interactive)
 
   ;; if region is selected
   (if (region-active-p)
       ;; Paste selected region
-      (webpaste-paste-region point mark)
+      (webpaste-paste-region (region-beginning) (region-end))
     ;; Else, Paste buffer
     (webpaste-paste-buffer)))
 
